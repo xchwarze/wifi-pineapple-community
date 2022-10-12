@@ -1,0 +1,195 @@
+Package: sslsplit
+Version: 0.5.5-tls13-1
+Depends: libc, libevent2-7, libopenssl1.1, libevent2-openssl7, libevent2-pthreads7, libnet-1.2.x, libpcap1, musl-fts
+License: BSD-2-Clause
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 156
+Filename: sslsplit_0.5.5-tls13-1_mipsel_24kc.ipk
+Size: 60517
+SHA256sum: 78b1d08508fdb1da0ab0be89833089f7cbeb0f1e5e0fee0dbfe2db62568a25ba
+Description:  Transparent SSL/TLS interception
+
+Package: mdk4
+Version: 1.0-lede-1
+Depends: libc, libpthread, libnl200, libpcap1
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 63222
+Filename: mdk4-1_mipsel_24kc.ipk
+Size: 63997
+SHA256sum: 739aeb690fbe098e203cd744dfe91d257fefa2ba970253318b743767ea9a20ea
+Description:  Tool to exploit wireless vulnerabilities. (DEVELOPER VERSION)
+
+Package: kismet-capture-linux-bluetooth
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 37108
+Filename: kismet-capture-linux-bluetooth_2020-12-R3-1_mipsel_24kc.ipk
+Size: 37753
+SHA256sum: a21fde03d189c163bbedfba905ed4088f03ccc5ca64f41e465d502463d6ef7c1
+Description:  Kismet HCI Bluetooth Support
+
+Package: kismet-capture-linux-wifi
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 52092
+Filename: kismet-capture-linux-wifi_2020-12-R3-1_mipsel_24kc.ipk
+Size: 52783
+SHA256sum: 6915cd2079d2d830ebc7eadef81d5346b2f458e0f72be32413659144e9c537a3
+Description:  Helper binary to capture Wi-Fi packets from a monitor mode adapter.
+ Enables local and remote Wi-Fi capture with Kismet
+
+Package: kismet-capture-nrf-51822
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 31605
+Filename: kismet-capture-nrf-51822_2020-12-R3-1_mipsel_24kc.ipk
+Size: 32245
+SHA256sum: ec5ccbb07a288064a78b65f09154db3fc08f7bf995d4129261cd9cc16d64fb7b
+Description:  Helper binary to capture BTLE from a NRF51822 serial adapter.
+ Enables local and remote BTLE packet capture with Kismet
+
+Package: kismet-capture-nxp-kw41z
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 33851
+Filename: kismet-capture-nxp-kw41z_2020-12-R3-1_mipsel_24kc.ipk
+Size: 34612
+SHA256sum: 46291addbf50becf53b453dfcf7ec7d83ca67ef6d5e6716d31b4a053b5741dbb
+Description:  Helper binary to capture BTLE from a NXPKW41Z adapter.
+ Enables local and remote 802.15.4 packet capture with Kismet
+
+Package: kismet-capture-sdr-rtl433
+Version: 2020-12-R3-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr, rtl_433
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 28386
+Filename: kismet-capture-sdr-rtl433_2020-12-R3-1_mipsel_24kc.ipk
+Size: 29258
+SHA256sum: 2f1780b41ab333c5d7afa3b48bc080cb265e44f0ce2c123bab6742cff28bcaba
+Description:  Helper binary to capture sensor and thermometer data using
+ rtl433 and a rtlsdr. Enables local and remote rtl433 capture with Kismet
+
+Package: kismet-capture-sdr-rtladsb
+Version: 2020-12-R3-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 36040
+Filename: kismet-capture-sdr-rtladsb_2020-12-R3-1_mipsel_24kc.ipk
+Size: 36943
+SHA256sum: 9fe4cf46a6119802be0299c1847a1955fd29ceb723ef634a8722d46945442f2c
+Description:  Helper binary to capture ADSB packets from a rtlsdr.
+ Enables local and remote ADSB capture with Kismet
+
+Package: kismet-capture-sdr-rtlamr
+Version: 2020-12-R3-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 32927
+Filename: kismet-capture-sdr-rtlamr_2020-12-R3-1_mipsel_24kc.ipk
+Size: 33837
+SHA256sum: 8a4cdb00a41009a09a7f088eaaec8ca5061c0da181073dede2eba17b3ba962d6
+Description:  Helper binary to capture AMR power and water meter packets 
+ from a rtlsdr. Enables local and remote AMR capture with Kismet
+
+Package: kismet-capture-ti-cc2531
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 33881
+Filename: kismet-capture-ti-cc2531_2020-12-R3-1_mipsel_24kc.ipk
+Size: 34647
+SHA256sum: 6733db27ea275330c4488046d2ab2f347847c1d445974f52f9ccd0c573451cf8
+Description:  Helper binary to capture 802.15.4 packets from a TI CC2531 adapter.
+ Enables local and remote 802.15.4 capture with Kismet
+
+Package: kismet-capture-ti-cc2540
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 33874
+Filename: kismet-capture-ti-cc2540_2020-12-R3-1_mipsel_24kc.ipk
+Size: 34634
+SHA256sum: a44cefdeb6e784fbdec42cf5ad465eebdf89d1e2b2fc79b85b28429c9e8a183f
+Description:  Helper binary to capture BTLE packets from a TI CC2540 adapter.
+ Enables local and remote BTLE capture with Kismet
+
+Package: kismet
+Version: 2020-12-R3-1
+Depends: libc, libpthread, libpcap1, libpcre, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libsensors5
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 3552456
+Filename: kismet_2020-12-R3-1_mipsel_24kc.ipk
+Size: 3546931
+SHA256sum: 1b06a22faaeb4b5071d28125fd055ec06bf3de17e127acda2420ed8f414369fa
+Description:  Modern Kismet wireless capture and IDS, with the web-ui based Kismet
+
+Package: mk7led
+Version: 20xx-XX-XX-1
+Depends: libc
+Section: utils
+Architecture: mipsel_24kc
+Installed-Size: 3824
+Filename: mk7led_20xx-XX-XX-1_mipsel_24kc.ipk
+Size: 4527
+SHA256sum: 4c81b8bccbce7e2906a5aab19a96941e9eabe9fd4bc0c31672a6970ab8bdaf31
+Description:  Control program for setting the LEDs on the MK7LED add-on board
+
+Package: python3-cython
+Version: 0.29.21-1
+Depends: libc, python3-light, python3-setuptools
+Section: lang
+Architecture: mipsel_24kc
+Installed-Size: 1650020
+Filename: python3-cython_0.29.21-1_mipsel_24kc.ipk
+Size: 1649030
+SHA256sum: 4d7a25bad687e7568b6307dd24b0401d37b947afe1d95bec215c60f63637cf88
+Description:  C language extension library for Python
+
+Package: python3-numpy
+Version: 1.19.1-1
+Depends: libc, python3-light, python3-setuptools, python3-cython
+Section: lang
+Architecture: mipsel_24kc
+Installed-Size: 6177725
+Filename: python3-numpy_1.19.1-1_mipsel_24kc.ipk
+Size: 6167870
+SHA256sum: 53903b0b929526baad2d4d70b480ab9476c3d902b06ae862d7fa5b91f82cf821
+Description:  Numpy math library for Python3
+
+Package: python3-protobuf
+Version: 3.13.0-1
+Depends: libc, python3-light, python3-setuptools, python3-six
+Section: lang
+Architecture: mipsel_24kc
+Installed-Size: 198586
+Filename: python3-protobuf_3.13.0-1_mipsel_24kc.ipk
+Size: 199270
+SHA256sum: 7c09ee19b70e9fae307aeffaa34f9b622e9b63e65aa16dec136897ef2824c4f2
+Description:  The official implementation of Google Protobufs in Python3
+
+Package: python3-websockets
+Version: 8.1-1
+Depends: libc, python3-light, python3-setuptools
+Section: lang
+Architecture: mipsel_24kc
+Installed-Size: 66251
+Filename: python3-websockets_8.1-1_mipsel_24kc.ipk
+Size: 67112
+SHA256sum: 2d678c8517cd49cd1bf190568e0d5a7e1d89e8bcc40b73bcca9b1dae929eb1a1
+Description:  Websockets implementation for python3

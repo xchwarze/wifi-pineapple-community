@@ -1,0 +1,10 @@
+{
+    "author": "DSR!",
+    "description": "Complete automate PMKID attack",
+    "devices": [
+        "nano",
+        "tetra"
+    ],
+    "title": "PMKIDAttack",
+    "version": "2.3"
+}

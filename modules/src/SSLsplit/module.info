@@ -1,0 +1,10 @@
+{
+    "author": "Whistle Master",
+    "description": "(FW2.5.4 or below) Perform man-in-the-middle attacks using SSLsplit",
+    "devices": [
+        "nano",
+        "tetra"
+    ],
+    "title": "SSLsplit",
+    "version": "1.5"
+}

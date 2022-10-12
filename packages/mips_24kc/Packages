@@ -1,0 +1,304 @@
+Package: hcxtools
+Version: 6.1.6
+Depends: libc, libpthread, libpcap1, zlib, libcurl4, libopenssl1.1
+License: MIT
+Section: net
+Architecture: mips_24kc
+Installed-Size: 130837
+Filename: hcxtools_6.1.6_mips_24kc.ipk
+Size: 130197
+SHA256sum: ddd61a27acdea1b23ac5bdf97e37e08f8231f8b70dd7b1a255c9f15e7b9dba20
+Description:  Set of tools convert packets from captures (h = hash, c = capture, convert and calculate candidates, x = different hashtypes)
+ for the use with latest hashcat or John the Ripper.
+
+Package: sslsplit
+Version: 0.5.5
+Depends: libc, musl-fts, zlib, libnet-1.2.x, libpcap1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 12693
+Filename: sslsplit_0.5.5_mips_24kc.ipk
+Size: 66818
+SHA256sum: 0f44897a29c7ecd59b31c1b589b8fa5f832950d16f757cece2d20bf18a813b2d
+Description:  SSLsplit is a tool for man-in-the-middle attacks against SSL/TLS encrypted network connections
+
+Package: libnids
+Version: 1.18-1
+Depends: libc, libnet0
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 12693
+Filename: libnids_1.18-1_mips_24kc.ipk
+Size: 13388
+SHA256sum: 136b28f8a6a0c99f579e9b1d0dab069000ee404bdcc832574a83180ba6973e92
+Description:  An implementation of an E-component of Network Intrusion Detection
+ System.
+
+Package: dsniff
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 57039
+Filename: dsniff_2.4b1-2_mips_24kc.ipk
+Size: 57153
+SHA256sum: 6f79d3af6d988d481ad3dce8873dda1189768334bd7c839f6905d061923310ec
+Description:  A collection of tools for network auditing and penetration testing.
+
+Package: arpspoof
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 2758
+Filename: arpspoof_2.4b1-2_mips_24kc.ipk
+Size: 3449
+SHA256sum: 2ace7847c0c0e8106c1258479445dd1af120558fe0e1c0c05c74359c694dd903
+Description:  Arpspoof package.
+
+Package: dnsspoof
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 5383
+Filename: dnsspoof_2.4b1-2_mips_24kc.ipk
+Size: 6082
+SHA256sum: de87d9317c955939479ec455553c8a9a235144141af099d5a05fb648ba62eba8
+Description:  Dnsspoof package.
+
+Package: urlsnarf
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 4571
+Filename: urlsnarf_2.4b1-2_mips_24kc.ipk
+Size: 5258
+SHA256sum: 60799f8d0c8276662cdb21b388dd90853b4da2ed321304099c63be5d873a31d2
+Description:  Urlsnarf package.
+
+Package: libnet0
+Version: 1.0.2a-9
+Depends: libc, libpcap1
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 9844
+Filename: libnet0_1.0.2a-9_mips_24kc.ipk
+Size: 10562
+SHA256sum: 9d050bc34fc49303c94dddf1f473a6aa439a425e4d5d9acd6ea97fbdb63f0153
+Description:  Low-level packet creation library (v1.0.x)
+
+Package: aircrack-ng-hak5
+Version: 1.2-rc5-1
+Depends: libc, libssp, librt, libpthread, libpcap1, libpthread, libopenssl1.1, libnl200, wireless-tools, ethtool, libstdcpp6, libpcre, libsqlite3
+License: GPLv2
+Section: net
+Architecture: mips_24kc
+Installed-Size: 362448
+Filename: aircrack-ng-hak5_1.2-rc5-1_mips_24kc.ipk
+Size: 359275
+SHA256sum: 8be13c3e85078dc8a96dca5f54645bbb8c3a08d072cf5575de6bbc15321b73df
+Description:  WLAN tools for breaking 802.11 WEP/WPA keys
+
+Package: kismet-hak5
+Version: 2020-03-R1-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libdw1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 2972573
+Filename: kismet-hak5_2020-03-R1-1_mips_24kc.ipk
+Size: 2967648
+SHA256sum: 23fe94ae849b62da0a61bfed5e65489a73d1bb3f656c1c7e5d1eb6fab65629a1
+Description:  Kismet wireless capture and IDS
+ Latest web UI based Kismet
+ Linux Wi-Fi and Bluetooth capture tools
+
+Package: kismet-remotecap-hak5
+Version: 2020-03-R1-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libdw1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 131900
+Filename: kismet-remotecap-hak5_2020-03-R1-1_mips_24kc.ipk
+Size: 129828
+SHA256sum: 3d9037098a5b08c576a1f64db9f7764ce9cd98257f947e719e457ae1d9cd8801
+Description:  Kismet Wireless Remote Capture Tools.
+
+Package: bully
+Version: 1.0-22
+Depends: libc, libpcap1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 57758
+Filename: bully_1.0-22_mips_24kc.ipk
+Size: 58530
+SHA256sum: 2176ec852c8653c74dc584d7d199e2d6068d8939e6de0af1faf2d7ef928380e9
+Description:  Brute force attack against WPS, that actually works
+
+Package: p0f
+Version: 3.09b
+Depends: libc, libpcap1, libpthread
+Section: net
+Architecture: mips_24kc
+Installed-Size: 60476
+Filename: p0f_3.09b_mips_24kc.ipk
+Size: 61387
+SHA256sum: 6f90b21dd44a0021f29e31ab80d11fe820c219e1135619594b6ccd08e2bd9f9f
+Description:  p0f is a passive TCP/IP stack fingerprinting tool. p0f can attempt to identify the system running on
+ machines that send network traffic to the box it is running on, or to a machine that shares a medium with
+ the machine it is running on. p0f can also assist in analysing other aspects of the remote system.
+
+Package: mdk3
+Version: v6-2
+Depends: libc, libpthread
+Section: net
+Architecture: mips_24kc
+Installed-Size: 45446
+Filename: mdk3_v6-2_mips_24kc.ipk
+Size: 46131
+SHA256sum: 9e3030eb84fd653e527a0b36bf0b2c296dc5733cb5ba283abc8f7d2ecdb9f46d
+Description:  Tool to exploit wireless vulnerabilities
+
+Package: ngrep
+Version: 1.45-3
+Depends: libc, libpcap1, libpcre
+Section: net
+Architecture: mips_24kc
+Installed-Size: 7201
+Filename: ngrep_1.45-3_mips_24kc.ipk
+Size: 8149
+SHA256sum: ac9bee46753d9ee277b6f64325b5ab06c8eeb6bf15d299418246d0d7de076363
+Description:  ngrep a pcap-aware tool that will allow you to specify extended
+ regular expressions to match against data payloads of packets. It
+ currently recognizes TCP, UDP, and ICMP across Ethernet, PPP, SLIP,
+ FDDI, Token Ring and null interfaces, and understands BPF filter
+ logic in the same fashion as more common packet sniffing tools,
+ like tcpdump and snoop.
+
+Package: sslstrip
+Version: 0.9-1
+Depends: libc, python, python-twisted, python-openssl
+Section: net
+Architecture: mips_24kc
+Installed-Size: 7838
+Filename: sslstrip_0.9-1_mips_24kc.ipk
+Size: 8739
+SHA256sum: 3afe7726a5c3195e788aad763164a108f157b16dc4faa8d831e667a622b092c9
+Description:  sslstrip will transparently hijack HTTP traffic on a network,
+ watch for HTTPS links and redirects, then map those links
+ into either look-alike HTTP links or homograph-similar HTTPS
+ links. It also supports modes for supplying a favicon which
+ looks like a lock icon, selective logging, and session denial.
+
+Package: kmod-rtc-ds1307
+Version: 4.14.171-1
+Depends: kmod-i2c-core, kmod-regmap-i2c, kmod-hwmon-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 6048
+Filename: kmod-rtc-ds1307_4.14.171-1_mips_24kc.ipk
+Size: 6875
+SHA256sum: d382abb05b5c4370a3fafc61aded73fda597949e6939f5c1d3bd010ddbd0211d
+Description:  Kernel module for Dallas/Maxim DS1307/DS1337/DS1338/DS1340/DS1388/DS3231,
+ Epson RX-8025 and various other compatible RTC chips connected via I2C.
+
+Package: kmod-rtc-ds1374
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 2649
+Filename: kmod-rtc-ds1374_4.14.171-1_mips_24kc.ipk
+Size: 3380
+SHA256sum: 6708faaf7f83f267ce899460cbba164223691d4480b53dfe796156343009a8ca
+Description:  Kernel module for Dallas/Maxim DS1374.
+
+Package: kmod-rtc-ds1672
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 1813
+Filename: kmod-rtc-ds1672_4.14.171-1_mips_24kc.ipk
+Size: 2590
+SHA256sum: c0cf00e828637642a6fe577279b6264ce241fe2ad77fe921e43ed7a6bc1267c7
+Description:  Kernel module for Dallas/Maxim DS1672 RTC.
+
+Package: kmod-rtc-em3027
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 1571
+Filename: kmod-rtc-em3027_4.14.171-1_mips_24kc.ipk
+Size: 2340
+SHA256sum: 5f3c297dd4dda6ac2ded00335a0900e1fad1c3405f68d267a4ef7a6380d0f0b6
+Description:  Kernel module for Microelectronic EM3027 RTC.
+
+Package: kmod-rtc-isl1208
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 4866
+Filename: kmod-rtc-isl1208_4.14.171-1_mips_24kc.ipk
+Size: 5608
+SHA256sum: e0d11aea9da6b2d18c813cbe0fad0a03efad6b58dde93ee7bd72816e7c0c04ef
+Description:  Kernel module for Intersil ISL1208 RTC.
+
+Package: kmod-rtc-pt7c4338
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 105
+Filename: kmod-rtc-pt7c4338_4.14.171-1_mips_24kc.ipk
+Size: 844
+SHA256sum: d7a1716c8ab4a8992eccb9be7cd6a62aa370f50f46ba6b482829c0e00968bf71
+Description:  Kernel module for Pericom PT7C4338 i2c RTC chip
+
+Package: kmod-rtc-rs5c372a
+Version: 4.14.171-1
+Depends: kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 3560
+Filename: kmod-rtc-rs5c372a_4.14.171-1_mips_24kc.ipk
+Size: 4325
+SHA256sum: c4e977a10c05599625269d1b9d81ff502b512e0415b864286c0ac03661bddd7b
+Description:  Kernel module for Ricoh R2025S/D, RS5C372A/B, RV5C386, RV5C387A RTC on chip module
+
+Package: ubi-utils
+Version: 2.1.1-1
+Depends: libc
+License: GPLv2
+Section: utils
+Architecture: mips_24kc
+Installed-Size: 70945
+Filename: ubi-utils_2.1.1-1_mips_24kc.ipk
+Size: 71267
+SHA256sum: 31176ef70ba742255c9ce50429d38ecf655ad301979bd2f74a936fb232edc30f
+Description:  Utilities for manipulating memory technology devices.
+
+Package: zip
+Version: 3.0-4
+Depends: libc
+License: BSD-4-Clause
+Section: utils
+Architecture: mips_24kc
+Installed-Size: 196103
+Filename: zip_3.0-4_mips_24kc.ipk
+Size: 197016
+SHA256sum: 49a488ebab4f218de6f8f60e27e814f7fdc4c1a182357a9d93b644429bf5b139
+Description:  This is InfoZIP's zip program. It produces files that are fully
+ compatible with the popular PKZIP program; however, the command line
+ options are not identical. In other words, the end result is the same,
+ but the methods differ.

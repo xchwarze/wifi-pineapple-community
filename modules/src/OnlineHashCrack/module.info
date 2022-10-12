@@ -1,0 +1,10 @@
+{
+    "author": "Whistle Master & DSR!",
+    "description": "Submit WPA Handshake to www.onlinehashcrack.com api service",
+    "devices": [
+        "nano",
+        "tetra"
+    ],
+    "title": "Online Hash Crack",
+    "version": "1.6"
+}
