@@ -1,0 +1,37 @@
+[
+   {
+      "title":"New Modules Community Repo",
+      "date":"2022-09-30",
+      "content":"<p>We are launching an official repo where you will find module updates! You can collaborate by sending your pull requests <a href='https://github.com/xchwarze/wifi-pineapple-modules'>here<\/a>. 📣<\/p>"
+   },
+   {
+      "title":"Full list of supported devices",
+      "date":"2022-09-27",
+      "content":"<p>🚨 We publish a list with all supported devices. You can check it <a href='https://github.com/xchwarze/wifi-pineapple-cloner/blob/master/devices.md'>here<\/a>. 📡<\/p>"
+   },
+   {
+      "title":"Update OpenWrt version",
+      "date":"2022-09-22",
+      "content":"<p>Update OpenWrt version to 19.02.7! Check for new builds in the <a href='https://github.com/xchwarze/wifi-pineapple-cloner-builds'>downloads repo<\/a>! 🚀<\/p>"
+   },
+   {
+      "title":"New targets",
+      "date":"2022-09-05",
+      "content":"<p>Add support for:<\/p><ul>\r\n<li>Zyxel NBG6716<\/li>\r\n<li>NETGEAR R6100, WNDR3700 V4 and WNDR4300 V1<\/li>\r\n<\/ul>"
+   },
+   {
+      "title":"Project Updates",
+      "date":"2022-09-01",
+      "content":"<p>Updates in:<\/p><ul>\r\n<li>Build scripts<\/li>\r\n<li>Documentation to replicate the method<\/li>\r\n<li>Example builds<\/li>\r\n<li>Finished builds were added to be able to use the project in several router models! 🦄<\/li>\r\n<\/ul>\r\n\r\n<p>You can send Pull Requests for improvements and support for new routers to the <a href='https://github.com/xchwarze/wifi-pineapple-cloner'>project repo<\/a><\/p>"
+   },
+   {
+      "title":"GL-AR150 updates",
+      "date":"2022-03-11",
+      "content":"<p>New builds using the Universal Wifi pineapple hardware cloner have been released.<br \/>They were made with OpenWrt 19.02.2 and 19.02.7! 🚀<br \/>In both you can find the new panel.<\/p>"
+   },
+   {
+      "title":"Panel updates!",
+      "date":"2022-01-16",
+      "content":"<p>As a side project I made <a href='https://github.com/xchwarze/wifi-pineapple-panel'>wifi-pineapple-panel<\/a> where I fixed various <strong>bugs<\/strong> in it and improved <strong>overall performance<\/strong>! 🛠<\/p>\r\n\r\n<p>Thanks to this we have:<\/p>\r\n\r\n<ul>\r\n <li>Tabs in the most complex sections<\/li>\r\n <li>PineAP configurable from the panel<\/li>\r\n   <li>Manual upgrade section<\/li>\r\n   <li>And other improvements in Recon, Clients, PineAP, Logging, Network and Advanced!<\/li>\r\n<\/ul>\r\n\r\n<p>This is why this  panel will be used in the 'Universal Wifi pineapple hardware cloner' project<\/p>"
+   }
+]
