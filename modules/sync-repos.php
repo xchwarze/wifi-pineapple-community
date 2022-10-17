@@ -10,7 +10,7 @@ if (!isset($_SERVER['argv']) && !isset($argv)) {
 }
 
 if (!isset($argv[1]) || !in_array($argv[1], ['nano', 'tetra'])) {
-    echo "Run with \"php opkg-parser.php [TYPE]\"\n";
+    echo "Run with \"php sync-repos.php [TYPE]\"\n";
     echo "    TYPE -> 'nano' or 'tetra'\n";
     exit(1);
 }
