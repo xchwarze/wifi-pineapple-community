@@ -32,7 +32,7 @@ function delTree($dir) {
     return rmdir($dir);
 }
 
-function cleanManifiest($string, $path) {
+function cleanManifiest($string, $folder, $filename) {
     $blacklist = [
         'Source',
         'SourceName',
@@ -48,7 +48,11 @@ function cleanManifiest($string, $path) {
         }
     }
 
+    $path = "{$folder}/{$filename}";
+    $size = filesize($path);
     $hash = hash_file('sha256', $path);
+    $manifiest[] = "Filename: {$filename}";
+    $manifiest[] = "Size: {$size}";
     $manifiest[] = "SHA256sum: {$hash}";
     $manifiest[] = '';
 
@@ -94,7 +98,7 @@ foreach ($files as $item) {
         continue;
     }
 
-    $packagesIndex[] = cleanManifiest(file_get_contents('unpack/control'), "{$folder}/{$item}");
+    $packagesIndex[] = cleanManifiest(file_get_contents('unpack/control'), $folder, $item);
 }
 
 @delTree('unpack');
