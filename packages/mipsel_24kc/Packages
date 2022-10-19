@@ -1,25 +1,97 @@
-Package: sslsplit
-Version: 0.5.5-tls13-1
-Depends: libc, libevent2-7, libopenssl1.1, libevent2-openssl7, libevent2-pthreads7, libnet-1.2.x, libpcap1, musl-fts
-License: BSD-2-Clause
+Package: aircrack-ng-custom
+Version: 1.6-10
+Depends: libc, libhwloc, libpcap1, libpcre, libpthread, uclibcxx, libopenssl1.1, libsqlite3-0, libnl-core200, libnl-genl200, zlib
+License: GPL-2.0-or-later
 Section: net
 Architecture: mipsel_24kc
-Installed-Size: 156
-Filename: sslsplit_0.5.5-tls13-1_mipsel_24kc.ipk
-Size: 60517
-SHA256sum: 78b1d08508fdb1da0ab0be89833089f7cbeb0f1e5e0fee0dbfe2db62568a25ba
-Description:  Transparent SSL/TLS interception
+Installed-Size: 524643
+Description:  WLAN tools for breaking 802.11 WEP/WPA keys
+SHA256sum: 28feac626d456286e81b7d8afc18fd17b4f7259313958553f4f57e9be50ba644
 
-Package: mdk4
-Version: 1.0-lede-1
-Depends: libc, libpthread, libnl200, libpcap1
+Package: asleap
+Version: 2.2-5
+Depends: libc, libpthread, libopenssl1.1, libpcap1
+License: GPL-2.0
 Section: net
 Architecture: mipsel_24kc
-Installed-Size: 63222
-Filename: mdk4-1_mipsel_24kc.ipk
-Size: 63997
-SHA256sum: 739aeb690fbe098e203cd744dfe91d257fefa2ba970253318b743767ea9a20ea
-Description:  Tool to exploit wireless vulnerabilities. (DEVELOPER VERSION)
+Installed-Size: 154221
+Description:  A generic MS-CHAPv2 cracking tool.
+ Can be applied anytime you have a MS-CHAPv2 packet capture available.
+SHA256sum: dd3f11ec6c6eb0e1557437e8f507f393e7672a318872e1d346ae4222c03483ec
+
+Package: backdoorfactory
+Version: 0.2-1
+Depends: libc, bettercap
+License: GPL-3.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 1158927
+Description:  Backdoorfactory is an extension to bettercap that allows the insertion of shellcode into intercepted file downloads.
+ It lets you man-in-the-middle live web file downloads and inject them with platform-appropriate shellcode. It works on downloaded archives as well.
+SHA256sum: d3ebe31b906f1d5672231dd27dcd36b33ca8f98fbc440cfdda41be340d689754
+
+Package: bettercap
+Version: 2.32.0-1
+Depends: libc, libpcap1, libusb-1.0-0, libnetfilter-queue1
+License: GPL-3.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 6160640
+Description:  Bettercap is a powerful, easily extensible and portable framework written
+ in Go which aims to offer to security researchers, red teamers and reverse
+ engineers an easy to use, all-in-one solution with all the features they
+ might possibly need for performing reconnaissance and attacking WiFi
+ networks, Bluetooth Low Energy devices, wireless HID devices and Ethernet networks.
+SHA256sum: 90e0eb6253d2e64339174f7081942d5647f42234ddd64058ad97349b0a883d4a
+
+Package: bully
+Version: 1.4-1
+Depends: libc, libpcap1
+License: MIT
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 62058
+Description:  Brute force attack against WPS, that actually works
+SHA256sum: 34f71791177bb9f1295bb209f12d7bd86ea8168ce793ecdb293b66e52e7c0d1e
+
+Package: dns2proxy
+Version: 1.1-1
+Depends: libc, python3-light, python3-dns, python3-setuptools, scapy
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 7155
+Description:  This tools offer a different features for post-explotation once you change the DNS server to a Victim
+SHA256sum: fd5a88daad8f2c681563205b65d43c770d604b6bac32036672d5bde4bd45e6a5
+
+Package: hcxtools-custom
+Version: 6.2.5-13
+Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
+License: MIT
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 139525
+Description:  Set of tools convert packets from captures (h = hash, c = capture, convert and calculate candidates, x = different hashtypes)
+ for the use with latest hashcat or John the Ripper.
+SHA256sum: 9561fe0cb896a6022238b495ae78bade33fdf386783ec4b0a6cff89c92af07cc
+
+Package: hostapd-mana
+Version: 2.6.5-28
+Depends: libc, hostapd-common, libubus20210603, libopenssl1.1, libnl-tiny
+License: GPL-2.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 461494
+Description:  This package contains hostapd with support for the MANA/KARMA attacks.
+SHA256sum: bfb4f0685bdde3b9f1a904fdcc6a36999d4798291339bb43e7b946e28d7ae5ee
+
+Package: hostapd-wpe
+Version: 1-2
+Depends: libc, libubus20191227, libnl-tiny, libopenssl1.1
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 384910
+Description:  This package contains a full featured IEEE 802.1x/WPA/EAP/RADIUS Authenticator with WPE patch support.
+SHA256sum: 8655d27ac29b70c4811d509f1bc761477b320c0a43c0cab528bc1527ac3fd23e
 
 Package: kismet-capture-linux-bluetooth
 Version: 2020-12-R3-1
@@ -27,10 +99,8 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 37108
-Filename: kismet-capture-linux-bluetooth_2020-12-R3-1_mipsel_24kc.ipk
-Size: 37753
-SHA256sum: a21fde03d189c163bbedfba905ed4088f03ccc5ca64f41e465d502463d6ef7c1
 Description:  Kismet HCI Bluetooth Support
+SHA256sum: a21fde03d189c163bbedfba905ed4088f03ccc5ca64f41e465d502463d6ef7c1
 
 Package: kismet-capture-linux-wifi
 Version: 2020-12-R3-1
@@ -38,11 +108,9 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 52092
-Filename: kismet-capture-linux-wifi_2020-12-R3-1_mipsel_24kc.ipk
-Size: 52783
-SHA256sum: 6915cd2079d2d830ebc7eadef81d5346b2f458e0f72be32413659144e9c537a3
 Description:  Helper binary to capture Wi-Fi packets from a monitor mode adapter.
  Enables local and remote Wi-Fi capture with Kismet
+SHA256sum: 6915cd2079d2d830ebc7eadef81d5346b2f458e0f72be32413659144e9c537a3
 
 Package: kismet-capture-nrf-51822
 Version: 2020-12-R3-1
@@ -50,11 +118,9 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 31605
-Filename: kismet-capture-nrf-51822_2020-12-R3-1_mipsel_24kc.ipk
-Size: 32245
-SHA256sum: ec5ccbb07a288064a78b65f09154db3fc08f7bf995d4129261cd9cc16d64fb7b
 Description:  Helper binary to capture BTLE from a NRF51822 serial adapter.
  Enables local and remote BTLE packet capture with Kismet
+SHA256sum: ec5ccbb07a288064a78b65f09154db3fc08f7bf995d4129261cd9cc16d64fb7b
 
 Package: kismet-capture-nxp-kw41z
 Version: 2020-12-R3-1
@@ -62,11 +128,9 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 33851
-Filename: kismet-capture-nxp-kw41z_2020-12-R3-1_mipsel_24kc.ipk
-Size: 34612
-SHA256sum: 46291addbf50becf53b453dfcf7ec7d83ca67ef6d5e6716d31b4a053b5741dbb
 Description:  Helper binary to capture BTLE from a NXPKW41Z adapter.
  Enables local and remote 802.15.4 packet capture with Kismet
+SHA256sum: 46291addbf50becf53b453dfcf7ec7d83ca67ef6d5e6716d31b4a053b5741dbb
 
 Package: kismet-capture-sdr-rtl433
 Version: 2020-12-R3-1
@@ -74,11 +138,9 @@ Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 28386
-Filename: kismet-capture-sdr-rtl433_2020-12-R3-1_mipsel_24kc.ipk
-Size: 29258
-SHA256sum: 2f1780b41ab333c5d7afa3b48bc080cb265e44f0ce2c123bab6742cff28bcaba
 Description:  Helper binary to capture sensor and thermometer data using
  rtl433 and a rtlsdr. Enables local and remote rtl433 capture with Kismet
+SHA256sum: 2f1780b41ab333c5d7afa3b48bc080cb265e44f0ce2c123bab6742cff28bcaba
 
 Package: kismet-capture-sdr-rtladsb
 Version: 2020-12-R3-1
@@ -86,11 +148,9 @@ Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 36040
-Filename: kismet-capture-sdr-rtladsb_2020-12-R3-1_mipsel_24kc.ipk
-Size: 36943
-SHA256sum: 9fe4cf46a6119802be0299c1847a1955fd29ceb723ef634a8722d46945442f2c
 Description:  Helper binary to capture ADSB packets from a rtlsdr.
  Enables local and remote ADSB capture with Kismet
+SHA256sum: 9fe4cf46a6119802be0299c1847a1955fd29ceb723ef634a8722d46945442f2c
 
 Package: kismet-capture-sdr-rtlamr
 Version: 2020-12-R3-1
@@ -98,11 +158,9 @@ Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 32927
-Filename: kismet-capture-sdr-rtlamr_2020-12-R3-1_mipsel_24kc.ipk
-Size: 33837
-SHA256sum: 8a4cdb00a41009a09a7f088eaaec8ca5061c0da181073dede2eba17b3ba962d6
 Description:  Helper binary to capture AMR power and water meter packets 
  from a rtlsdr. Enables local and remote AMR capture with Kismet
+SHA256sum: 8a4cdb00a41009a09a7f088eaaec8ca5061c0da181073dede2eba17b3ba962d6
 
 Package: kismet-capture-ti-cc2531
 Version: 2020-12-R3-1
@@ -110,11 +168,9 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 33881
-Filename: kismet-capture-ti-cc2531_2020-12-R3-1_mipsel_24kc.ipk
-Size: 34647
-SHA256sum: 6733db27ea275330c4488046d2ab2f347847c1d445974f52f9ccd0c573451cf8
 Description:  Helper binary to capture 802.15.4 packets from a TI CC2531 adapter.
  Enables local and remote 802.15.4 capture with Kismet
+SHA256sum: 6733db27ea275330c4488046d2ab2f347847c1d445974f52f9ccd0c573451cf8
 
 Package: kismet-capture-ti-cc2540
 Version: 2020-12-R3-1
@@ -122,11 +178,9 @@ Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobu
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 33874
-Filename: kismet-capture-ti-cc2540_2020-12-R3-1_mipsel_24kc.ipk
-Size: 34634
-SHA256sum: a44cefdeb6e784fbdec42cf5ad465eebdf89d1e2b2fc79b85b28429c9e8a183f
 Description:  Helper binary to capture BTLE packets from a TI CC2540 adapter.
  Enables local and remote BTLE capture with Kismet
+SHA256sum: a44cefdeb6e784fbdec42cf5ad465eebdf89d1e2b2fc79b85b28429c9e8a183f
 
 Package: kismet
 Version: 2020-12-R3-1
@@ -134,21 +188,114 @@ Depends: libc, libpthread, libpcap1, libpcre, libstdcpp6, libncurses6, libsqlite
 Section: net
 Architecture: mipsel_24kc
 Installed-Size: 3552456
-Filename: kismet_2020-12-R3-1_mipsel_24kc.ipk
-Size: 3546931
-SHA256sum: 1b06a22faaeb4b5071d28125fd055ec06bf3de17e127acda2420ed8f414369fa
 Description:  Modern Kismet wireless capture and IDS, with the web-ui based Kismet
+SHA256sum: 1b06a22faaeb4b5071d28125fd055ec06bf3de17e127acda2420ed8f414369fa
 
-Package: mk7led
-Version: 20xx-XX-XX-1
+Package: kmod-rtl88x2bu
+Version: 4.14.248+2021-01-21-48e7c19c-1
+Depends: kernel (=4.14.248-1-0c41ecd250a0da2a3fda85a25c45c051), kmod-cfg80211, kmod-usb-core
+License: GPLv2
+Section: kernel
+Architecture: mipsel_24kc
+Installed-Size: 1187626
+Description:  Realtek 8812BU/8822BU support
+SHA256sum: fe2327fde5bacc31fa74dd38db2db14a819f060914d129946492fab5ae6ddf02
+
+Package: libwifi
+Version: 0.0.1-1
 Depends: libc
+License: Apache-2.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 35214
+Description:  libwifi is a C library with a permissive license for
+ generating and parsing a wide variety of 802.11 wireless frames
+SHA256sum: 6c086141824bc0766518757896f15a57277e0f03398be8f2ffee0d5469a98358
+
+Package: mdk3
+Version: 8.1-1
+Depends: libc, libpthread, libnl200, libpcap1
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 58945
+Description:  Tool to exploit wireless vulnerabilities
+SHA256sum: 1f03f1234baea706617a0b95b0c6fe23c1f025a0dfa88071f2c09e7c6782c879
+
+Package: mdk4
+Version: 4.2-1
+Depends: libc, libpthread, libpcap1, libpcre, libnl200, libnl-genl200
+License: GPL-3.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 64957
+Description:  Tool to exploit wireless vulnerabilities.
+SHA256sum: f20bae8cf6b90996b1d55c78dedff07c7371adb7fbf1ac363967d19744f1f822
+
+Package: nano-custom
+Version: 6.0-2
+Depends: libc, libncurses6, zlib
+License: GPL-3.0-or-later
 Section: utils
 Architecture: mipsel_24kc
-Installed-Size: 3824
-Filename: mk7led_20xx-XX-XX-1_mipsel_24kc.ipk
-Size: 4527
-SHA256sum: 4c81b8bccbce7e2906a5aab19a96941e9eabe9fd4bc0c31672a6970ab8bdaf31
-Description:  Control program for setting the LEDs on the MK7LED add-on board
+Installed-Size: 121615
+Description:  Custom version of Nano
+SHA256sum: a8d2a10734fd298f12292303fe88fec442654005b8266e9e95bd41881b83a4c2
+
+Package: ngrep
+Version: 1.47-1
+Depends: libc, libpcap1, libpcre
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 7893
+Description:  ngrep a pcap-aware tool that will allow you to specify extended
+ regular expressions to match against data payloads of packets. It
+ currently recognizes TCP, UDP, and ICMP across Ethernet, PPP, SLIP,
+ FDDI, Token Ring and null interfaces, and understands BPF filter
+ logic in the same fashion as more common packet sniffing tools,
+ like tcpdump and snoop.
+SHA256sum: cc1b056f5a338ea646601a6281dc47a6a67d0cb722d087049c2334eeac7f5c76
+
+Package: openblas
+Version: 0.3.18
+Depends: libc, libgfortran
+License: BSD 3-Clause
+Section: libs
+Architecture: mipsel_24kc
+Installed-Size: 428390
+Description:  OpenBLAS is an optimized BLAS (Basic Linear Algebra Subprograms) library
+ based on GotoBLAS2 1.13 BSD version.
+SHA256sum: a635d8094b7b60e62b4e125dda0e33ee2a3cfef3bbf4697cb13e8f5641a1ff9d
+
+Package: pixelserv-tls
+Version: 2.4-1
+Depends: libc, libopenssl1.1, libpthread
+License: GPL-2.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 24784
+Description:  A tiny bespoke HTTP/1.1 webserver with HTTPS and SNI support.
+ It acts on behalf of hundreds of thousands of advert/tracker servers
+ and responds to all requests with nothing to speed up web browsing.
+ pixelserv-tls supports TLSv1.0, TLSv1.2 and TLSv1.3 and thus could operate with a wide range
+ of browsers and client devices. Server certificates for any given advert/tracker domains are
+ generated automatically on first use and saved to disk.
+ pixelserv-tls can log access and HTTP/1.1 POST contents to syslog.
+ So it is also a useful tool to inspect and expose 'wrongly blocked' domains
+ as well as 'rogue' domains invading user privacy.
+SHA256sum: 3548d683628bb07f321093b16e70d88b31f559a136f35d01b27abe2094165dcd
+
+Package: pixiewps-custom
+Version: 1.4.2-3
+Depends: libc, libpthread, libopenssl1.1
+License: GPL-3.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 31113
+Description:  Pixiewps is a tool written in C used to bruteforce offline the WPS PIN
+ exploiting the low or non-existing entropy of some Access Points, the so-called
+ "pixie-dust attack" discovered by Dominique Bongard in summer 2014.  It is
+ meant for educational purposes only.
+SHA256sum: 4b996655b7beab2eeea218b69808eaf719153d88381d566e1b99ef9680498549
 
 Package: python3-cython
 Version: 0.29.21-1
@@ -156,10 +303,8 @@ Depends: libc, python3-light, python3-setuptools
 Section: lang
 Architecture: mipsel_24kc
 Installed-Size: 1650020
-Filename: python3-cython_0.29.21-1_mipsel_24kc.ipk
-Size: 1649030
-SHA256sum: 4d7a25bad687e7568b6307dd24b0401d37b947afe1d95bec215c60f63637cf88
 Description:  C language extension library for Python
+SHA256sum: 4d7a25bad687e7568b6307dd24b0401d37b947afe1d95bec215c60f63637cf88
 
 Package: python3-numpy
 Version: 1.19.1-1
@@ -167,10 +312,8 @@ Depends: libc, python3-light, python3-setuptools, python3-cython
 Section: lang
 Architecture: mipsel_24kc
 Installed-Size: 6177725
-Filename: python3-numpy_1.19.1-1_mipsel_24kc.ipk
-Size: 6167870
-SHA256sum: 53903b0b929526baad2d4d70b480ab9476c3d902b06ae862d7fa5b91f82cf821
 Description:  Numpy math library for Python3
+SHA256sum: 53903b0b929526baad2d4d70b480ab9476c3d902b06ae862d7fa5b91f82cf821
 
 Package: python3-protobuf
 Version: 3.13.0-1
@@ -178,10 +321,8 @@ Depends: libc, python3-light, python3-setuptools, python3-six
 Section: lang
 Architecture: mipsel_24kc
 Installed-Size: 198586
-Filename: python3-protobuf_3.13.0-1_mipsel_24kc.ipk
-Size: 199270
-SHA256sum: 7c09ee19b70e9fae307aeffaa34f9b622e9b63e65aa16dec136897ef2824c4f2
 Description:  The official implementation of Google Protobufs in Python3
+SHA256sum: 7c09ee19b70e9fae307aeffaa34f9b622e9b63e65aa16dec136897ef2824c4f2
 
 Package: python3-websockets
 Version: 8.1-1
@@ -189,7 +330,52 @@ Depends: libc, python3-light, python3-setuptools
 Section: lang
 Architecture: mipsel_24kc
 Installed-Size: 66251
-Filename: python3-websockets_8.1-1_mipsel_24kc.ipk
-Size: 67112
-SHA256sum: 2d678c8517cd49cd1bf190568e0d5a7e1d89e8bcc40b73bcca9b1dae929eb1a1
 Description:  Websockets implementation for python3
+SHA256sum: 2d678c8517cd49cd1bf190568e0d5a7e1d89e8bcc40b73bcca9b1dae929eb1a1
+
+Package: reaver-custom
+Version: 1.6.6-7
+Depends: libc, libpcap1, libpthread
+License: GPL-2.0
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 284643
+Description:  Reaver has been designed to be a robust and practical attack against Wi-Fi
+ Protected Setup (WPS) registrar PINs in order to recover WPA/WPA2
+ passphrases. It has been tested against a wide variety of access points and
+ WPS implementations.
+ 
+ This is reaver-wps-fork-t6x, a community forked version, which has included
+ various bug fixes and additional attack method (the offline Pixie Dust
+ attack).
+SHA256sum: 1d53c2aba91ad59badf0ccf00e29acb7f65537c9d658e87302d05d7dfc67acfa
+
+Package: reaver-macchanger
+Version: 1.6.6-2
+Depends: libc, libpcap1, libpthread
+License: GPL-2.0
+Section: net
+SourceDateEpoch: 1610581240
+Architecture: mipsel_24kc
+Installed-Size: 283751
+Description:  This is a fork of reaver-wps-fork-t6x with an added MAC Changer function.
+SHA256sum: f07bb724bb3f4acd356a7e6a64ddf53bbe4278dde08d41c30db628b236a2567b
+
+Package: sslsplit
+Version: 0.5.5-tls13-1
+Depends: libc, libevent2-7, libopenssl1.1, libevent2-openssl7, libevent2-pthreads7, libnet-1.2.x, libpcap1, musl-fts
+License: BSD-2-Clause
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 59942
+Description:  Transparent SSL/TLS interception
+SHA256sum: 78b1d08508fdb1da0ab0be89833089f7cbeb0f1e5e0fee0dbfe2db62568a25ba
+
+Package: sslstrip-hsts
+Version: 1.0-3
+Depends: libc, python-light, python-twisted, python-pyopenssl, python-zope-interface, python-setuptools
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 13604
+Description:  SSLstrip that includes the new feature to avoid 'HTTP Strict Transport Security' (HSTS.
+SHA256sum: da72e6b3c0f39db2d67dae0ca30d075814f4bb042bc9e6eef133758d4c1c0da8

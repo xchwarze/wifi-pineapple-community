@@ -1,5 +1,11 @@
 <?php
 
+// curl -L http://downloads.openwrt.org/releases/19.07.7/targets/ar71xx/generic/packages/Packages > openwrt_core_packages
+// curl -L http://downloads.openwrt.org/releases/19.07.7/packages/mips_24kc/base/Packages > openwrt_base_packages
+// curl -L http://downloads.openwrt.org/releases/19.07.7/packages/mips_24kc/packages/Packages > openwrt_packages_packages
+
+
+
 function packagesToArray($file_path) {
     //return strtok(file_get_contents($file_path), "\n\n");
     //return explode("\n\n", file_get_contents($file_path));
@@ -40,19 +46,19 @@ foreach ($packages as $key) {
     if (in_array($key, $openwrt_base_packages)) {
         $status = true;
         $openwrt_base_count++;
-        //echo "[!] {$key} found in 'openwrt_base_packages'\n";
+        echo "[!!!] {$key} found in 'openwrt_base_packages'\n";
     }
 
     if (in_array($key, $openwrt_core_packages)) {
         $status = true;
         $openwrt_core_count++;
-        //echo "[!] {$key} found in 'openwrt_core_packages'\n";
+        echo "[!!!] {$key} found in 'openwrt_core_packages'\n";
     }
 
     if (in_array($key, $openwrt_packages_packages)) {
         $status = true;
         $openwrt_packages_count++;
-        //echo "[!] {$key} found in 'openwrt_packages_packages'\n";
+        echo "[!!!] {$key} found in 'openwrt_packages_packages'\n";
     }
 
     if (!$status) {
@@ -61,6 +67,9 @@ foreach ($packages as $key) {
     }
 }
 
+$openwrt_base = count($openwrt_base_packages);
+$openwrt_core = count($openwrt_core_packages);
+$openwrt_packages = count($openwrt_core_packages);
 $missing_packages_count = count($missing_packages);
 
 
@@ -84,10 +93,10 @@ foreach ($mk6_packages as $key) {
 echo "
 Resume
 ============================
-openwrt_base     : {$openwrt_base_count}
-openwrt_core     : {$openwrt_core_count}
-openwrt_packages : {$openwrt_packages_count}
-missing packages : {$missing_packages_count}
+openwrt_base ({$openwrt_base})       : {$openwrt_base_count}
+openwrt_core ({$openwrt_core})       : {$openwrt_core_count}
+openwrt_packages ({$openwrt_packages})   : {$openwrt_packages_count}
+missing packages         : {$missing_packages_count}
 
 
 Packages
