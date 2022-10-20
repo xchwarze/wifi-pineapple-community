@@ -10,8 +10,9 @@ if (!isset($_SERVER['argv']) && !isset($argv)) {
 }
 
 if (!isset($argv[1]) || !in_array($argv[1], ['nano', 'tetra'])) {
-    echo "Run with \"php sync-repos.php [TYPE]\"\n";
-    echo "    TYPE -> 'nano' or 'tetra'\n";
+    echo "Run with \"php sync-repos.php [TYPE] [DISABLE_SYNC]\"\n";
+    echo "    TYPE          -> 'nano' or 'tetra'\n";
+    echo "    DISABLE_SYNC  -> disable sync with original pineapple repo\n";
     exit(1);
 }
 
