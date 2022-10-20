@@ -2,7 +2,7 @@
    {
       "title":"WPC v3 released",
       "date":"2022-10-17",
-      "content":"<p>Today I released v3 of the project, where the main changes are: 📣<\/p><ul>\r\n<li>Fixed all the problems found in v2<\/li>\r\n<li>Expanded the compatibility list from 125 to 211<\/li>\r\n<li>Added support for mipsel architecture<\/li>\r\n<li>Online updater<\/li>\r\n<\/ul>"
+      "content":"<p>Today I released v3 of the project, where the main changes are: 📣<\/p><ul>\r\n<li>Fixed all the problems found in v2<\/li>\r\n<li>Expanded the compatibility list from 125 to 211 devices<\/li>\r\n<li>Added support for mipsel architecture<\/li>\r\n<li>Online firmware updater<\/li>\r\n<\/ul>"
    },
    {
       "title":"New Modules Community Repo",
