@@ -75,18 +75,63 @@ Filename: dns2proxy_1.1-1_mipsel_24kc.ipk
 Size: 7984
 SHA256sum: fd5a88daad8f2c681563205b65d43c770d604b6bac32036672d5bde4bd45e6a5
 
+Package: hcxdumptool-custom
+Version: 6.2.5-3
+Depends: libc, libpcap1, libopenssl1.1
+License: MIT
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 58176
+Description:  Small tool to capture packets from wlan devices. After capturing, upload
+ the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
+ to see if your ap or the client is vulnerable by using common wordlists.
+ Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
+ and check if wlan-key or plainmasterkey was transmitted unencrypted.
+Filename: hcxdumptool-custom_6.2.5-3_mipsel_24kc.ipk
+Size: 59267
+SHA256sum: 44a21fcab7b31c4a241b02364422ef01f91555b1440534d2a65d32bb98762632
+
+Package: hcxlabtools
+Version: 6.2.5-3
+Depends: libc, libpcap1, libopenssl1.1
+License: MIT
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 90337
+Description:  Small tool to capture packets from wlan devices. After capturing, upload
+ the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
+ to see if your ap or the client is vulnerable by using common wordlists.
+ Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
+ and check if wlan-key or plainmasterkey was transmitted unencrypted.
+Filename: hcxlabtools_6.2.5-3_mipsel_24kc.ipk
+Size: 89298
+SHA256sum: b3b90f077012ec22a57fdd23302202a9106bccd905729d23666f9841256f7f15
+
 Package: hcxtools-custom
-Version: 6.2.5-13
+Version: 6.2.5-3
 Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
 License: MIT
 Section: net
 Architecture: mipsel_24kc
-Installed-Size: 139525
+Installed-Size: 138403
 Description:  Set of tools convert packets from captures (h = hash, c = capture, convert and calculate candidates, x = different hashtypes)
  for the use with latest hashcat or John the Ripper.
-Filename: hcxtools-custom_6.2.5-13_mipsel_24kc.ipk
-Size: 139793
-SHA256sum: 9561fe0cb896a6022238b495ae78bade33fdf386783ec4b0a6cff89c92af07cc
+Filename: hcxtools-custom_6.2.5-3_mipsel_24kc.ipk
+Size: 138668
+SHA256sum: eca75c568616e9db02a5aad6b6c10c50251e02724c87db8c1433c7b1bc2fc617
+
+Package: hcxtools-full
+Version: 6.2.5-3
+Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
+License: MIT
+Section: net
+Architecture: mipsel_24kc
+Installed-Size: 104
+Description:  This package includes all the tools made by @ZerBea
+ Tools: hcxtools, hcxdumptool, and wifi_laboratory (hcxlabtools)
+Filename: hcxtools-full_6.2.5-3_mipsel_24kc.ipk
+Size: 930
+SHA256sum: 8f843edd07ca035dd199644715d9d36a0d00322edbb396631a7a5ce9ce731d8d
 
 Package: hostapd-mana
 Version: 2.6.5-28
