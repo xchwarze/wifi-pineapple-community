@@ -1,4 +1,8 @@
 $(function() {
+    if ($('#terminal-open').length === 1) {
+        return;
+    }
+
     // JS
     var js = $('<script src="modules/Terminal/js/jquery-resizable.min.js"></script>');
     $('head').append(js);

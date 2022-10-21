@@ -1,22 +1,18 @@
 <style>
 .terminal-container {
-    position: fixed; 
+    width: 100%;
+    position: fixed;
     bottom: 0;
-    width: 100%; 
-    z-index: 99999;
     margin-bottom: 0;
     background-color: #2b2b2b;
-    border-bottom: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-width: 1px 0 0 0;
+    border-radius: 4px 4px 0 0;
+    z-index: 999;
 }
 
 .terminal-content {
     width: 100%;
     border: 0;
-    min-height: 200px;
 }
 
 #terminal-panel {
@@ -24,13 +20,17 @@
 }
 
 .terminal-collapse {
-    content: url('/img/chevron_up.svg');
     width: 16px;
+    content: url('/img/chevron_up.svg');
     vertical-align: middle;
 }
 
 .terminal-collapse.collapsed {
     content: url('/img/chevron_down.svg');
+}
+
+.module-content {
+    padding-bottom: 60px;
 }
 </style>
 
@@ -47,7 +47,7 @@
 </div>
 
 <script type="text/javascript">
-    $(function() {
+$(function() {
     //registerController('TerminalController', ['$scope', '$api', function($scope, $api){
     var $scope = {};
     var $api = window.pineapple;
