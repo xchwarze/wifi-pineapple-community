@@ -117,62 +117,45 @@ Size: 57153
 SHA256sum: 6f79d3af6d988d481ad3dce8873dda1189768334bd7c839f6905d061923310ec
 
 Package: hcxdumptool-custom
-Version: 6.2.5-8
+Version: 6.2.7
 Depends: libc, libpcap1, libopenssl1.1
 License: MIT
 Section: net
 Architecture: mips_24kc
-Installed-Size: 59828
+Installed-Size: 61069
 Description:  Small tool to capture packets from wlan devices. After capturing, upload
  the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
  to see if your ap or the client is vulnerable by using common wordlists.
  Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
  and check if wlan-key or plainmasterkey was transmitted unencrypted.
-Filename: hcxdumptool-custom_6.2.5-8_mips_24kc.ipk
-Size: 60768
-SHA256sum: f9e0b4ba241eb033ab955037a180630e0dd185b2f8427260dd2ca71af3504b96
+Filename: hcxdumptool-custom_6.2.7_mips_24kc.ipk
+Size: 62018
+SHA256sum: 9159205c720f74baafdfca9449b01f6a284d6de10981193457a35b65f16042c0
 
 Package: hcxlabtools
-Version: 6.2.5-8
+Version: 6.2.7
 Depends: libc, libpcap1, libopenssl1.1
 License: MIT
 Section: net
 Architecture: mips_24kc
-Installed-Size: 92530
-Description:  Small tool to capture packets from wlan devices. After capturing, upload
- the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
- to see if your ap or the client is vulnerable by using common wordlists.
- Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
- and check if wlan-key or plainmasterkey was transmitted unencrypted.
-Filename: hcxlabtools_6.2.5-8_mips_24kc.ipk
-Size: 91505
-SHA256sum: 67e12c2a9ec6edd9c46969a545a6785dd90a3326fef705d9d9c2f9d9c1be4872
+Installed-Size: 104387
+Description:  Skeleton to test WiFi adapters and to understand 802.11 protocol. 
+Filename: hcxlabtools_6.2.7_mips_24kc.ipk
+Size: 103343
+SHA256sum: 3726a9a05504816d4533145d9a621a8e243d2b5c0b5a3e8339b653e448c5262c
 
 Package: hcxtools-custom
-Version: 6.2.5-8
-Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
+Version: 6.2.7
+Depends: libc, libpthread, zlib, libcurl4, libpcap1, libopenssl1.1
 License: MIT
 Section: net
 Architecture: mips_24kc
-Installed-Size: 141276
-Description:  Set of tools convert packets from captures (h = hash, c = capture, convert and calculate candidates, x = different hashtypes)
- for the use with latest hashcat or John the Ripper.
-Filename: hcxtools-custom_6.2.5-8_mips_24kc.ipk
-Size: 140834
-SHA256sum: 8849cfbe2461e626a07d5654fd1a2efcc91a383ad10eb171efe886342750d1ae
-
-Package: hcxtools-full
-Version: 6.2.5-8
-Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
-License: MIT
-Section: net
-Architecture: mips_24kc
-Installed-Size: 105
-Description:  This package includes all the tools made by @ZerBea
- Tools: hcxtools, hcxdumptool, and wifi_laboratory (hcxlabtools)
-Filename: hcxtools-full_6.2.5-8_mips_24kc.ipk
-Size: 929
-SHA256sum: 2fe3f8c9c40de22ffbc1b0588ebd2e5150f12a39972a258d2b3fce5784efa79d
+Installed-Size: 141862
+Description:  Portable solution for conversion of cap/pcap/pcapng (gz compressed) WiFi dump files to hashcat formats
+ and to John the Ripper formats. hcx: h = hash, c = convert and calculate candidates, x = different hashtypes
+Filename: hcxtools-custom_6.2.7_mips_24kc.ipk
+Size: 141198
+SHA256sum: bae3d30ae3b3117f2ab57578cb5217af782bc95a1afe82d614d5dcad20a41f9b
 
 Package: hostapd-mana
 Version: 2.6.5-27
