@@ -17,7 +17,7 @@
    {
       "title":"Update OpenWrt version",
       "date":"2022-09-22",
-      "content":"<p>Update OpenWrt version to 19.02.7! Check for new builds in the <a href='https://github.com/xchwarze/wifi-pineapple-cloner-builds'>downloads repo<\/a>! 🚀<\/p>"
+      "content":"<p>Update OpenWrt version to 19.07.7! Check for new builds in the <a href='https://github.com/xchwarze/wifi-pineapple-cloner-builds'>downloads repo<\/a>! 🚀<\/p>"
    },
    {
       "title":"New targets",
@@ -32,7 +32,7 @@
    {
       "title":"GL-AR150 updates",
       "date":"2022-03-11",
-      "content":"<p>New builds using the Universal Wifi pineapple hardware cloner have been released.<br \/>They were made with OpenWrt 19.02.2 and 19.02.7! 🚀<br \/>In both you can find the new panel.<\/p>"
+      "content":"<p>New builds using the Universal Wifi pineapple hardware cloner have been released.<br \/>They were made with OpenWrt 19.07.2 and 19.07.7! 🚀<br \/>In both you can find the new panel.<\/p>"
    },
    {
       "title":"Panel updates!",
