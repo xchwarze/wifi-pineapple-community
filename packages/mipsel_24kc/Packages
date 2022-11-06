@@ -381,6 +381,23 @@ Filename: pixiewps-custom_1.4.2-3_mipsel_24kc.ipk
 Size: 31628
 SHA256sum: 4b996655b7beab2eeea218b69808eaf719153d88381d566e1b99ef9680498549
 
+Package: protobuf-lite
+Version: 3.5.1-1
+Depends: libc, zlib, libpthread, libatomic1, libstdcpp6
+License: BSD-3-Clause
+Section: libs
+Architecture: mipsel_24kc
+Installed-Size: 116748
+Description:  Protocol Buffers are a way of encoding structured data in an efficient
+ yet extensible format. Google uses Protocol Buffers for almost all
+ of its internal RPC protocols and file formats.
+ 
+ This package provides the libprotobuf-lite library.
+ 
+Filename: protobuf-lite_3.5.1-1_mipsel_24kc.ipk
+Size: 117590
+SHA256sum: d6383545f53d2d103fd5e00792a3fd656485017f8d3f967ac009ddc1c4386aba
+
 Package: python3-cython
 Version: 0.29.21-1
 Depends: libc, python3-light, python3-setuptools
