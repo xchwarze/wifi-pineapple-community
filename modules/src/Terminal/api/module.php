@@ -57,13 +57,10 @@ class Terminal extends Module
 
     protected function checkPanelVersion()
     {
-        $version = file_get_contents("/etc/pineapple/pineapple_version");
-        $version = str_replace("+", "", trim($version));
-        if (version_compare($version, "2.8.0") >= 0) {
-            return true;
-        }
+        $version = \helper\getFirmwareVersion();
+        $version = str_replace("+", "", $version);
 
-        return false;
+        return version_compare($version, "2.8.0") >= 0;
     }
 
     protected function checkDependencyInstalled()
