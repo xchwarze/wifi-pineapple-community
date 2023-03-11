@@ -108,6 +108,7 @@ class Terminal extends Module
         */
         if (!\helper\checkRunning(self::TTYD)) {
             $this->execBackground(self::TTYD . ' -p 1477 -i br-lan /bin/login');
+            sleep(1);
         }
 
         $this->response = ["success" => \helper\checkRunning(self::TTYD)];
