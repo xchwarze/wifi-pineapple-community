@@ -1,0 +1,797 @@
+Package: aircrack-ng-custom
+Version: 1.6-5
+Depends: libc, libhwloc, libpcap1, libpcre, libpthread, uclibcxx, libopenssl1.1, libsqlite3-0, libnl-core200, libnl-genl200, zlib, libbsd0
+License: GPL-2.0-or-later
+Section: net
+Architecture: mips_24kc
+Installed-Size: 470369
+Description:  WLAN tools for breaking 802.11 WEP/WPA keys
+Filename: aircrack-ng-custom_1.6-5_mips_24kc.ipk
+Size: 469196
+SHA256sum: 7ba877765f26aae933a8128726c6ae04791a2e14ba6117195a361fcd3ae1ec9f
+
+Package: arpspoof
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 2758
+Description:  Arpspoof package.
+Filename: arpspoof_2.4b1-2_mips_24kc.ipk
+Size: 3449
+SHA256sum: 2ace7847c0c0e8106c1258479445dd1af120558fe0e1c0c05c74359c694dd903
+
+Package: asleap
+Version: 2.2-4
+Depends: libc, libpthread, libopenssl1.1, libpcap1
+License: GPL-2.0
+Section: base
+Architecture: mips_24kc
+Installed-Size: 152117
+Description:  A generic MS-CHAPv2 cracking tool.
+ Can be applied anytime you have a MS-CHAPv2 packet capture available.
+Filename: asleap_2.2-4_mips_24kc.ipk
+Size: 152884
+SHA256sum: e812beea1638a1bb15d1b4a93fa359f4e5134d16afddedd5c7741aa42973d4d6
+
+Package: backdoorfactory
+Version: 0.2-1
+Depends: libc, bettercap
+License: GPL-3.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 1473709
+Description:  backdoorfactory is an extension to bettercap that allows the insertion of shellcode into intercepted file downloads.
+ 
+ It lets you man-in-the-middle web file downloads and inject them with platform-appropriate shellcode. It works on downloaded archives as well.
+ 
+ Features
+ * Works on PE, Mach-O, and ELF format binaries using the Binject Debug library
+ * Integrates with bettercap's DNS and ARP based man-in-the-middling capabilites
+ * Unpacks and repacks Zip, Tar, and Tar.gz archives, injecting any binaries inside
+ * Supports configurable methods of shellcode injection via the Binjection library
+ * Shellcode repository allows different shellcodes per architecture and per binary format
+Filename: backdoorfactory_0.2-1_mips_24kc.ipk
+Size: 1471006
+SHA256sum: 43567b8a285e04b5ae5228160db31c31d0071c7aadf78df68c74e51121f4fd47
+
+Package: bettercap
+Version: 2.32.0-1
+Depends: libc, libpcap1, libusb-1.0-0, libnetfilter-queue1
+License: GPL-3.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 7152204
+Description:  Bettercap is a powerful, easily extensible and portable framework written
+ in Go which aims to offer to security researchers, red teamers and reverse
+ engineers an easy to use, all-in-one solution with all the features they
+ might possibly need for performing reconnaissance and attacking WiFi
+ networks, Bluetooth Low Energy devices, wireless HID devices and Ethernet networks.
+Filename: bettercap_2.32.0-1_mips_24kc.ipk
+Size: 7101896
+SHA256sum: 0ae362ed6f40062ba7361d80e8062766e4216ff2ebfcbcaacd8caf03f4ea6a98
+
+Package: bully
+Version: 1.4-1
+Depends: libc, libpcap1
+License: MIT
+Section: net
+Architecture: mips_24kc
+Installed-Size: 61042
+Description:  Brute force attack against WPS, that actually works
+Filename: bully_1.4-1_mips_24kc.ipk
+Size: 61904
+SHA256sum: 6fb83efadfa2dd401b330c8950be64e1ce02d03550d1a6a2de282193f0c598c5
+
+Package: dns2proxy
+Version: 1.1-1
+Depends: libc, python3-light, python3-dns, python3-setuptools, scapy
+Section: net
+Architecture: mips_24kc
+Installed-Size: 10054
+Description:  This tools offer a different features for post-explotation once you change the DNS server to a Victim
+Filename: dns2proxy_1.1-1_mips_24kc.ipk
+Size: 10855
+SHA256sum: 529266fe5ee4b69f546c61e8aaec883829aa6e9012d84aca6d1ae5e8226b1774
+
+Package: dnsspoof
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 5383
+Description:  Dnsspoof package.
+Filename: dnsspoof_2.4b1-2_mips_24kc.ipk
+Size: 6082
+SHA256sum: de87d9317c955939479ec455553c8a9a235144141af099d5a05fb648ba62eba8
+
+Package: dsniff
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 57039
+Description:  A collection of tools for network auditing and penetration testing.
+Filename: dsniff_2.4b1-2_mips_24kc.ipk
+Size: 57153
+SHA256sum: 6f79d3af6d988d481ad3dce8873dda1189768334bd7c839f6905d061923310ec
+
+Package: hcxdumptool-custom
+Version: 6.2.7-1
+Depends: libc, libpcap1, libopenssl1.1
+License: MIT
+Section: net
+Architecture: mips_24kc
+Installed-Size: 73921
+Description:  Small tool to capture packets from wlan devices. After capturing, upload
+ the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
+ to see if your ap or the client is vulnerable by using common wordlists.
+ Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
+ and check if wlan-key or plainmasterkey was transmitted unencrypted.
+Filename: hcxdumptool-custom_6.2.7-1_mips_24kc.ipk
+Size: 74904
+SHA256sum: 233b637d05aa5e50517d264b9880cb8d349acd459f9330185e3e54e09ebb339f
+
+Package: hcxlabtools
+Version: 6.2.7-1
+Depends: libc, libpcap1, libopenssl1.1
+License: MIT
+Section: net
+Architecture: mips_24kc
+Installed-Size: 131718
+Description:  Small tool to capture packets from wlan devices. After capturing, upload
+ the "uncleaned" cap here (https://wpa-sec.stanev.org/?submit)
+ to see if your ap or the client is vulnerable by using common wordlists.
+ Convert the cap to hccapx and/or to WPA-PMKID-PBKDF2 hashline (16800) with hcxpcaptool (hcxtools)
+ and check if wlan-key or plainmasterkey was transmitted unencrypted.
+Filename: hcxlabtools_6.2.7-1_mips_24kc.ipk
+Size: 131908
+SHA256sum: 1db22a6de9622666e88f201bca3840497301c559086d584863b4c8ab307b5caf
+
+Package: hcxtools-custom
+Version: 6.2.7-1
+Depends: libc, libpcap1, libopenssl1.1, libpthread, zlib, libcurl4, python3-light
+License: MIT
+Section: net
+Architecture: mips_24kc
+Installed-Size: 159637
+Description:  Set of tools convert packets from captures (h = hash, c = capture, convert and calculate candidates, x = different hashtypes)
+ for the use with latest hashcat or John the Ripper.
+Filename: hcxtools-custom_6.2.7-1_mips_24kc.ipk
+Size: 159532
+SHA256sum: fe1ae66288bf58e50dd0e34a7a71ea28b9e377d594b300e522f550d8aa0dcd00
+
+Package: hostapd-mana
+Version: 2.6.5-27
+Depends: libc, libubus20191227, libnl-tiny, libopenssl1.1
+License: GPL-2.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 468565
+Description:  This package contains hostapd with support for the MANA/KARMA attacks.
+Filename: hostapd-mana_2.6.5-27_mips_24kc.ipk
+Size: 468102
+SHA256sum: 112a00377a8529a87baa8acda4b835f50246eabeea2ac6ae56a02d17e9974729
+
+Package: hostapd-wpe
+Version: 1-2
+Depends: libc, libubus20191227, libnl-tiny, libopenssl1.1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 385468
+Description:  This package contains a full featured IEEE 802.1x/WPA/EAP/RADIUS Authenticator with WPE patch support.
+Filename: hostapd-wpe_1-2_mips_24kc.ipk
+Size: 383249
+SHA256sum: 0ed081e632a41619e56f011119e582d2a0ad551e870bd3bb789eec3dadc39269
+
+Package: kismet-capture-linux-bluetooth
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 39114
+Description:  Kismet HCI Bluetooth Support
+Filename: kismet-capture-linux-bluetooth_2021-07-24-1_mips_24kc.ipk
+Size: 39727
+SHA256sum: e9267ff8c063a1f513b6a4657f57e390d86ccd1c8dffb8ea369a1da49cdc7bbf
+
+Package: kismet-capture-linux-wifi
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 54140
+Description:  Helper binary to capture Wi-Fi packets from a monitor mode adapter.
+ Enables local and remote Wi-Fi capture with Kismet
+Filename: kismet-capture-linux-wifi_2021-07-24-1_mips_24kc.ipk
+Size: 54648
+SHA256sum: 519d1f54716587c659802610a67fc2696aede0628a50e7463d6c1c096cd6ccec
+
+Package: kismet-capture-nrf-51822
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 33566
+Description:  Helper binary to capture BTLE from a NRF51822 serial adapter.
+ Enables local and remote BTLE packet capture with Kismet
+Filename: kismet-capture-nrf-51822_2021-07-24-1_mips_24kc.ipk
+Size: 34238
+SHA256sum: 1d3ed270812d166a910c8912574015f8d42e8c29ceecb3639eff750305dcf502
+
+Package: kismet-capture-nrf-52840
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 33616
+Description:  Helper binary to use an NRF52840 serial adapter as a Bluetooth capture source.
+Filename: kismet-capture-nrf-52840_2021-07-24-1_mips_24kc.ipk
+Size: 34337
+SHA256sum: 85ec07bd9771b64311629fc56646e373dbec148ebfc510c68923b466bc6bf134
+
+Package: kismet-capture-nxp-kw41z
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 35395
+Description:  Helper binary to capture BTLE from a NXPKW41Z adapter.
+ Enables local and remote 802.15.4 packet capture with Kismet
+Filename: kismet-capture-nxp-kw41z_2021-07-24-1_mips_24kc.ipk
+Size: 36104
+SHA256sum: 5b984caf9510ad81d322a48273b00074405e70af9234130b5452c493bce5b05d
+
+Package: kismet-capture-rz-killerbee
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 34844
+Description:  Helper binary to capture Zigbee from a Killerbee adapter.
+ Enables local and remote 802.15.4 packet capture with Kismet
+Filename: kismet-capture-rz-killerbee_2021-07-24-1_mips_24kc.ipk
+Size: 35538
+SHA256sum: 746d126d1b7477576784cd69c5f8c5c275de366ddd7ead3fe412133c9193b0cc
+
+Package: kismet-capture-sdr-rtl433
+Version: 2021-07-24-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr, rtl_433
+Section: net
+Architecture: mips_24kc
+Installed-Size: 28246
+Description:  Helper binary to capture sensor and thermometer data using
+ rtl433 and a rtlsdr. Enables local and remote rtl433 capture with Kismet
+Filename: kismet-capture-sdr-rtl433_2021-07-24-1_mips_24kc.ipk
+Size: 29098
+SHA256sum: 5fdddd46b425682244e04e5786f00d89fb479cfd3b9aa539b3de3a4dbdd77ecc
+
+Package: kismet-capture-sdr-rtladsb
+Version: 2021-07-24-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr
+Section: net
+Architecture: mips_24kc
+Installed-Size: 35950
+Description:  Helper binary to capture ADSB packets from a rtlsdr.
+ Enables local and remote ADSB capture with Kismet
+Filename: kismet-capture-sdr-rtladsb_2021-07-24-1_mips_24kc.ipk
+Size: 36810
+SHA256sum: cf931072b6ab2ae53d972beddcac663d7259dac9be912062c8ffc47937f75051
+
+Package: kismet-capture-sdr-rtlamr
+Version: 2021-07-24-1
+Depends: libc, python3, python3-setuptools, python3-cffi, python3-numpy, python3-protobuf, python3-websockets, librtlsdr
+Section: net
+Architecture: mips_24kc
+Installed-Size: 32831
+Description:  Helper binary to capture AMR power and water meter packets 
+ from a rtlsdr. Enables local and remote AMR capture with Kismet
+Filename: kismet-capture-sdr-rtlamr_2021-07-24-1_mips_24kc.ipk
+Size: 33707
+SHA256sum: 807f6d610ead1fe7d012c6ece967c05a2946c52134745ec0cf513a165bf4f270
+
+Package: kismet-capture-ti-cc2531
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 35449
+Description:  Helper binary to capture 802.15.4 packets from a TI CC2531 adapter.
+ Enables local and remote 802.15.4 capture with Kismet
+Filename: kismet-capture-ti-cc2531_2021-07-24-1_mips_24kc.ipk
+Size: 36130
+SHA256sum: 30d7b83e90bd1e5a8d3bfbefbcc202ef9322f6f7069202c0d72e0210c50644b1
+
+Package: kismet-capture-ti-cc2540
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libnl200, libcap, protobuf-lite, libprotobuf-c, libusb-1.0-0, libwebsockets-full
+Section: net
+Architecture: mips_24kc
+Installed-Size: 35440
+Description:  Helper binary to capture BTLE packets from a TI CC2540 adapter.
+ Enables local and remote BTLE capture with Kismet
+Filename: kismet-capture-ti-cc2540_2021-07-24-1_mips_24kc.ipk
+Size: 36105
+SHA256sum: 04d8e3412242d15c578aa397a6e01cf384cec5287f604e1044d1b005be7a70c2
+
+Package: kismet-custom
+Version: 15102020-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libdw1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 3597778
+Description:  Kismet wireless capture and IDS
+ Latest web UI based Kismet
+ Linux Wi-Fi and Bluetooth capture tools
+Filename: kismet-custom_15102020-1_mips_24kc.ipk
+Size: 3592751
+SHA256sum: 45ff250f8011424632a4efcc5d24ad20304202da76aa54cb7e9277a44e9e1c9f
+
+Package: kismet-custom
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libpcre, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libsensors5
+Section: net
+Architecture: mips_24kc
+Installed-Size: 3644832
+Description:  Modern Kismet wireless capture and IDS, with the web-ui based Kismet
+Filename: kismet-custom_2021-07-24-1_mips_24kc.ipk
+Size: 3637739
+SHA256sum: 937096542964d76d5cd265905f801b4791749f64190dd7e4c27a7e0be9b347b2
+
+Package: kismet-hak5
+Version: 2020-03-R1-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libdw1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 2972573
+Description:  Kismet wireless capture and IDS
+ Latest web UI based Kismet
+ Linux Wi-Fi and Bluetooth capture tools
+Filename: kismet-hak5_2020-03-R1-1_mips_24kc.ipk
+Size: 2967648
+SHA256sum: 23fe94ae849b62da0a61bfed5e65489a73d1bb3f656c1c7e5d1eb6fab65629a1
+
+Package: kismet-icao-database
+Version: 2021-07-24-1
+Depends: libc, kismet-custom
+Section: net
+Architecture: mips_24kc
+Installed-Size: 6385210
+Description:  Kismet ICAO airplane database
+ Compressed database of ICAO airplane registrations.  Without this
+ database, Kismet will not be able to resolve flight info for 
+ airlines detected via ADSB.
+Filename: kismet-icao-database_2021-07-24-1_mips_24kc.ipk
+Size: 6387044
+SHA256sum: b2d825661996728c5cb2c8886bbf2698b56b463729f837e6b60bf5178dc4ab76
+
+Package: kismet-manuf-database
+Version: 2021-07-24-1
+Depends: libc, kismet-custom
+Section: net
+Architecture: mips_24kc
+Installed-Size: 327715
+Description:  Kismet IEEE manufacturer database
+ Compressed database of manufacturer names for Kismet; without this
+ database, Kismet will not be able to resolve manufacturers for 
+ Wi-Fi devices.
+Filename: kismet-manuf-database_2021-07-24-1_mips_24kc.ipk
+Size: 328649
+SHA256sum: 1aa6507d663473c5e59209b3691d003bcb01051b37256f39cd42c10a2d6c4fed
+
+Package: kismet-remotecap-hak5
+Version: 2020-03-R1-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, libdw1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 131900
+Description:  Kismet Wireless Remote Capture Tools.
+Filename: kismet-remotecap-hak5_2020-03-R1-1_mips_24kc.ipk
+Size: 129828
+SHA256sum: 3d9037098a5b08c576a1f64db9f7764ce9cd98257f947e719e457ae1d9cd8801
+
+Package: kismet-tools
+Version: 2021-07-24-1
+Depends: libc, libpthread, libpcap1, libpcre, libmicrohttpd, libnl200, libcap, libstdcpp6, libncurses6, libsqlite3-0, zlib, protobuf-lite, libprotobuf-c, kismet-custom
+Section: net
+Architecture: mips_24kc
+Installed-Size: 1012979
+Description:  Kismet server and log manipulation tools for monitoring for announcing
+ servers and converting kismetdb logs to wigle, csv, json, pcap, etc.
+Filename: kismet-tools_2021-07-24-1_mips_24kc.ipk
+Size: 1013081
+SHA256sum: 0ebb6013d582e3bae76be4fea0db762f51f8130f74269aa9fa1c7b16a9479ac3
+
+Package: kmod-rtc-ds1307
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core, kmod-regmap-i2c, kmod-hwmon-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 6048
+Description:  Kernel module for Dallas/Maxim DS1307/DS1337/DS1338/DS1340/DS1388/DS3231,
+ Epson RX-8025 and various other compatible RTC chips connected via I2C.
+Filename: kmod-rtc-ds1307_4.14.171-1_mips_24kc.ipk
+Size: 6875
+SHA256sum: d382abb05b5c4370a3fafc61aded73fda597949e6939f5c1d3bd010ddbd0211d
+
+Package: kmod-rtc-ds1374
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 2649
+Description:  Kernel module for Dallas/Maxim DS1374.
+Filename: kmod-rtc-ds1374_4.14.171-1_mips_24kc.ipk
+Size: 3380
+SHA256sum: 6708faaf7f83f267ce899460cbba164223691d4480b53dfe796156343009a8ca
+
+Package: kmod-rtc-ds1672
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 1813
+Description:  Kernel module for Dallas/Maxim DS1672 RTC.
+Filename: kmod-rtc-ds1672_4.14.171-1_mips_24kc.ipk
+Size: 2590
+SHA256sum: c0cf00e828637642a6fe577279b6264ce241fe2ad77fe921e43ed7a6bc1267c7
+
+Package: kmod-rtc-em3027
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 1571
+Description:  Kernel module for Microelectronic EM3027 RTC.
+Filename: kmod-rtc-em3027_4.14.171-1_mips_24kc.ipk
+Size: 2340
+SHA256sum: 5f3c297dd4dda6ac2ded00335a0900e1fad1c3405f68d267a4ef7a6380d0f0b6
+
+Package: kmod-rtc-isl1208
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 4866
+Description:  Kernel module for Intersil ISL1208 RTC.
+Filename: kmod-rtc-isl1208_4.14.171-1_mips_24kc.ipk
+Size: 5608
+SHA256sum: e0d11aea9da6b2d18c813cbe0fad0a03efad6b58dde93ee7bd72816e7c0c04ef
+
+Package: kmod-rtc-pt7c4338
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 105
+Description:  Kernel module for Pericom PT7C4338 i2c RTC chip
+Filename: kmod-rtc-pt7c4338_4.14.171-1_mips_24kc.ipk
+Size: 844
+SHA256sum: d7a1716c8ab4a8992eccb9be7cd6a62aa370f50f46ba6b482829c0e00968bf71
+
+Package: kmod-rtc-rs5c372a
+Version: 4.14.171-1
+Depends: kernel (=4.14.171-1-1979aa31de29cd679eb6ebdf7c0b7205), kmod-i2c-core
+License: GPL-2.0
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 3560
+Description:  Kernel module for Ricoh R2025S/D, RS5C372A/B, RV5C386, RV5C387A RTC on chip module
+Filename: kmod-rtc-rs5c372a_4.14.171-1_mips_24kc.ipk
+Size: 4325
+SHA256sum: c4e977a10c05599625269d1b9d81ff502b512e0415b864286c0ac03661bddd7b
+
+Package: kmod-rtl88x2bu
+Version: 4.14.254+2021-01-21-48e7c19c-1
+Depends: kernel (=4.14.254-1-eaba7d49a4578c8b240c08c0d433b00e), kmod-cfg80211, kmod-usb-core
+License: GPLv2
+Section: kernel
+Architecture: mips_24kc
+Installed-Size: 1284909
+Description:  Realtek 8812BU/8822BU support
+Filename: kmod-rtl88x2bu_4.14.254+2021-01-21-48e7c19c-1_mips_24kc.ipk
+Size: 1152010
+SHA256sum: b0f5deea1f77fa677bbfb1b61ef58ea2ce8dd4fa0acb06cbf56cf691ef610303
+
+Package: libgeoip
+Version: 1.6.12-1
+Depends: libc
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 79337
+Description:  GeoIP is a C library that enables the user to find geographical and network
+ information of an IP address
+Filename: libgeoip_1.6.12-1_mips_24kc.ipk
+Size: 78701
+SHA256sum: d708c82926ea958852bdeb904b326868671060ed30255ab9199c7e9064a69f43
+
+Package: libnet0
+Version: 1.0.2a-9
+Depends: libc, libpcap1
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 9844
+Description:  Low-level packet creation library (v1.0.x)
+Filename: libnet0_1.0.2a-9_mips_24kc.ipk
+Size: 10562
+SHA256sum: 9d050bc34fc49303c94dddf1f473a6aa439a425e4d5d9acd6ea97fbdb63f0153
+
+Package: libnids
+Version: 1.18-1
+Depends: libc, libnet0
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 12693
+Description:  An implementation of an E-component of Network Intrusion Detection 
+ System.
+Filename: libnids_1.18-1_mips_24kc.ipk
+Size: 13388
+SHA256sum: 136b28f8a6a0c99f579e9b1d0dab069000ee404bdcc832574a83180ba6973e92
+
+Package: libwifi
+Version: 0.0.1-1
+Depends: libc
+License: Apache-2.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 35382
+Description:  libwifi is a C library with a permissive license for
+ generating and parsing a wide variety of 802.11 wireless frames
+Filename: libwifi_0.0.1-1_mips_24kc.ipk
+Size: 36178
+SHA256sum: 400952669936d393474af26de0421ffde673aa78fedb28e257ead93267b53cc4
+
+Package: mdk3
+Version: 8.1-1
+Depends: libc, libpthread, libnl200, libpcap1
+Section: net
+Architecture: mips_24kc
+Installed-Size: 59099
+Description:  Tool to exploit wireless vulnerabilities
+Filename: mdk3_8.1-1_mips_24kc.ipk
+Size: 59733
+SHA256sum: 62ff824528c9563d67c0bbfd17697fe8498b1254dc8dcd1f55edeb92061fa6f2
+
+Package: mdk4
+Version: 4.2-1
+Depends: libc, libpthread, libpcap1, libpcre, libnl200, libnl-genl200
+License: GPL-3.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 65110
+Description:  Tool to exploit wireless vulnerabilities.
+Filename: mdk4_4.2-1_mips_24kc.ipk
+Size: 65647
+SHA256sum: 07a4229f8e26344bd2495ff0e15b5bfd340c76480b82a9590594aac504362655
+
+Package: ngrep
+Version: 1.47-1
+Depends: libc, libpcap1, libpcre
+Section: net
+Architecture: mips_24kc
+Installed-Size: 7937
+Description:  ngrep a pcap-aware tool that will allow you to specify extended
+ regular expressions to match against data payloads of packets. It
+ currently recognizes TCP, UDP, and ICMP across Ethernet, PPP, SLIP,
+ FDDI, Token Ring and null interfaces, and understands BPF filter
+ logic in the same fashion as more common packet sniffing tools,
+ like tcpdump and snoop.
+Filename: ngrep_1.47-1_mips_24kc.ipk
+Size: 8860
+SHA256sum: db80ee2ce6744c9ef8cf3284cf49e925297507335fd053c9de49fc9767b829cb
+
+Package: p0f
+Version: 3.09b
+Depends: libc, libpcap1, libpthread
+Section: net
+Architecture: mips_24kc
+Installed-Size: 60476
+Description:  p0f is a passive TCP/IP stack fingerprinting tool. p0f can attempt to identify the system running on 
+ machines that send network traffic to the box it is running on, or to a machine that shares a medium with 
+ the machine it is running on. p0f can also assist in analysing other aspects of the remote system.
+Filename: p0f_3.09b_mips_24kc.ipk
+Size: 61387
+SHA256sum: 6f90b21dd44a0021f29e31ab80d11fe820c219e1135619594b6ccd08e2bd9f9f
+
+Package: pixiewps-custom
+Version: 1.4.2-3
+Depends: libc, libpthread, libopenssl1.1
+License: GPL-3.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 30681
+Description:  Pixiewps is a tool written in C used to bruteforce offline the WPS PIN
+ exploiting the low or non-existing entropy of some Access Points, the so-called
+ "pixie-dust attack" discovered by Dominique Bongard in summer 2014.  It is
+ meant for educational purposes only.
+Filename: pixiewps-custom_1.4.2-3_mips_24kc.ipk
+Size: 30850
+SHA256sum: f38020f5faea7deec44f4775d4d49dc3dd9555d7cc697df9b7aa96fa86d7bd47
+
+Package: protobuf-lite
+Version: 3.5.1-1
+Depends: libc, zlib, libpthread, libatomic1, libstdcpp6
+License: BSD-3-Clause
+Section: libs
+Architecture: mips_24kc
+Installed-Size: 118026
+Description:  Protocol Buffers are a way of encoding structured data in an efficient
+ yet extensible format. Google uses Protocol Buffers for almost all
+ of its internal RPC protocols and file formats.
+ 
+ This package provides the libprotobuf-lite library.
+ 
+Filename: protobuf-lite_3.5.1-1_mips_24kc.ipk
+Size: 118860
+SHA256sum: e92ad4c316020b8e1592dec2f791dc1877ecfa184eaba27f59c21220d29beaea
+
+Package: python3-cython
+Version: 0.29.21-1
+Depends: libc, python3-light, python3-setuptools
+Section: lang
+Architecture: mips_24kc
+Installed-Size: 1638956
+Description:  C language extension library for Python
+Filename: python3-cython_0.29.21-1_mips_24kc.ipk
+Size: 1634465
+SHA256sum: 6852524f0bbb438adc9e436bac4edd7c367c56b24f928bd332605cf65f052452
+
+Package: python3-numpy
+Version: 1.19.1-1
+Depends: libc, python3-light, python3-setuptools, python3-cython
+Section: lang
+Architecture: mips_24kc
+Installed-Size: 6127662
+Description:  Numpy math library for Python3
+Filename: python3-numpy_1.19.1-1_mips_24kc.ipk
+Size: 6111747
+SHA256sum: 5a04b30074966f816fc28cf2fcb3da2c381b919e93f86e3ef6b8b01211829621
+
+Package: python3-protobuf
+Version: 3.13.0-1
+Depends: libc, python3-light, python3-setuptools, python3-six
+Section: lang
+Architecture: mips_24kc
+Installed-Size: 198539
+Description:  The official implementation of Google Protobufs in Python3
+Filename: python3-protobuf_3.13.0-1_mips_24kc.ipk
+Size: 199054
+SHA256sum: 496e0a8165585d94ce6ec46211dc25499a746dd02407db544c898621164b3ec5
+
+Package: python3-websockets
+Version: 8.1-1
+Depends: libc, python3-light, python3-setuptools
+Section: lang
+Architecture: mips_24kc
+Installed-Size: 65641
+Description:  Websockets implementation for python3
+Filename: python3-websockets_8.1-1_mips_24kc.ipk
+Size: 66422
+SHA256sum: f4696494a94b1210ce6845bd11b3e753808c97d8a17de42fbfad54290002e43e
+
+Package: reaver-custom
+Version: 1.6.6-5
+Depends: libc, libpcap1, libpthread
+License: GPL-2.0
+Section: net
+Architecture: mips_24kc
+Installed-Size: 305116
+Description:  Reaver has been designed to be a robust and practical attack against Wi-Fi
+ Protected Setup (WPS) registrar PINs in order to recover WPA/WPA2
+ passphrases. It has been tested against a wide variety of access points and
+ WPS implementations.
+ 
+ This is reaver-wps-fork-t6x, a community forked version, which has included
+ various bug fixes and additional attack method (the offline Pixie Dust
+ attack).
+Filename: reaver-custom_1.6.6-5_mips_24kc.ipk
+Size: 221525
+SHA256sum: 79a68a4c96c6cb7da6afb272fc903e6e1b4942ec0625be0dd790639fe6a6f303
+
+Package: reaver-macchanger
+Version: 1.6.6-2
+Depends: libc, libpcap1, libpthread
+License: GPL-2.0
+Section: net
+SourceDateEpoch: 1610581240
+Architecture: mips_24kc
+Installed-Size: 305068
+Description:  This is a fork of reaver-wps-fork-t6x with an added MAC Changer function.
+Filename: reaver-macchanger_1.6.6-2_mips_24kc.ipk
+Size: 221265
+SHA256sum: 385c1277dece9754c0e0e7038621aa65775e2508e1cd31fa53c4df4566660d58
+
+Package: reghack
+Version: 1.0-4
+Depends: libc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 2942
+Description:  Reghack modifies the regulatory domain rules
+ within the driver binaries with less restrictive ones.
+ The current version also lifts the 5GHz radar channel restrictions in ath9k.
+Filename: reghack_1.0-4_mips_24kc.ipk
+Size: 3852
+SHA256sum: c033a10e29ee4a32b3053d5d874852c18bb0204ff7556c91eadc9f9b85bb1e29
+
+Package: sslsplit
+Version: 0.5.5-3
+Depends: libc, libevent2-7, libopenssl1.1, libevent2-openssl7, libevent2-pthreads7, libnet-1.2.x, libpcap1, musl-fts
+License: BSD-2-Clause
+Section: net
+Architecture: mips_24kc
+Installed-Size: 56985
+Description:  Transparent SSL/TLS interception
+Filename: sslsplit_0.5.5-3_mips_24kc.ipk
+Size: 56850
+SHA256sum: 8f3199af29c7ed440f9cc42f0d5cf841e7d21445f7de2264fed9d2c2c10df624
+
+Package: sslstrip-hsts
+Version: 1.0-3
+Depends: libc, python-light, python-twisted, python-pyopenssl, python-zope-interface, python-setuptools
+Section: net
+Architecture: mips_24kc
+Installed-Size: 13601
+Description:  SSLstrip that includes the new feature to avoid 'HTTP Strict Transport Security' (HSTS.
+Filename: sslstrip-hsts_1.0-3_mips_24kc.ipk
+Size: 14356
+SHA256sum: 1c82eb5d95c08710085f5e279db3f00a1b9f242594e8d9121756ddc6e3f789eb
+
+Package: sslstrip
+Version: 0.9-1
+Depends: libc, python, python-twisted, python-openssl
+Section: net
+Architecture: mips_24kc
+Installed-Size: 7838
+Description:  sslstrip will transparently hijack HTTP traffic on a network,
+ watch for HTTPS links and redirects, then map those links
+ into either look-alike HTTP links or homograph-similar HTTPS
+ links. It also supports modes for supplying a favicon which
+ looks like a lock icon, selective logging, and session denial.
+Filename: sslstrip_0.9-1_mips_24kc.ipk
+Size: 8739
+SHA256sum: 3afe7726a5c3195e788aad763164a108f157b16dc4faa8d831e667a622b092c9
+
+Package: ubi-utils
+Version: 2.1.1-1
+Depends: libc
+License: GPLv2
+Section: utils
+Architecture: mips_24kc
+Installed-Size: 70945
+Description:  Utilities for manipulating memory technology devices.
+Filename: ubi-utils_2.1.1-1_mips_24kc.ipk
+Size: 71267
+SHA256sum: 31176ef70ba742255c9ce50429d38ecf655ad301979bd2f74a936fb232edc30f
+
+Package: urlsnarf
+Version: 2.4b1-2
+Depends: libc, libpcap1, libnids, libnet0, libopenssl1.1, libgdbm, libtirpc
+Section: net
+Architecture: mips_24kc
+Installed-Size: 4571
+Description:  Urlsnarf package.
+Filename: urlsnarf_2.4b1-2_mips_24kc.ipk
+Size: 5258
+SHA256sum: 60799f8d0c8276662cdb21b388dd90853b4da2ed321304099c63be5d873a31d2
+
+Package: zip
+Version: 3.0-4
+Depends: libc
+License: BSD-4-Clause
+Section: utils
+Architecture: mips_24kc
+Installed-Size: 196103
+Description:  This is InfoZIP's zip program. It produces files that are fully
+ compatible with the popular PKZIP program; however, the command line
+ options are not identical. In other words, the end result is the same,
+ but the methods differ.
+Filename: zip_3.0-4_mips_24kc.ipk
+Size: 197016
+SHA256sum: 49a488ebab4f218de6f8f60e27e814f7fdc4c1a182357a9d93b644429bf5b139
