@@ -23,8 +23,8 @@
     </div>
 </div>
 
-<div class="row" ng-show="$root.installedDependencies">
-    <div class="col-md-6" ng-controller="PMKIDAttack_ScanResults">
+<div class="row" ng-show="$root.pmkid_installedDependencies">
+    <div class="col-md-6" ng-controller="PMKIDAttack_AttackResults">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -75,89 +75,54 @@
         </div>
     </div>
 
-    <div class="col-md-6" ng-controller="PMKIDAttack_ScanSettings">
+    <div class="col-md-6" ng-controller="PMKIDAttack_ScanLoad">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    Scan Settings
-                    <span class="label label-warning" ng-show="captureRunning">Running Attack on {{ $root.bssid }}</span>
+                    Scan Results
+                    <span class="label label-warning" ng-show="$root.pmkid_captureRunning">Running Attack on {{ $root.pmkid_bssid }}</span>
+                    <span class="pull-right">
+                        <button type="button" class="btn btn-default btn-xs btn-fixed-length pull-right" ng-click="getScans();">
+                            Refresh
+                        </button>
+                    </span>
                 </h3>
             </div>
             <div class="panel-body">
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="input-group">
-                            <div ng-show="device == 'tetra'">
-                                <label class="radio-inline"><input type="radio" ng-model="scanType" value="0"
-                                                                   ng-disabled="running">2.4GHz</label>
-                                <label class="radio-inline"><input type="radio" ng-model="scanType" value="1"
-                                                                   ng-disabled="running">5GHz</label>
-                                <label class="radio-inline"><input type="radio" ng-model="scanType" value="2"
-                                                                   ng-disabled="running">Both</label>
-                            </div>
-                            <label class="checkbox-inline"><input type="checkbox" ng-model="scanSettings.live"
-                                                                  ng-disabled="running || scanSettings.scanDuration === '0'"
-                                                                  ng-change="updateScanSettings()">Live</label>
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="row form-inline">
-                        <select class="fixed-width-200 form-control" ng-model="scanSettings.scanDuration"
-                                ng-change="updateScanSettings()" ng-disabled="running">
-                            <option value="0">Continuous</option>
-                            <option value="30">30 Seconds</option>
-                            <option value="60">1 Minute</option>
-                            <option value="120">2 Minutes</option>
-                            <option value="300">5 Minutes</option>
-                            <option value="600">10 Minutes</option>
-                        </select>
-                        <br/><br/>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default" ng-click="startScan()"
-                                    ng-disabled="running">
-                                <span ng-show="!running">Start</span>
-                                <img class="button-throbber" ng-show="running" src="img/throbber.gif">
-                            </button>
-                            </button>
-                            <button type="button" class="btn btn-default" ng-click="pauseLiveScan()"
-                                    ng-show="scanSettings.live && running && !paused && !captureRunning"
-                                    ng-disabled="!scanSettings.live && !running">Pause
-                            </button>
-                            <button type="button" class="btn btn-default" ng-click="resumeLiveScan()"
-                                    ng-show="scanSettings.live && running && paused && !captureRunning"
-                                    ng-disabled="!scanSettings.live && !running">Resume
-                            </button>
-                            <button type="button" class="btn btn-default" ng-click="stopAttack()"
-                                    ng-show="captureRunning">Stop Attack
-                            </button>
-                            <button type="button" class="btn btn-default"
-                                    data-toggle="modal" data-target="#viewLog"
-                                    ng-show="captureRunning"
-                                    ng-disabled="$root.pmkidLog.length === 0">View Log
-                            </button>
-                            <button type="button" class="btn btn-default" ng-click="stopScan()"
-                                    ng-disabled="!running">Stop
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <br/>
-                        <div class="progress" ng-show="running && scanSettings.scanDuration > 0">
-                            <div class="progress-bar progress-bar-striped active" role="progressbar"
-                                 aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: {{ percent }}%">{{ percent | roundCeil }}%
-                            </div>
-                            <div class="alert well-sm alert-danger" ng-show="error">{{ error }}</div>
-                        </div>
-                    </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Scans Location</span>
+                    <input class="form-control" ng-model="scanLocation" ng-disabled="running || loading">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="setScanLocation()" ng-disabled="running || loading">Set</button>
+                    </span>
                 </div>
-            </div>
-            <div class="panel-footer" ng-show="!pineAPDRunning">
-                <div class="alert alert-info">
-                    <strong>Notice:</strong> In order to use Recon, PineAP must first be enabled.<br/>
-                    <button class="btn btn-default" ng-click="startPineAP()" ng-disabled="pineAPDStarting">
-                        <span ng-hide="pineAPDStarting">Start PineAP</span>
-                        <img class="button-throbber" ng-show="pineAPDStarting" src="img/throbber.gif">
+                <br/>
+                <div class="input-group">
+                    <span class="input-group-addon">Scan</span>
+                    <select class="form-control" ng-options="scan.date for scan in scans | filter:shouldShowScan track by scan.scan_id" ng-model="selectedScan" ng-disabled="scans == '' || running"></select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="displayScan();" ng-disabled="running || loading || scans == ''">Load</button>
+                        <button class="btn btn-default" ng-click="removeScan();" ng-disabled="running || loading || scans == ''">Remove</button>
+                    </span>
+                </div>
+                <br/>
+
+                <img ng-show="loadingScan" src="img/throbber.gif"/>
+                <p class="alert well-sm alert-success" ng-show="setLocationSuccess">Succcessfully set scan location.</p>
+                <p class="alert well-sm alert-success" ng-show="removedScan">Succcessfully removed scan.</p>
+                <p class="alert well-sm alert-info" ng-show="scans == '' && !running">There are no scans available. Please run <a href="#!/modules/Recon">Recon</a> at least once.</p>
+                <p class="alert well-sm alert-danger" ng-show="error">{{ error }}</p>
+
+                <div class="btn-group" ng-show="$root.pmkid_captureRunning">
+                    <button type="button" class="btn btn-default" ng-disabled="$root.pmkid_captureRunning">
+                        <img class="button-throbber" src="img/throbber.gif">
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="$root.pmkid_stopAttack()">
+                        Stop Attack
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#viewLog"
+                            ng-disabled="$root.pmkid_pmkidLog.length === 0">
+                        View Log
                     </button>
                 </div>
             </div>
@@ -165,18 +130,18 @@
     </div>
 </div>
 
-<div class="row" ng-show="$root.installedDependencies">
+<div class="row" ng-show="$root.pmkid_installedDependencies">
     <div class="col-md-12" ng-controller="PMKIDAttack_ScanResults">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     Scan Results
-                    <span ng-show="$root.accessPoints.length" class="badge">{{ $root.accessPoints.length }}</span>
+                    <span ng-show="$root.pmkid_accessPoints.length" class="badge">{{ $root.pmkid_accessPoints.length }}</span>
                 </h3>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <table class="table table-hover" ng-hide="($root.accessPoints.length == 0)">
+                    <table class="table table-hover" ng-hide="($root.pmkid_accessPoints.length == 0)">
                         <thead>
                         <tr class="default-cursor">
                             <th ng-click="orderByName='ssid'; reverseSort = !reverseSort">SSID <span
@@ -190,13 +155,6 @@
                                     ng-show="orderByName=='encryption'"><span class="caret"
                                                                               ng-show="reverseSort"></span><span
                                     class="caret caret-reversed" ng-show="!reverseSort"></span></span></th>
-                            <th ng-click="orderByName='wps'; reverseSort = !reverseSort">WPS <span
-                                    ng-show="orderByName=='wps'"><span class="caret" ng-show="reverseSort"></span><span
-                                    class="caret caret-reversed" ng-show="!reverseSort"></span></span></th>
-                            <th ng-click="orderByName='channel'; reverseSort = !reverseSort">Channel <span
-                                    ng-show="orderByName=='channel'"><span class="caret"
-                                                                           ng-show="reverseSort"></span><span
-                                    class="caret caret-reversed" ng-show="!reverseSort"></span></span></th>
                             <th ng-click="orderByName='power'; reverseSort = !reverseSort">Signal <span
                                     ng-show="orderByName=='power'"><span class="caret"
                                                                          ng-show="reverseSort"></span><span
@@ -209,7 +167,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="accessPoint in $root.accessPoints|orderBy:orderByName:reverseSort"
+                        <tr ng-repeat="accessPoint in $root.pmkid_accessPoints|orderBy:orderByName:reverseSort"
                             ng-show="accessPoint.encryption != 'Open'">
                             <td class="autoselect">
                                 <span class="text-info" ng-hide="accessPoint.ssid"><i>Hidden</i></span>
@@ -221,13 +179,11 @@
                             <td>
                                 {{ accessPoint.encryption }}
                             </td>
-                            <td>{{ (accessPoint.wps == 1) ? "Yes" : "No" }}</td>
-                            <td>{{ (accessPoint.channel == 0) ? "Wi-Fi Direct" : accessPoint.channel }}</td>
                             <td>{{ accessPoint.power }}</td>
                             <td class="autoselect">{{ accessPoint.lastSeen | timesinceepoch }}</td>
                             <td>
-                                <button type="button" ng-click="startAttack(accessPoint.ssid, accessPoint.bssid)"
-                                        ng-disabled="$root.running || $root.captureRunning"
+                                <button type="button" ng-click="$root.pmkid_startAttack(accessPoint.ssid, accessPoint.bssid)"
+                                        ng-disabled="$root.pmkid_captureRunning"
                                         class="btn btn-default btn-xs">Attack
                                 </button>
                             </td>
@@ -235,10 +191,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div ng-if="($root.accessPoints.length === 0) && !running">
+                <div ng-if="($root.pmkid_accessPoints.length === 0) && !running">
                     No scan results.
                 </div>
-                <div ng-if="($root.accessPoints.length === 0) && running">
+                <div ng-if="($root.pmkid_accessPoints.length === 0) && running">
                     <img src="img/throbber.gif">
                 </div>
             </div>
@@ -281,7 +237,7 @@
                 <h4 class="modal-title ng-binding" id="captureModalLabel">View Log</h4>
             </div>
             <div class="modal-body">
-                <pre class="scrollable-pre log-pre ng-binding">{{ $root.pmkidLog }}</pre>
+                <pre class="scrollable-pre log-pre ng-binding">{{ $root.pmkid_pmkidLog }}</pre>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

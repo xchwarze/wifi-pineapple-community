@@ -7,29 +7,12 @@ require_once("/pineapple/modules/PineAP/api/PineAPHelper.php");
 class PMKIDAttack extends Module
 {
     const MODULE_PATH = "/pineapple/modules/PMKIDAttack";
+    const LOG_PATH = "/pineapple/modules/PMKIDAttack/log/module.log";
+    const CAPTURE_PATH = "/pineapple/modules/PMKIDAttack/pcapng";
     const DEPS_FLAG = "/tmp/PMKIDAttack.progress";
     const EXPORT_PATH = "/tmp/pmkid-handshake.tmp";
     const TOOLS_PATH = "/sbin/";
     const TOOLS_SD_PATH = "/sd/sbin/";
-
-    private $pineAPHelper;
-    private $moduleFolder;
-    private $captureFolder;
-    private $logPath;
-    private $hcxdumptoolPath;
-    private $hcxpcaptoolPath;
-
-    public function __construct($request, $moduleClass)
-    {
-        parent::__construct($request, $moduleClass);
-
-        $this->pineAPHelper = new PineAPHelper();
-        $this->moduleFolder = $this->getPathModule();
-        $this->captureFolder = "{$this->moduleFolder}/pcapng";
-        $this->logPath = "{$this->moduleFolder}/log/module.log";
-        $this->hcxdumptoolPath = $this->getToolPath("hcxdumptool");
-        $this->hcxpcaptoolPath = $this->getToolPath("hcxpcapngtool"); // old name hcxpcaptool
-    }
 
     public function route()
     {
@@ -76,11 +59,6 @@ class PMKIDAttack extends Module
         }
     }
 
-    protected function getPathModule()
-    {
-        return self::MODULE_PATH;
-    }
-
     protected function getToolPath($tool)
     {
         $folder = ($this->isSDAvailable()) ?
@@ -98,36 +76,32 @@ class PMKIDAttack extends Module
 
     protected function clearLog()
     {
-        exec("rm {$this->logPath}");
+        exec("rm " . self::LOG_PATH);
     }
 
     protected function getLog()
     {
-        if (!file_exists($this->logPath)) {
-            touch($this->logPath);
+        if (!file_exists(self::LOG_PATH)) {
+            touch(self::LOG_PATH);
         }
 
-        $this->response = array("moduleLog" => file_get_contents($this->logPath));
+        $this->response = ["moduleLog" => file_get_contents(self::LOG_PATH)];
     }
 
     protected function addLog($massage)
     {
-        file_put_contents($this->logPath, $this->formatLog($massage), FILE_APPEND);
-    }
-
-    protected function formatLog($massage)
-    {
-        return "[" . date("Y-m-d H:i:s") . "] {$massage}\n";
+        $entry = "[" . date("Y-m-d H:i:s") . "] {$massage}\n";
+        file_put_contents(self::LOG_PATH, $entry, FILE_APPEND);
     }
 
     protected function getDependenciesStatus()
     {
-        $response = array(
+        $response = [
             "installed" => false,
             "install" => "Install",
             "installLabel" => "success",
             "processing" => false
-        );
+        ];
 
         if (file_exists(self::DEPS_FLAG)) {
             $response["install"] = "Installing...";
@@ -169,15 +143,18 @@ class PMKIDAttack extends Module
 
     protected function managerDependencies()
     {
-        $this->stopAttack();
         $action = $this->checkDependencyInstalled() ? "remove" : "install";
-        $this->execBackground("{$this->moduleFolder}/scripts/dependencies.sh {$action}");
+        $command = self::MODULE_PATH . "/scripts/dependencies.sh";
+
+        $this->stopAttack();
+        $this->execBackground("{$command} {$action}");
+
         $this->response = ["success" => true];
     }
 
     protected function getDependenciesInstallStatus()
     {
-        $this->response = array("success" => !file_exists(self::DEPS_FLAG));
+        $this->response = ["success" => !file_exists(self::DEPS_FLAG)];
     }
 
     protected function getMonitorInterface()
@@ -187,27 +164,38 @@ class PMKIDAttack extends Module
 
     protected function startAttack()
     {
-        $this->pineAPHelper->disablePineAP();
+        $ssid = $this->request->ssid;
+        $bssid = $this->request->bssid;
+        $cleanStart = $this->request->cleanStart === "true";
 
         //$this->execBackground("{$this->moduleFolder}/scripts/PMKIDAttack.sh start " . $this->request->bssid);
-        $this->uciSet("pmkidattack.@config[0].ssid", $this->request->ssid);
-        $this->uciSet("pmkidattack.@config[0].bssid", $this->request->bssid);
+        $this->uciSet("pmkidattack.@config[0].ssid", $ssid);
+        $this->uciSet("pmkidattack.@config[0].bssid", $bssid);
         $this->uciSet("pmkidattack.@config[0].attack", "1");
 
-        $BSSID = $this->getBSSID(true);
+        $cleanBSSID = $this->getBSSID(true);
         $interface = $this->getMonitorInterface();
         $capPath = $this->getCapPath();
-        $filterPath = "{$this->moduleFolder}/scripts/filter.txt";
+        $hcxdumptoolPath = $this->getToolPath("hcxdumptool");
+        $filterPath = self::MODULE_PATH . "/scripts/filter.txt";
 
-        exec("echo {$BSSID} > {$filterPath}");
-        $command = "{$this->hcxdumptoolPath} " . 
+        if ($cleanStart) {
+            $originalInterface = str_replace('mon', '', $interface);
+            exec("airmon-ng start {$originalInterface}");
+        }
+
+        $pineAPHelper = new PineAPHelper();
+        $pineAPHelper->disablePineAP();
+
+        exec("echo {$cleanBSSID} > {$filterPath}");
+        $command = "{$hcxdumptoolPath} " . 
             "-o {$capPath} " .
             "-i {$interface} " .
             "--filterlist_ap={$filterPath} " .
             "--filtermode=2 " .
-            "--enable_status=1";
+            "--enable_status=1 &> /dev/null &";
         $this->execBackground($command);
-        $this->addLog("Start attack {$this->request->bssid}");
+        $this->addLog("Start attack {$bssid}");
         //$this->addLog($command);
 
         $this->response = ["success" => true];
@@ -215,7 +203,6 @@ class PMKIDAttack extends Module
 
     protected function stopAttack()
     {
-        $BSSID = $this->getBSSID(true);
         $BSSIDFormatted = $this->getBSSID();
         $capPath = $this->getCapPath();
 
@@ -236,14 +223,18 @@ class PMKIDAttack extends Module
     {
         $check = $this->checkPMKID();
         if ($check['status']) {
-            $this->addLog("PMKID " . $this->getBSSID() . " intercepted!");
+            $BSSID = $this->getBSSID(true);
+            $BSSIDFormatted = $this->getBSSID();
+            $capPath = $this->getCapPath();
+            $captureFolder = self::CAPTURE_PATH;
 
+            $this->addLog("PMKID {$BSSIDFormatted} intercepted!");
             $metadata = json_encode([
                 'ssid' => $this->uciGet("pmkidattack.@config[0].ssid"),
                 'bssid' => $BSSIDFormatted
             ]);
-            file_put_contents("{$this->captureFolder}/{$BSSID}.data", $metadata);
-            exec("cp {$capPath} {$this->captureFolder}/");
+            file_put_contents("{$captureFolder}/{$BSSID}.data", $metadata);
+            exec("cp {$capPath} {$captureFolder}/");
         }
 
         $this->response = [
@@ -263,6 +254,7 @@ class PMKIDAttack extends Module
     {
         $capPath = $this->getCapPath();
         $exportPath = self::EXPORT_PATH;
+        $hcxpcaptoolPath = $this->getToolPath("hcxpcapngtool"); // old name hcxpcaptool
         if (!file_exists($capPath)) {
             return false;
         }
@@ -270,26 +262,27 @@ class PMKIDAttack extends Module
         // hcxpcaptool 6.0   : -z <file> : output PMKID file (hashcat hashmode -m 16800 old format and john)
         // hcxpcapngtool 6.1 : -o <file> : output WPA-PBKDF2-PMKID+EAPOL (hashcat -m 22000)hash file
         //exec("{$this->moduleFolder}/scripts/PMKIDAttack.sh check-bg " . $this->getBSSID(true));
-        exec("{$this->hcxpcaptoolPath} -o {$exportPath} {$capPath}", $result);
-        $pmkidLog = implode("\n", $result);
+        exec("{$hcxpcaptoolPath} -o {$exportPath} {$capPath}", $result);
+        $log = implode("\n", $result);
 
         return [
-            'log' => $pmkidLog,
+            'log' => $log,
 
             // on hcxpcaptool 6.0
-            //'status' => strpos($pmkidLog, " handshake(s) written to") !== false && strpos($pmkidLog, "0 handshake(s) written to") === false,
+            //'status' => strpos($log, " handshake(s) written to") !== false && strpos($log, "0 handshake(s) written to") === false,
 
-            // on hcxpcaptool 6.1
-            'status' => strpos($pmkidLog, "Information: no hashes written to hash files") === false,
+            // on hcxpcaptool 6.1/6.2
+            'status' => strpos($log, "Information: no hashes written to hash files") === false && strpos($log, "This dump file does not contain enough EAPOL") === false,
         ];
     }
 
     protected function getPMKIDFiles()
     {
+        $captureFolder = self::CAPTURE_PATH;
         $pmkids = [];
-        foreach (glob("{$this->captureFolder}/*.pcapng") as $capture) {
+        foreach (glob("{$captureFolder}/*.pcapng") as $capture) {
             $file = basename($capture, ".pcapng");
-            $metadata = file_get_contents("{$this->captureFolder}/{$file}.data");
+            $metadata = file_get_contents("{$captureFolder}/{$file}.data");
             if ($metadata) {
                 $captureMetadata = json_decode($metadata, true);
                 $name = "{$captureMetadata['ssid']} ({$captureMetadata['bssid']})";
@@ -310,30 +303,36 @@ class PMKIDAttack extends Module
     {
         $file = $this->request->file;
         $workingDir = "/tmp/PMKIDAttack";
+        $captureFolder = self::CAPTURE_PATH;
+        $hcxpcaptoolPath = $this->getToolPath("hcxpcapngtool");
 
         exec("mkdir {$workingDir}");
-        exec("cp {$this->captureFolder}/{$file}.pcapng {$workingDir}/");
-        exec("{$this->hcxpcaptoolPath} -o {$workingDir}/pmkid.22000 {$workingDir}/{$file}.pcapng &> {$workingDir}/report.txt");
+        exec("cp {$captureFolder}/{$file}.pcapng {$workingDir}/");
+        exec("{$hcxpcaptoolPath} -o {$workingDir}/pmkid.22000 {$workingDir}/{$file}.pcapng &> {$workingDir}/report.txt");
         exec("cd {$workingDir}/ && tar -czf /tmp/{$file}.tar.gz *");
         exec("rm -rf {$workingDir}/");
 
-        $this->response = array("download" => $this->downloadFile("/tmp/{$file}.tar.gz"));
+        $this->response = ["download" => $this->downloadFile("/tmp/{$file}.tar.gz")];
     }
 
     protected function deletePMKID()
     {
         $file = escapeshellarg($this->request->file);
-        exec("rm {$this->captureFolder}/{$file}.pcapng {$this->captureFolder}/{$file}.data");
+        $captureFolder = self::CAPTURE_PATH;
+        exec("rm {$captureFolder}/{$file}.pcapng {$captureFolder}/{$file}.data");
 
         $this->response = ["success" => true];
     }
 
     protected function viewAttackLog()
     {
-        $exportPath = self::EXPORT_PATH;
         $file = $this->request->file;
-        $capPath = empty($file) ? $this->getCapPath() : escapeshellarg("{$this->captureFolder}/{$file}.pcapng");
-        exec("{$this->hcxpcaptoolPath} -o {$exportPath} {$capPath}", $result);
+        $exportPath = self::EXPORT_PATH;
+        $captureFolder = self::CAPTURE_PATH;
+        $hcxpcaptoolPath = $this->getToolPath("hcxpcapngtool");
+
+        $capPath = empty($file) ? $this->getCapPath() : escapeshellarg("{$captureFolder}/{$file}.pcapng");
+        exec("{$hcxpcaptoolPath} -o {$exportPath} {$capPath}", $result);
 
         $this->response = ["pmkidLog" => implode("\n", $result)];
     }
@@ -343,7 +342,8 @@ class PMKIDAttack extends Module
         $this->response = [
             "ssid" => $this->uciGet("pmkidattack.@config[0].ssid"),
             "bssid" => $this->uciGet("pmkidattack.@config[0].bssid"),
-            "success" => $this->uciGet("pmkidattack.@config[0].attack") === true,
+            "attack" => $this->uciGet("pmkidattack.@config[0].attack") === true,
+            "process" => \helper\checkRunning($this->getToolPath("hcxdumptool")),
         ];
     }
 }
