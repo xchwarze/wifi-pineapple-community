@@ -206,7 +206,7 @@ registerController('PMKIDAttack_AttackResults', ['$api', '$scope', '$rootScope',
                 $rootScope.pmkid_bssid = response.bssid;
                 $scope.checkPMKID();
             } else if (!response.process && response.attack) {
-                $rootScope.pmkid_startAttack(response.ssid, response.bssid, "true");
+                $rootScope.pmkid_startAttack(response.ssid, response.bssid);
             }
         });
     };
@@ -215,11 +215,7 @@ registerController('PMKIDAttack_AttackResults', ['$api', '$scope', '$rootScope',
         $rootScope.pmkid_captureRunning = true;
         if (!$rootScope.pmkid_intervalCheckHash) {
             $rootScope.pmkid_intervalCheckHash = $interval(function () {
-                if ($rootScope.pmkid_captureRunning) {
-                    $scope.catchPMKID();
-                } else {
-                    $rootScope.pmkid_stopAttack();
-                }
+                $scope.catchPMKID();
             }, 30000);
         }
     };
@@ -231,7 +227,9 @@ registerController('PMKIDAttack_AttackResults', ['$api', '$scope', '$rootScope',
         }, function (response) {
             $rootScope.pmkid_pmkidLog = response.pmkidLog;
             if (response.success) {
-                $rootScope.pmkid_captureRunning = false;
+                $rootScope.pmkid_stopAttack();
+            } else if (!response.process) {
+                $rootScope.pmkid_startAttack($scope.ssid, $rootScope.pmkid_bssid);
             }
         });
     };
@@ -280,7 +278,7 @@ registerController('PMKIDAttack_AttackResults', ['$api', '$scope', '$rootScope',
         });
     };
 
-    $rootScope.pmkid_startAttack = function (ssid, bssid, cleanStart) {
+    $rootScope.pmkid_startAttack = function (ssid, bssid) {
         $scope.ssid = ssid;
         $rootScope.pmkid_bssid = bssid;
         $rootScope.pmkid_pmkidLog = '';
@@ -290,7 +288,6 @@ registerController('PMKIDAttack_AttackResults', ['$api', '$scope', '$rootScope',
             module: 'PMKIDAttack',
             ssid: ssid,
             bssid: bssid,
-            cleanStart: cleanStart
         }, function (response) {
             if (response.success) {
                 $scope.checkPMKID();

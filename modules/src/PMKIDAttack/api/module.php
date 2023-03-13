@@ -162,16 +162,30 @@ class PMKIDAttack extends Module
         return $this->uciGet("pineap.@config[0].pineap_interface");
     }
 
+    protected function getBSSID($clean = false)
+    {
+        $bssid = $this->uciGet("pmkidattack.@config[0].bssid");
+
+        return $clean ? str_replace(":", "", $bssid) : $bssid;
+    }
+
+    protected function getProcessStatus()
+    {
+        return \helper\checkRunning($this->getToolPath("hcxdumptool"));
+    }
+
     protected function startAttack()
     {
         $ssid = $this->request->ssid;
         $bssid = $this->request->bssid;
-        $cleanStart = $this->request->cleanStart === "true";
 
         //$this->execBackground("{$this->moduleFolder}/scripts/PMKIDAttack.sh start " . $this->request->bssid);
         $this->uciSet("pmkidattack.@config[0].ssid", $ssid);
         $this->uciSet("pmkidattack.@config[0].bssid", $bssid);
         $this->uciSet("pmkidattack.@config[0].attack", "1");
+
+        $pineAPHelper = new PineAPHelper();
+        $pineAPHelper->disablePineAP();
 
         $cleanBSSID = $this->getBSSID(true);
         $interface = $this->getMonitorInterface();
@@ -179,21 +193,14 @@ class PMKIDAttack extends Module
         $hcxdumptoolPath = $this->getToolPath("hcxdumptool");
         $filterPath = self::MODULE_PATH . "/scripts/filter.txt";
 
-        if ($cleanStart) {
+        exec("ifconfig -a | grep {$interface}", $interfaceCheck);
+        if (empty($interfaceCheck)) {
             $originalInterface = str_replace('mon', '', $interface);
             exec("airmon-ng start {$originalInterface}");
         }
 
-        $pineAPHelper = new PineAPHelper();
-        $pineAPHelper->disablePineAP();
-
         exec("echo {$cleanBSSID} > {$filterPath}");
-        $command = "{$hcxdumptoolPath} " . 
-            "-o {$capPath} " .
-            "-i {$interface} " .
-            "--filterlist_ap={$filterPath} " .
-            "--filtermode=2 " .
-            "--enable_status=1 &> /dev/null &";
+        $command = "{$hcxdumptoolPath} -o {$capPath} -i {$interface} --filterlist_ap={$filterPath} --filtermode=2 --enable_status=1";
         $this->execBackground($command);
         $this->addLog("Start attack {$bssid}");
         //$this->addLog($command);
@@ -239,15 +246,9 @@ class PMKIDAttack extends Module
 
         $this->response = [
             "pmkidLog" => $check['log'],
+            "process" => $check['process'],
             "success" => $check['status'],
         ];
-    }
-
-    protected function getBSSID($clean = false)
-    {
-        $bssid = $this->uciGet("pmkidattack.@config[0].bssid");
-
-        return $clean ? str_replace(":", "", $bssid) : $bssid;
     }
 
     protected function checkPMKID()
@@ -267,6 +268,7 @@ class PMKIDAttack extends Module
 
         return [
             'log' => $log,
+            'process' => $this->getProcessStatus(),
 
             // on hcxpcaptool 6.0
             //'status' => strpos($log, " handshake(s) written to") !== false && strpos($log, "0 handshake(s) written to") === false,
@@ -340,10 +342,10 @@ class PMKIDAttack extends Module
     protected function getStatusAttack()
     {
         $this->response = [
+            "process" => $this->getProcessStatus(),
             "ssid" => $this->uciGet("pmkidattack.@config[0].ssid"),
             "bssid" => $this->uciGet("pmkidattack.@config[0].bssid"),
             "attack" => $this->uciGet("pmkidattack.@config[0].attack") === true,
-            "process" => \helper\checkRunning($this->getToolPath("hcxdumptool")),
         ];
     }
 }
