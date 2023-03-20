@@ -2,6 +2,7 @@ registerController('Terminal_Dependencies', ['$api', '$scope', '$rootScope', '$i
     $scope.install = "Loading...";
     $scope.installLabel = "";
     $scope.processing = false;
+    $scope.moduleLog = '';
     $rootScope.installedDependencies = false;
 
     $scope.refreshStatus = function () {
@@ -31,6 +32,7 @@ registerController('Terminal_Dependencies', ['$api', '$scope', '$rootScope', '$i
                 if (response.success === true) {
                     $scope.processing = false;
                     $scope.refreshStatus();
+                    $scope.getLog();
                     $interval.cancel(dependenciesInstallStatusInterval);
                 }
             });
@@ -51,5 +53,15 @@ registerController('Terminal_Dependencies', ['$api', '$scope', '$rootScope', '$i
         });
     };
 
+    $scope.getLog = function () {
+        $api.request({
+            module: "Terminal",
+            action: "getLog"
+        }, function (response) {
+            $scope.moduleLog = response.moduleLog;
+        })
+    };
+
     $scope.refreshStatus();
+    $scope.getLog();
 }]);

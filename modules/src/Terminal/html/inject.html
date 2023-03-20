@@ -55,6 +55,7 @@ $(function() {
     $scope.status = false;
 
     $scope.openTerminalPanel = (function () {
+        $('#terminal-open').addClass('active');
         $('#terminal-module').collapse('show');
         $('#terminal').collapse('show').append('<iframe id="terminal-iframe" class="terminal-content"src="modules/Terminal/html/iframe.html"></iframe>');
 
@@ -79,6 +80,7 @@ $(function() {
     });
 
     $scope.closeTerminalPanel = (function () {
+        $('#terminal-open').removeClass('active');
         $('#terminal-module').collapse('hide');
         $('#terminal').empty();
     });
