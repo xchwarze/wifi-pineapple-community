@@ -149,7 +149,11 @@ class Terminal extends Module
         ];
         */
         exec("/usr/bin/pkill ttyd");
-        $this->response = ["success" => !\helper\checkRunning($this->getTerminalPath())];
+        $status = \helper\checkRunning($this->getTerminalPath());
+        if ($status) {
+            $this->addLog("Terminal could not be stop! command: /usr/bin/pkill ttyd");
+        }
+        $this->response = ["success" => !$status];
     }
 
     protected function getStatus()
