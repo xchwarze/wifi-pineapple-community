@@ -1,6 +1,6 @@
-<!-- Controls -->
-<div class="row">
-    <div class="col-md-4" ng-controller="Terminal_Dependencies">
+<div class="row" ng-controller="Terminal_Dependencies">
+    <!-- Controls -->
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Controls</h3>
@@ -18,6 +18,19 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log -->
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Log</h3>
+            </div>
+            <div class="panel-body">
+                <p ng-show="moduleLog === ''">No log entries found yet.</p>
+                <pre class="scrollable-pre log-pre" ng-hide="moduleLog === ''">{{ moduleLog }}</pre>
             </div>
         </div>
     </div>

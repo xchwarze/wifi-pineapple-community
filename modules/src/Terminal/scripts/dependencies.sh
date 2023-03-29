@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOGFILE="/tmp/terminal.log"
+LOGFILE="/pineapple/modules/Terminal/module.log"
 TIMESTAMP=`date "+[%Y-%m-%d %H:%M:%S]"`
 
 function add_log {
@@ -29,6 +29,7 @@ if [[ "$1" = "install" ]]; then
         opkg --dest sd install ttyd >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg --dest sd install ttyd failed"
+            rm /tmp/terminal.progress
             exit 1
         fi
     else
@@ -37,6 +38,7 @@ if [[ "$1" = "install" ]]; then
         opkg install ttyd >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg install ttyd failed"
+            rm /tmp/terminal.progress
             exit 1
         fi
     fi

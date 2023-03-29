@@ -9,54 +9,43 @@ if (!isset($_SERVER['argv']) && !isset($argv)) {
     $argv = $_SERVER['argv'];
 }
 
-if (!isset($argv[1]) || !in_array($argv[1], ['nano', 'tetra'])) {
-    echo "Run with \"php sync-repos.php [TYPE] [DISABLE_SYNC]\"\n";
-    echo "    TYPE          -> 'nano' or 'tetra'\n";
-    echo "    DISABLE_SYNC  -> disable sync with original pineapple repo\n";
+if (!isset($argv[1])) {
+    echo "Run with \"php sync-repos.php [TARGET] [REMOTE_SYNC]\"\n";
+    echo "    TARGET        -> Module name. For remote sync set this with 'nano' or 'tetra'\n";
+    echo "    REMOTE_SYNC   -> Enable sync with original pineapple modules repo\n";
     exit(1);
 }
 
 
-
-//tar czf OnlineHashCrack.tar.gz OnlineHashCrack && mv OnlineHashCrack.tar.gz ../build
-//tar czf PMKIDAttack.tar.gz PMKIDAttack && mv PMKIDAttack.tar.gz ../build
-//tar czf Terminal.tar.gz Terminal && mv Terminal.tar.gz ../build
-$extraPackages = [
-    'OnlineHashCrack',
-    'PMKIDAttack',
-    'Terminal',
-];
-
 echo "\nsync mk6 packages - by DSR!\n\n";
 
-$device      = $argv[1];
-$disableSync = (isset($argv[2]) && filter_var($argv[2], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE));
+$target      = $argv[1];
+$remoteSync  = (isset($argv[2]) && filter_var($argv[2], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE));
+
 $buildDir    = getcwd() . '/build';
 $srcDir      = getcwd() . '/src';
-$moduleData  = json_decode(file_get_contents("https://www.wifipineapple.com/{$device}/modules"), true);
+$moduleData  = json_decode(file_get_contents("{$buildDir}/modules.json"), true);
 
-if (!$disableSync) {
+if ($remoteSync) {
+    $moduleData  = json_decode(file_get_contents("https://www.wifipineapple.com/{$target}/modules"), true);
+
     echo "======== Packages (" . count($moduleData) . ") ========\n";
     foreach ($moduleData as $key => $value) {
         if ($value["type"] !== 'Sys') {
             echo "    [+] {$key}\n";
-            $file = file_get_contents("https://www.wifipineapple.com/{$device}/modules/{$key}");
+            $file = file_get_contents("https://www.wifipineapple.com/{$target}/modules/{$key}");
             @unlink("{$buildDir}/{$key}.tar.gz");
             file_put_contents("{$buildDir}/{$key}.tar.gz", $file);
         }
     }
-
-    echo "\n\n";
-}
-
-echo "======== Extra Packages (" . count($extraPackages) . ") ========\n";
-foreach ($extraPackages as $key) {
-    echo "    [+] {$key}\n";
-    $fileName = "{$buildDir}/{$key}.tar.gz";
-    $infoData = json_decode(file_get_contents("{$srcDir}/{$key}/module.info"));
+} else {
+    echo "======== Update Package: {$target} ========\n";
+    echo "Remember compress first! tar czf {$target}.tar.gz {$target} && mv {$target}.tar.gz ../build\n";
+    $fileName = "{$buildDir}/{$target}.tar.gz";
+    $infoData = json_decode(file_get_contents("{$srcDir}/{$target}/module.info"));
     
     $module = [
-        'name' => $key,
+        'name' => $target,
         'title' => $infoData->title,
         'version' => $infoData->version,
         'description' => $infoData->description,
@@ -73,12 +62,12 @@ foreach ($extraPackages as $key) {
         $module['type'] = 'GUI';
     }
 
-    $moduleData[ $key ] = $module;
+    echo "module info:\n";
+    var_dump($module);
+    $moduleData[ $target ] = $module;
 }
 
 asort($moduleData);
-//@unlink("{$buildDir}/{$device}.json");
-//file_put_contents("{$buildDir}/{$device}.json", json_encode($moduleData));
 @unlink("{$buildDir}/modules.json");
 file_put_contents("{$buildDir}/modules.json", json_encode($moduleData));
 

@@ -4,7 +4,9 @@ namespace pineapple;
 
 class Terminal extends Module
 {
-    const TTYD = "/sd/usr/bin/ttyd";
+    const TTYD_PATH = "/usr/bin/ttyd";
+    const TTYD_SD_PATH = "/sd/usr/bin/ttyd";
+    const LOG_PATH = "/pineapple/modules/Terminal/module.log";
 
     public function route()
     {
@@ -27,7 +29,21 @@ class Terminal extends Module
             case "getStatus":
                 $this->getStatus();
                 break;
+            case "getLog":
+                $this->getLog();
+                break;
         }
+    }
+
+    protected function addLog($massage)
+    {
+        $entry = "[" . date("Y-m-d H:i:s") . "] {$massage}\n";
+        file_put_contents(self::LOG_PATH, $entry, FILE_APPEND);
+    }
+
+    protected function getTerminalPath()
+    {
+        return $this->isSDAvailable() ? self::TTYD_SD_PATH : self::TTYD_PATH;
     }
 
     protected function getDependenciesStatus()
@@ -106,12 +122,20 @@ class Terminal extends Module
             "message" => $status,
         ];
         */
-        if (!\helper\checkRunning(self::TTYD)) {
-            $this->execBackground(self::TTYD . ' -p 1477 -i br-lan /bin/login');
+        $terminal = $this->getTerminalPath();
+        $status = \helper\checkRunning($terminal);
+        if (!$status) {
+            $command = "{$terminal} -p 1477 -i br-lan /bin/login";
+            $this->execBackground($command);
+
             sleep(1);
+            $status = \helper\checkRunning($terminal);
+            if (!$status) {
+                $this->addLog("Terminal could not be run! command: {$command}");
+            }
         }
 
-        $this->response = ["success" => \helper\checkRunning(self::TTYD)];
+        $this->response = ["success" => $status];
     }
 
     protected function stopTerminal()
@@ -125,11 +149,24 @@ class Terminal extends Module
         ];
         */
         exec("/usr/bin/pkill ttyd");
-        $this->response = ["success" => !\helper\checkRunning(self::TTYD)];
+        $status = \helper\checkRunning($this->getTerminalPath());
+        if ($status) {
+            $this->addLog("Terminal could not be stop! command: /usr/bin/pkill ttyd");
+        }
+        $this->response = ["success" => !$status];
     }
 
     protected function getStatus()
     {
-        $this->response = ["status" => \helper\checkRunning(self::TTYD)];
+        $this->response = ["status" => \helper\checkRunning($this->getTerminalPath())];
+    }
+
+    protected function getLog()
+    {
+        if (!file_exists(self::LOG_PATH)) {
+            touch(self::LOG_PATH);
+        }
+
+        $this->response = ["moduleLog" => file_get_contents(self::LOG_PATH)];
     }
 }
