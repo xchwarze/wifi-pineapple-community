@@ -240,11 +240,11 @@ class wps extends Module
     {
         if ($this->request->duration && $this->request->monitor != "") {
             exec("killall -9 airodump-ng && rm -rf /tmp/wps-*");
-            $this->execBackground("airodump-ng -a --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
+            $this->execBackground("airodump-ng -a --wps --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
             sleep($this->request->duration);
-            exec("wash -f /tmp/wps-01.cap -o /tmp/wps-01.wash &> /dev/null");
-
             exec("killall -9 airodump-ng");
+
+            exec("wash -f /tmp/wps-01.cap > /tmp/wps-01.wash");
         }
 
         $p = $this->iwlistparse->parseScanDev($this->request->interface);
@@ -325,16 +325,14 @@ class wps extends Module
             }
 
             if ($this->request->duration && $this->request->monitor != "") {
-                $wps_enabled = trim(exec("cat /tmp/wps-01.wash | tail -n +3 | grep ".$accessPoint['mac']." | awk '{ print $5; }'"));
-                if ($wps_enabled == "No" || $wps_enabled == "Yes") {
-                    $accessPoint['wps'] = "Yes";
-                    $accessPoint['wpsLabel'] = "success";
-                } else {
-                    $accessPoint['wps'] = "No";
-                    $accessPoint['wpsLabel'] = "";
-                }
-            } else {
-                $accessPoint['wps'] = "--";
+                $accessPoint['wps'] = trim(exec("cat /tmp/wps-01.wash | tail -n +3 | grep ".$accessPoint['mac']." | awk '{ print $4; }'"));
+                $accessPoint['wpsLabel'] = "success";
+                
+            } 
+            
+            if ($accessPoint['wps'] == "") {
+                $accessPoint['wps'] = "No";
+                $accessPoint['wpsLabel'] = "";
             }
 
             array_push($returnArray, $accessPoint);
