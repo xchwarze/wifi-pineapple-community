@@ -1,5 +1,6 @@
 <?php namespace pineapple;
 
+
 require_once('/pineapple/modules/wps/api/iwlist_parser.php');
 
 class wps extends Module
@@ -79,7 +80,7 @@ class wps extends Module
 
     protected function checkRunning($processName)
     {
-        return exec("ps w | grep {$processName} | grep -v grep") !== '' ? 1 : 0;
+        return exec("ps -A | grep {$processName} | grep -v grep") !== '' ? 1 : 0;
     }
 
     protected function refreshInfo()
@@ -91,11 +92,21 @@ class wps extends Module
     private function handleDependencies()
     {
         if (!$this->checkDeps("reaver")) {
-            $this->execBackground("/pineapple/modules/wps/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            if (file_exists('/sd/modules/wps/scripts/dependencies.sh')) {
+                $this->execBackground("bash /sd/modules/wps/scripts/dependencies.sh install ".$this->request->destination);
+                $this->response = array('success' => true);
+            } else {
+                $this->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh install ".$this->request->destination);
+                $this->response = array('success' => true);
+            }
         } else {
-            $this->execBackground("/pineapple/modules/wps/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            if (file_exists('/sd/modules/wps/scripts/dependencies.sh')) {
+                $this->execBackground("bash /sd/modules/wps/scripts/dependencies.sh remove");
+                $this->response = array('success' => true);
+            } else {
+                $this->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh remove");
+                $this->response = array('success' => true);
+            }
         }
     }
 
@@ -152,8 +163,10 @@ class wps extends Module
     private function togglewps()
     {
         if (!($this->checkRunning("reaver") || $this->checkRunning("bully"))) {
-            $full_cmd = $this->request->command . " -o /pineapple/modules/wps/log/log_".time().".log";
+            $full_cmd = $this->request->command . " &> /pineapple/modules/wps/log/log_".time().".log";
+            $lazy = $this->request->command;
             shell_exec("echo -e \"{$full_cmd}\" > /tmp/wps.run");
+            shell_exec("echo -e \"{$lazy}\" > /tmp/lazy.read");
 
             $this->execBackground("/pineapple/modules/wps/scripts/wps.sh start");
         } else {
@@ -186,7 +199,7 @@ class wps extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->response = implode("\n", $output);
                     } else {
                         $this->response = "Empty log...";
                     }
@@ -227,11 +240,11 @@ class wps extends Module
     {
         if ($this->request->duration && $this->request->monitor != "") {
             exec("killall -9 airodump-ng && rm -rf /tmp/wps-*");
-            $this->execBackground("airodump-ng -a --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
+            $this->execBackground("airodump-ng -a --wps --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
             sleep($this->request->duration);
-            exec("wash -f /tmp/wps-01.cap -o /tmp/wps-01.wash &> /dev/null");
-
             exec("killall -9 airodump-ng");
+
+            exec("wash -f /tmp/wps-01.cap > /tmp/wps-01.wash");
         }
 
         $p = $this->iwlistparse->parseScanDev($this->request->interface);
@@ -312,16 +325,14 @@ class wps extends Module
             }
 
             if ($this->request->duration && $this->request->monitor != "") {
-                $wps_enabled = trim(exec("cat /tmp/wps-01.wash | tail -n +3 | grep ".$accessPoint['mac']." | awk '{ print $5; }'"));
-                if ($wps_enabled == "No" || $wps_enabled == "Yes") {
-                    $accessPoint['wps'] = "Yes";
-                    $accessPoint['wpsLabel'] = "success";
-                } else {
-                    $accessPoint['wps'] = "No";
-                    $accessPoint['wpsLabel'] = "";
-                }
-            } else {
-                $accessPoint['wps'] = "--";
+                $accessPoint['wps'] = trim(exec("cat /tmp/wps-01.wash | tail -n +3 | grep ".$accessPoint['mac']." | awk '{ print $4; }'"));
+                $accessPoint['wpsLabel'] = "success";
+                
+            } 
+            
+            if ($accessPoint['wps'] == "") {
+                $accessPoint['wps'] = "No";
+                $accessPoint['wpsLabel'] = "";
             }
 
             array_push($returnArray, $accessPoint);
@@ -344,7 +355,7 @@ class wps extends Module
 
         $process = array();
         if (file_exists("/tmp/wps.run") && ($this->checkRunning("reaver") || $this->checkRunning("bully"))) {
-            $args = $this->parse_args(file_get_contents("/tmp/wps.run"));
+            $args = $this->parse_args(file_get_contents("/tmp/lazy.read"));
 
             $process['ssid'] = $args["e"];
             $process['mac'] = $args["b"];
@@ -444,7 +455,7 @@ class wps extends Module
     private function viewHistory()
     {
         $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/wps/log/".$this->request->file));
-        exec("strings /pineapple/modules/wps/log/".$this->request->file, $output);
+        exec("cat /pineapple/modules/wps/log/".$this->request->file, $output);
 
         if (!empty($output)) {
             $this->response = array("output" => implode("\n", $output), "date" => $log_date);

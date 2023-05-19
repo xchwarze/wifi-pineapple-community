@@ -1,5 +1,5 @@
 #!/bin/sh
-#2015 - Whistle Master
+#2022 - m5kro aka kraken5
 
 [[ -f /tmp/wps.progress ]] && {
   exit 0
@@ -9,16 +9,21 @@ touch /tmp/wps.progress
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
-	 opkg update
-
+     opkg update
      opkg install reaver
      opkg install bully
+     opkg install pixiewps
+     opkg install libpcap
+     chmod +x /pineapple/modules/wps/scripts/wps.sh
 
   elif [ "$2" = "sd" ]; then
-    opkg update
-
-    opkg install reaver --dest sd
-    opkg install bully --dest sd
+     opkg update
+     ln -s /sd/modules/wps /pineapple/modules/
+     opkg -d sd install reaver
+     opkg -d sd install bully
+     opkg -d sd install pixiewps
+     opkg -d sd install libpcap
+     chmod +x /sd/modules/wps/scripts/wps.sh
 
   fi
   
@@ -35,6 +40,7 @@ if [ "$1" = "install" ]; then
 elif [ "$1" = "remove" ]; then
     opkg remove reaver
     opkg remove bully
+    opkg remove pixiewps
     rm -rf /etc/config/wps
 fi
 

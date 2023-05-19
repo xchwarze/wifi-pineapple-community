@@ -1,10 +1,10 @@
 {
     "author": "Whistle Master",
-    "description": "WPS brute force attack using Reaver, Bully and Pixiewps",
+    "description": "WPS brute force attack using Reaver, Bully, and Pixiewps. Edited by m5kro to support new firmwares.",
     "devices": [
         "nano",
         "tetra"
     ],
     "title": "wps",
-    "version": "1.7"
+    "version": "1.8"
 }
