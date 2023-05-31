@@ -97,6 +97,8 @@ $(function() {
             if (data.error === undefined && data.success){
                 $scope.status = true;
                 $scope.openTerminalPanel();
+            } else {
+                alert('The terminal could not be opened. Read the module logs!');
             }
         });
     });
