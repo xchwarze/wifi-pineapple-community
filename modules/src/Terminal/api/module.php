@@ -81,14 +81,13 @@ class Terminal extends Module
 
     protected function checkDependencyInstalled()
     {
-        if ($this->uciGet("ttyd.@ttyd[0].port")) {
-            return true;
-        }
+       if ($this->checkDependency("ttyd")) {
+            if (!$this->uciGet("ttyd.@ttyd[0].port")) {
+                $this->uciSet("ttyd.@ttyd[0].port", "1477");
+                //$this->uciSet("ttyd.@ttyd[0].index", "/pineapple/modules/Terminal/ttyd/iframe.html");
+                exec("/etc/init.d/ttyd disable");
+            }
 
-        if ($this->checkDependency("ttyd")) {
-            $this->uciSet("ttyd.@ttyd[0].port", "1477");
-            //$this->uciSet("ttyd.@ttyd[0].index", "/pineapple/modules/Terminal/ttyd/iframe.html");
-            exec("/etc/init.d/ttyd disable");
             return true;
         }
 
