@@ -1,5 +1,10 @@
 [
    {
+      "title":"Patreon and Tips!",
+      "date":"2023-06-04",
+      "content":"<p>Those who want to help buy testing hardware or just give me a tip, you can do it by <a href=\"https://github.com/xchwarze/wifi-pineapple-cloner#patreon-and-tips\" target=\"_blank\">sending donations<\/a> to my Binance account. I also made a <a href=\"https://www.patreon.com/xchwarze\" target=\"_blank\">Patreon account<\/a> where I share private builds and tests. Here you can find updates for the Pineapple Nano and builds to improve stability on 5g.<\/p>"
+   },
+   {
       "title":"WPC v4 released",
       "date":"2022-01-31",
       "content":"<p>Today we are launching the final version of this project. It fixes the last bugs that could be experienced depending on what setup we have mounted.<\/p><p>Both v3 and v4 of the project manage to generate hardware equal to the real one. All the bugs fixed for this release were also in the real hardware.<\/p>"
