@@ -86,16 +86,8 @@ class ZeroTier extends Module
     protected function managerDependencies()
     {
         $action = $this->checkDependencyInstalled() ? "remove" : "install";
-        // added checks in case folders are not linked
-        if (file_exists("/sd/modules/ZeroTier/scripts/dependencies.sh")) {
-            $command = "bash /sd/modules/ZeroTier/scripts/dependencies.sh";
-        } else {
-            $command = "bash /pineapple/modules/ZeroTier/scripts/dependencies.sh";
-        }
-        
-
+        $command = "bash /pineapple/modules/ZeroTier/scripts/dependencies.sh";
         $this->execBackground("{$command} {$action} {$this->request->where}");
-
         $this->response = ["success" => true];
     }
 
@@ -117,7 +109,8 @@ class ZeroTier extends Module
         if ($this->checkRunning("zerotier-one")) {
             $response["running"] = "Stop";
             $response["runningLabel"] = "danger";
-            $response["ip"] = exec("ifconfig ztyxayvrgh | grep 'inet addr' | cut -d: -f2 | awk '{print $1}'");
+            $interface = exec("/usr/bin/zerotier-cli get {$this->uciGet("zerotier.openwrt_network.join")} portDeviceName");
+            $response["ip"] = exec("/sbin/ifconfig {$interface} | /bin/grep 'inet addr' | /usr/bin/cut -d: -f2 | /usr/bin/awk '{print $1}'");
             $this->execBackground("rm /tmp/zerotier.process");
         } else if (file_exists("/tmp/zerotier.process")) {
             $response["running"] = "Starting...";
@@ -138,11 +131,9 @@ class ZeroTier extends Module
     protected function zerotierSwitch()
     {
         if ($this->checkRunning("zerotier-one")) {
-            $this->execBackground("/etc/init.d/zerotier stop");
-            $this->execBackground("rm /tmp/zerotier.process");
+            $this->execBackground("/etc/init.d/zerotier stop && rm /tmp/zerotier.process");
         } else {
-            $this->execBackground("touch /tmp/zerotier.process");
-            $this->execBackground("/etc/init.d/zerotier start");
+            $this->execBackground("touch /tmp/zerotier.process && /etc/init.d/zerotier start");
         }
 
     }
@@ -150,20 +141,20 @@ class ZeroTier extends Module
     protected function zerotierBootSwitch()
     {
         if (file_exists("/pineapple/modules/ZeroTier/zerotier.boot")) {
-            $this->execBackground("/etc/init.d/zerotier disable");
-            $this->execBackground("rm /pineapple/modules/ZeroTier/zerotier.boot");
+            $this->execBackground("/etc/init.d/zerotier disable && rm /pineapple/modules/ZeroTier/zerotier.boot");
         } else {
-            $this->execBackground("/etc/init.d/zerotier enable");
-            $this->execBackground("touch /pineapple/modules/ZeroTier/zerotier.boot");
+            $this->execBackground("/etc/init.d/zerotier enable && touch /pineapple/modules/ZeroTier/zerotier.boot");
         }
     }
 
     protected function zerotierSetID()
     {
-        $this->execBackground("uci delete zerotier.openwrt_network.join");
-        $this->execBackground("uci commit zerotier");
-        $this->execBackground("uci add_list zerotier.openwrt_network.join='{$this->request->ID}'");
-        $this->execBackground("uci commit zerotier");
+        if($this->request->ID === ""){
+            $this->uciSet("zerotier.openwrt_network.join", null);
+        } else {
+            $this->uciSet("zerotier.openwrt_network.join", null);
+            $this->uciAddList("zerotier.openwrt_network.join", $this->request->ID);
+        }
         $this->response = ["confirm" => "Success"];
     }
 
@@ -174,11 +165,8 @@ class ZeroTier extends Module
 
     protected function zerotierNewIdentity()
     {
-        $this->execBackground("uci delete zerotier.openwrt_network.secret");
-        $this->execBackground("uci commit zerotier");
-        $this->execBackground("rm -rf /var/lib/zerotier-one");
-        $this->execBackground("/etc/init.d/zerotier start");
-        $this->execBackground("/etc/init.d/zerotier stop");
+        $this->uciSet("zerotier.openwrt_network.secret", null);
+        $this->execBackground("rm -rf /var/lib/zerotier-one && /etc/init.d/zerotier restart && /etc/init.d/zerotier stop");
     }
 
     protected function zerotierGetIdentity()
