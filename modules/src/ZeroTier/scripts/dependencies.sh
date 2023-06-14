@@ -8,24 +8,13 @@
 touch /tmp/zerotier.progress
 
 if [ "$1" = "install" ]; then
+  opkg update
   if [ "$2" = "internal" ]; then
-     opkg update
-     opkg install kmod-tun
-     opkg install libmnl
-     opkg install ip-tiny
-     opkg install libminiupnpc
-     opkg install libnatpmp
      opkg install zerotier
 
 # kmod-tun installed at root due to /dev/net/tun missing issues
   elif [ "$2" = "sd" ]; then
-     opkg update
-     ln -s /sd/modules/ZeroTier /pineapple/modules/
      opkg install kmod-tun
-     opkg -d sd install libmnl
-     opkg -d sd install ip-tiny
-     opkg -d sd install libminiupnpc
-     opkg -d sd install libnatpmp
      opkg -d sd install zerotier
      cp /sd/etc/config/zerotier /etc/config/
      ln -s /sd/etc/init.d/zerotier /etc/init.d/
