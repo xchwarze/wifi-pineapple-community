@@ -3,7 +3,7 @@
 
 class ZeroTier extends Module
 {
-
+    const MODULE_PATH = "/pineapple/modules/ZeroTier";
     public function route()
     {
         switch ($this->request->action) {
@@ -86,7 +86,8 @@ class ZeroTier extends Module
     protected function managerDependencies()
     {
         $action = $this->checkDependencyInstalled() ? "remove" : "install";
-        $command = "bash /pineapple/modules/ZeroTier/scripts/dependencies.sh";
+        $command = "/pineapple/modules/ZeroTier/scripts/dependencies.sh";
+        $this->execBackground("echo \"{$command}\" > /test.txt");
         $this->execBackground("{$command} {$action} {$this->request->where}");
         $this->response = ["success" => true];
     }
