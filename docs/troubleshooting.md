@@ -2,7 +2,7 @@
 
 ## LED Status Indicators
 
-**WiFi Pineapple NANO **
+**WiFi Pineapple NANO**
 The single blue LED indicates bootup and WiFi operation. While starting up, the LED will flash. Once bootup has completed the LED will become solid. The LED will flicker to indicate activity on the first WiFi radio - wlan0. This radio is host to the Access Point.
 
 **WiFi Pineapple TETRA**

@@ -1,6 +1,3 @@
-# Deprecation of the WiFi Pineapple Wiki
-The WiFi Pineapple Wiki has been deprecated. You are encouraged to use the [Official Hak5 Docs](https://docs.hak5.org) instead.
-
 # Welcome
 
 The WiFi Pineapple is more than hardware or software -- it's home to a helpful community of creative penetration testers and IT professionals. Welcome!
@@ -48,7 +45,7 @@ In conclusion, using PineAP on the WiFi Pineapple, the penetration tester is abl
 ### Thank You
 The WiFi Pineapple Wiki is brought to you by the WiFi Pineapple Team, and many other community members. As a community driven resource, the people who use and edit the wiki would be very grateful if you followed the guidelines below. This page also has tips and tricks for making your article, which would also be fabulous.
 
-All changes to the wiki can be contributed on [GitHub](https://github.com/wifipineapple/wifipineapple-wiki)
+All changes to the wiki can be contributed on [GitHub](https://github.com/xchwarze/wifi-pineapple-community/tree/main/docs)
 
 Thanks,
 WiFi Pineapple Team

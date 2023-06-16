@@ -215,7 +215,7 @@ Action|Description|Parameters
 
 ### PineAP
 #### Description
-The PineAP module provides an easy way to interface with the [PineAP suite](/#!index.md#The_PineAP_Suite). For example, one might use the following to add an SSID to PineAP's pool:
+The PineAP module provides an easy way to interface with the [PineAP suite](index.md#The_PineAP_Suite). For example, one might use the following to add an SSID to PineAP's pool:
 ```
 {
   "module": "PineAP",
@@ -287,7 +287,7 @@ Action|Description|Parameters
 `removeMac`|Removes a MAC from tracking|<ul><li>`mac`<ul><li>The MAC address to stop tracking</li></ul></li>
 
 ## Module.php API
-Every module must extend the `Module` class that resides in `Module.php`. Extending this class gives the module access to the following API functions. For more information, see [Creating Modules](https://wiki.wifipineapple.com/creating_modules.md).
+Every module must extend the `Module` class that resides in `Module.php`. Extending this class gives the module access to the following API functions. For more information, see [Creating Modules](creating_modules.md).
 
 Function|Arguments|Description|Usage
 ----|----|----|----

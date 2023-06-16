@@ -15,5 +15,3 @@
 [![Let's Code: Session 1 - WiFi Pineapple Modules and API](http://img.youtube.com/vi/Lvf2At3G1C0/0.jpg)](http://www.youtube.com/watch?v=Lvf2At3G1C0)
 
 [![WiFi Pineapple TETRA: Linux Setup](http://img.youtube.com/vi/gqMW0NeODAQ/0.jpg)](http://www.youtube.com/watch?v=gqMW0NeODAQ)
-
-[![WiFi Pineapple TETRA: Android Setup](http://img.youtube.com/vi/Lj6N7TeBLhM/0.jpg)](http://www.youtube.com/watch?v=Lj6N7TeBLhM)

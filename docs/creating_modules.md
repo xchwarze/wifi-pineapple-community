@@ -28,7 +28,7 @@ A module will contain at least four files required to function. A `module.html` 
 Modules are stored on the WiFi Pineapple at `/pineapple/modules/`.
 
 ##Creating a module
-You can create the module files on the WiFi Pineapple with ease using the [Module Maker](https://www.wifipineapple.com/modules) module. It will create the initial files for you (with an example included), and will also allow you to package the module for distribution when you are finished.
+You can create the module files on the WiFi Pineapple with ease using the [Module Maker](https://github.com/xchwarze/wifi-pineapple-community/tree/main/modules) module. It will create the initial files for you (with an example included), and will also allow you to package the module for distribution when you are finished.
 
 After downloading the module, enter the correct information into the Name, Description, Version and Author fields and click "Generate". Your module will then be ready to download and edit. Open the module in your favorite text editor.
 
