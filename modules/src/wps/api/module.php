@@ -216,7 +216,7 @@ class wps extends Module
     {
         exec("iwconfig 2> /dev/null | grep \"wlan*\" | grep -v \"mon*\" | awk '{print $1}'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray);
+        $this->response = array("interfaces" => array_reverse($interfaceArray));
     }
 
     private function getMonitors()
@@ -239,16 +239,24 @@ class wps extends Module
     private function scanForNetworks()
     {
         if ($this->request->duration && $this->request->monitor != "") {
-            exec("killall -9 airodump-ng && rm -rf /tmp/wps-*");
+            exec("killall airodump-ng && rm -rf /tmp/wps-*");
             $this->execBackground("airodump-ng -a --wps --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
             sleep($this->request->duration);
-            exec("killall -9 airodump-ng");
-
+            exec("killall airodump-ng");
             exec("wash -f /tmp/wps-01.cap > /tmp/wps-01.wash");
         }
-
-        $p = $this->iwlistparse->parseScanDev($this->request->interface);
-        $apArray = $p[$this->request->interface];
+        
+        $apArray;
+        if($this->request->monitor != null){
+            $tempStation = substr($this->request->monitor, 0, -3);
+            exec("airmon-ng stop ".$this->request->monitor);
+            $p = $this->iwlistparse->parseScanDev($tempStation);
+            $apArray = $p[$tempStation];
+            exec("airmon-ng start ".$tempStation);
+        } else {
+            $p = $this->iwlistparse->parseScanDev($this->request->interface);
+            $apArray = $p[$this->request->interface];
+        }
 
         $returnArray = array();
         foreach ($apArray as $apData) {
