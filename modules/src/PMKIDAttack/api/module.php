@@ -61,10 +61,11 @@ class PMKIDAttack extends Module
 
     protected function getToolPath($tool)
     {
-        $folder = ($this->isSDAvailable()) ?
-                self::TOOLS_SD_PATH : self::TOOLS_PATH;
+        if ($this->isSDAvailable() && file_exists(self::TOOLS_SD_PATH . $tool)) {
+            return self::TOOLS_SD_PATH . $tool;
+        }
 
-        return "{$folder}{$tool}";
+        return self::TOOLS_PATH . $tool;
     }
 
     protected function getCapPath()
