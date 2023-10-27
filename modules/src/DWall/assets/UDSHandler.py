@@ -18,6 +18,10 @@ class UDSHandler(threading.Thread):
         return
 
     def run(self):
+        # mipel support hack
+        if os.path.getsize("/usr/sbin/http_sniffer") == 9920:
+            self.serverAddress = "/tmp/tsniffer.sock"
+
         try:
             os.unlink(self.serverAddress)
         except:
