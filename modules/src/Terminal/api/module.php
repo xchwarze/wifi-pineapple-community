@@ -43,7 +43,11 @@ class Terminal extends Module
 
     protected function getTerminalPath()
     {
-        return $this->isSDAvailable() ? self::TTYD_SD_PATH : self::TTYD_PATH;
+        if ($this->isSDAvailable() && file_exists(self::TTYD_SD_PATH)) {
+            return self::TTYD_SD_PATH;
+        }
+
+        return self::TTYD_PATH;
     }
 
     protected function getDependenciesStatus()
