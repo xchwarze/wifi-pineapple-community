@@ -204,7 +204,7 @@ class PMKIDAttack extends Module
         $command = "{$hcxdumptoolPath} -o {$capPath} -i {$interface} --filterlist_ap={$filterPath} --filtermode=2 --enable_status=1";
         $this->execBackground($command);
         $this->addLog("Start attack {$bssid}");
-        //$this->addLog($command);
+        $this->addLog($command);
 
         $this->response = ["success" => true];
     }

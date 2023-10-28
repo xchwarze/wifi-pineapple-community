@@ -46,18 +46,21 @@ touch /tmp/PMKIDAttack.progress
 if [[ "$1" = "install" ]]; then
     opkg update
 
-    if [[ $(/bin/mount | /bin/grep "on /sd") ]]; then
+    check_sd=$(/bin/mount | /bin/grep "on /sd")    
+    if [[ -e /sd ]] && [[ -n "$check_sd" ]]; then
         add_log "Installing on sd"
 
         opkg --dest sd install $HCXTOOLS_IPK >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg --dest sd install $HCXTOOLS_IPK failed"
+            rm /tmp/PMKIDAttack.progress
             exit 1
         fi
 
         opkg --dest sd install $HCXDUMPTOOL_IPK >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg --dest sd install $HCXDUMPTOOL_IPK failed"
+            rm /tmp/PMKIDAttack.progress
             exit 1
         fi
     else
@@ -66,12 +69,14 @@ if [[ "$1" = "install" ]]; then
         opkg install $HCXTOOLS_IPK >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg install $HCXTOOLS_IPK failed"
+            rm /tmp/PMKIDAttack.progress
             exit 1
         fi
 
         opkg install $HCXDUMPTOOL_IPK >> $LOGFILE
         if [[ $? -ne 0 ]]; then
             add_log "ERROR: opkg install $HCXDUMPTOOL_IPK failed"
+            rm /tmp/PMKIDAttack.progress
             exit 1
         fi
     fi

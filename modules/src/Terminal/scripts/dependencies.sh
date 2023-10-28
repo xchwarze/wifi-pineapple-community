@@ -23,7 +23,8 @@ touch /tmp/terminal.progress
 if [[ "$1" = "install" ]]; then
     opkg update
 
-    if [[ $(/bin/mount | /bin/grep "on /sd") ]]; then
+    check_sd=$(/bin/mount | /bin/grep "on /sd")    
+    if [[ -e /sd ]] && [[ -n "$check_sd" ]]; then
         add_log "Installing on sd"
 
         opkg --dest sd install ttyd >> $LOGFILE
