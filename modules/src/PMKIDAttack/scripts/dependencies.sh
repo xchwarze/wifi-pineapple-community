@@ -95,7 +95,7 @@ fi
 if [[ "$1" = "remove" ]]; then
     add_log "Removing dependencies"
 
-    rm -rf /etc/config/PMKIDAttack
+    rm -f /etc/config/pmkidattack
 
     opkg remove hcxtools-custom hcxdumptool-custom
     #opkg remove hcxtools hcxdumptool
