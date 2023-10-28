@@ -43,11 +43,12 @@ if [[ "$1" = "install" ]]; then
         fi
     fi
 
+    sleep 2
+    
     uci set ttyd.@ttyd[0].port=1477
     #uci set ttyd.@ttyd[0].index='/pineapple/modules/Terminal/ttyd/iframe.html'
     uci commit ttyd
-
-    sleep 2
+    
     /etc/init.d/ttyd disable
 
     add_log "Installation complete!"
