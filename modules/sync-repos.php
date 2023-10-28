@@ -40,7 +40,9 @@ if ($remoteSync) {
     }
 } else {
     echo "======== Update Package: {$target} ========\n";
-    echo "Remember compress first! tar czf {$target}.tar.gz {$target} && mv {$target}.tar.gz ../build\n";
+    echo "Remember compress first!: tar czf {$target}.tar.gz {$target} && mv {$target}.tar.gz ../build\n";
+    echo "Doing this on Windows can actually BREAK scripts!\n\n";
+
     $fileName = "{$buildDir}/{$target}.tar.gz";
     $infoData = json_decode(file_get_contents("{$srcDir}/{$target}/module.info"));
     
