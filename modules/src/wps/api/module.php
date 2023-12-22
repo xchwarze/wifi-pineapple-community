@@ -192,7 +192,6 @@ class wps extends Controller
             exec("wash -f /tmp/wps-01.cap > /tmp/wps-01.wash");
         }
         
-        $apArray;
         if($this->request['monitor'] != null){
             $tempStation = substr($this->request['monitor'], 0, -3);
             exec("airmon-ng stop ".$this->request['monitor']);
