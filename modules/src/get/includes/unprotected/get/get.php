@@ -1,7 +1,6 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
     
-    require_once("/pineapple/api/DatabaseConnection.php");
-    
+    /* Code modified by Frieren Auto Refactor */
     $dbConnection = "";
     $dbPath = "";
     $report = "";
@@ -11,11 +10,11 @@
     if ( doesLocationFileExist("/etc/pineapple/get_database_location") )
     {
         $dbPath = trim(file_get_contents("/etc/pineapple/get_database_location")) . "get.db";
-        $dbConnection = new DatabaseConnection($dbPath);
+        $dbConnection = new \frieren\orm\SQLite($dbPath);
     }
     else
     {
-        $dbConnection = new DatabaseConnection(self::DATABASE);
+        $dbConnection = new \frieren\orm\SQLite(self::DATABASE);
     }
     
     // Run the client report and then parse it for our current client's info...
@@ -213,7 +212,9 @@ if ( mac.length > 0 )
 }
 </script>
 
-<?php namespace pineapple;
+<?php namespace frieren\core;
+
+/* Code modified by Frieren Auto Refactor */
 
 function doesLocationFileExist($path)
 {

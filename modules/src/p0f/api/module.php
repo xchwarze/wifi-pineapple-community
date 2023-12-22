@@ -1,55 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class p0f extends Module
+/* Code modified by Frieren Auto Refactor */
+class p0f extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'togglep0f':
-                $this->togglep0f();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-            case 'togglep0fOnBoot':
-                $this->togglep0fOnBoot();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'saveAutostartSettings':
-                $this->saveAutostartSettings();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'togglep0f', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory', 'togglep0fOnBoot', 'getInterfaces', 'saveAutostartSettings'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("p0f.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("p0f.module.installed")));
     }
 
     protected function getDevice()
@@ -60,30 +18,30 @@ class p0f extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/p0f/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("p0f")) {
-            $this->execBackground("/pineapple/modules/p0f/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/p0f/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/p0f/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/p0f/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/p0f.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function togglep0fOnBoot()
+    public function togglep0fOnBoot()
     {
         if (exec("cat /etc/rc.local | grep p0f/scripts/autostart_p0f.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -94,27 +52,27 @@ class p0f extends Module
         }
     }
 
-    private function togglep0f()
+    public function togglep0f()
     {
-        if (!$this->checkRunning("p0f")) {
-            $this->uciSet("p0f.run.interface", $this->request->interface);
+        if (!$this->systemHelper->checkRunning("p0f")) {
+            $this->systemHelper->uciSet("p0f.run.interface", $this->request['interface']);
 
-            $this->execBackground("/pineapple/modules/p0f/scripts/p0f.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/p0f/scripts/p0f.sh start");
         } else {
-            $this->uciSet("p0f.run.interface", '');
+            $this->systemHelper->uciSet("p0f.run.interface", '');
 
-            $this->execBackground("/pineapple/modules/p0f/scripts/p0f.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/p0f/scripts/p0f.sh stop");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray, "selected" => $this->uciGet("p0f.run.interface"));
+        $this->responseHandler->setData(array("interfaces" => $interfaceArray, "selected" => $this->systemHelper->uciGet("p0f.run.interface")));
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/p0f.progress')) {
             if (!$this->checkDeps("p0f")) {
@@ -134,7 +92,7 @@ class p0f extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("p0f")) {
+                if ($this->systemHelper->checkRunning("p0f")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -164,16 +122,16 @@ class p0f extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("p0f")) {
-            if ($this->checkRunning("p0f")) {
+            if ($this->systemHelper->checkRunning("p0f")) {
                 $path = "/pineapple/modules/p0f/log";
 
                 $latest_ctime = 0;
@@ -191,8 +149,8 @@ class p0f extends Module
                 if ($latest_filename != "") {
                     $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/p0f/log/".$latest_filename));
 
-                    if ($this->request->filter != "") {
-                        $filter = $this->request->filter;
+                    if ($this->request['filter'] != "") {
+                        $filter = $this->request['filter'];
 
                         $cmd = "cat /pineapple/modules/p0f/log/".$latest_filename." | ".$filter;
                     } else {
@@ -201,20 +159,20 @@ class p0f extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->responseHandler->setData(implode("\n", array_reverse($output)));
                     } else {
-                        $this->response = "Empty log...";
+                        $this->responseHandler->setData("Empty log...");
                     }
                 }
             } else {
-                $this->response = "p0f is not running...";
+                $this->responseHandler->setData("p0f is not running...");
             }
         } else {
-            $this->response = "p0f is not installed...";
+            $this->responseHandler->setData("p0f is not installed...");
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/p0f/log/*"));
@@ -235,31 +193,31 @@ class p0f extends Module
         };
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/p0f/log/".$this->request->file));
-        exec("cat /pineapple/modules/p0f/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/p0f/log/".$this->request['file']));
+        exec("cat /pineapple/modules/p0f/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/p0f/log/".$this->request->file);
+        exec("rm -rf /pineapple/modules/p0f/log/".$this->request['file']);
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/p0f/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/p0f/log/".$this->request['file'])));
     }
 
-    private function saveAutostartSettings()
+    public function saveAutostartSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("p0f.autostart.interface", $settings->interface);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("p0f.autostart.interface", $settings->interface);
     }
 }

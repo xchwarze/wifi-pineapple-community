@@ -1,51 +1,26 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class RandomRoll extends Module
+/* Code modified by Frieren Auto Refactor */
+class RandomRoll extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'checkStatus':
-                $this->checkStatus();
-                break;
-            case 'startRandomRoll':
-                $this->startRandomRoll();
-                break;
+    protected $endpointRoutes = ['checkStatus', 'startRandomRoll', 'stopRandomRoll', 'getRandomRollRolls', 'getRandomRollLogs', 'clearRandomRollLogs'];
 
-            case 'stopRandomRoll':
-                $this->stopRandomRoll();
-                break;
-
-            case 'getRandomRollRolls':
-                $this->getRandomRollRolls();
-                break;
-
-            case 'getRandomRollLogs':
-                $this->getRandomRollLogs();
-                break;
-
-            case 'clearRandomRollLogs':
-                $this->clearRandomRollLogs();
-                break;
-        }
-    }
-
-    private function checkStatus()
+    public function checkStatus()
     {
         $running = file_get_contents('/pineapple/modules/RandomRoll/assets/running');
         if($running == 1){
-            $this->response = array("running" => true);
+            $this->responseHandler->setData(array("running" => true));
         } else {
-            $this->response = array("running" => false);
+            $this->responseHandler->setData(array("running" => false));
         }
     }
 
-    private function startRandomRoll()
+    public function startRandomRoll()
     {
         $date = date("Ymd H:i:s -- ");
         file_put_contents("/pineapple/modules/RandomRoll/assets/logs/randomroll.log", $date . "RandomRoll Started\n", FILE_APPEND);
 
-        foreach($this->request->selected as $roll){
+        foreach($this->request['selected'] as $roll){
             $title = $roll->randomRollTitle;
             $checked = $roll->randomRollChecked;
             if ($checked){
@@ -60,10 +35,10 @@ class RandomRoll extends Module
 
         file_put_contents('/pineapple/modules/RandomRoll/assets/running', '1');
 
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function stopRandomRoll()
+    public function stopRandomRoll()
     {
         $date = date("Ymd H:i:s -- ");
         file_put_contents("/pineapple/modules/RandomRoll/assets/logs/randomroll.log", $date . "RandomRoll Stopped\n\n", FILE_APPEND);
@@ -75,10 +50,10 @@ class RandomRoll extends Module
 
         file_put_contents('/pineapple/modules/RandomRoll/assets/running', '0');
 
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function getRandomRollRolls()
+    public function getRandomRollRolls()
     {
         $rolls = array();
         
@@ -87,16 +62,16 @@ class RandomRoll extends Module
             array_push($rolls, array("randomRollTitle" => $rollname, "randomRollChecked" => false));
         }
 
-        $this->response = $rolls;
+        $this->responseHandler->setData($rolls);
     }
 
-    private function getRandomRollLogs()
+    public function getRandomRollLogs()
     {
         $randomRollLogOutput = file_get_contents('/pineapple/modules/RandomRoll/assets/logs/randomroll.log');
-        $this->response = array("randomRollLogOutput" => $randomRollLogOutput);
+        $this->responseHandler->setData(array("randomRollLogOutput" => $randomRollLogOutput));
     }
 
-    private function clearRandomRollLogs()
+    public function clearRandomRollLogs()
     {
         file_put_contents("/pineapple/modules/RandomRoll/assets/logs/randomroll.log", "");
     }

@@ -1,55 +1,17 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-
-
-class Status extends Module
+/* Code modified by Frieren Auto Refactor */
+class Status extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'getSystem':
-                $this->getSystem();
-                break;
-            case 'getCPU':
-                $this->getCPU();
-                break;
-            case 'getDHCP':
-                $this->getDHCP();
-                break;
-            case 'getMemory':
-                $this->getMemory();
-                break;
-            case 'getWiFi':
-                $this->getWiFi();
-                break;
-            case 'getSwap':
-                $this->getSwap();
-                break;
-            case 'getStorage':
-                $this->getStorage();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'getMACInfo':
-                $this->getMACInfo();
-                break;
-            case 'getPingInfo':
-                $this->getPingInfo();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'getSystem', 'getCPU', 'getDHCP', 'getMemory', 'getWiFi', 'getSwap', 'getStorage', 'getInterfaces', 'getMACInfo', 'getPingInfo'];
 
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/Status/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function getSystem()
+    public function getSystem()
     {
         $current_time = exec("date");
         $up_time = exec("uptime | awk -F, '{sub(\".*up \",x,$1);print $1}'");
@@ -63,10 +25,10 @@ class Status extends Module
                     'machine' => $machine
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getCPU()
+    public function getCPU()
     {
         $cpu = trim(exec("cat /proc/cpuinfo | grep cpu | awk -F: '{print $2}'"));
         $bogo = trim(exec("cat /proc/cpuinfo | grep Bogo | awk -F: '{print $2}'"));
@@ -87,10 +49,10 @@ class Status extends Module
                     'loadAverageAll' =>  $cpu_load_all
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getDHCP()
+    public function getDHCP()
     {
         $dhcpClients = explode("\n", trim(shell_exec("cat /tmp/dhcp.leases")));
         $clientsList = array();
@@ -109,10 +71,10 @@ class Status extends Module
                     'clientsList' =>  $clientsList
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getMemory()
+    public function getMemory()
     {
         $mem_total = exec("free | grep \"Mem:\" | awk '{ print $2 }'");
         $mem_used = exec("free | grep \"Mem:\" | awk '{ print $3 }'");
@@ -133,10 +95,10 @@ class Status extends Module
                     'memoryUsedPourcentage' =>  $mem_used_ptg
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getWiFi()
+    public function getWiFi()
     {
         $wifiClients = explode("\n", trim(shell_exec("iw dev wlan0 station dump | grep \"Station\"")));
         $wifiClientsList = array();
@@ -155,10 +117,10 @@ class Status extends Module
                     'wifiClientsList' =>  $wifiClientsList
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getSwap()
+    public function getSwap()
     {
         $swap_total = exec("free | grep \"Swap:\" | awk '{ print $2 }'");
         $swap_used = exec("free | grep \"Swap:\" | awk '{ print $3 }'");
@@ -190,10 +152,10 @@ class Status extends Module
                     'swapUsedPourcentage' =>  $swap_used_ptg
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getStorage()
+    public function getStorage()
     {
         $dfAll = explode("\n", trim(shell_exec("df | grep -v \"Filesystem\"")));
         $dfList = array();
@@ -211,10 +173,10 @@ class Status extends Module
                     'storagesList' => $dfList
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         $interfaces = explode("\n", trim(shell_exec("ifconfig | grep  'encap:Ethernet'  | cut -d' ' -f1")));
         $interfacesList = array();
@@ -253,22 +215,22 @@ class Status extends Module
                     'interfacesList' => $interfacesList
                     );
 
-        $this->response = array('info' => $info);
+        $this->responseHandler->setData(array('info' => $info));
     }
 
-    private function getMACInfo()
+    public function getMACInfo()
     {
-        $content = file_get_contents("https://api.macvendors.com/".$this->request->mac);
-        $this->response = array('title' => $this->request->mac, "output" => $content);
+        $content = file_get_contents("https://api.macvendors.com/".$this->request['mac']);
+        $this->responseHandler->setData(array('title' => $this->request['mac'], "output" => $content));
     }
 
-    private function getPingInfo()
+    public function getPingInfo()
     {
-        exec("ping -c4 ".$this->request->ip, $output);
-        $this->response = array('title' => $this->request->ip, "output" => implode("\n", array_reverse($output)));
+        exec("ping -c4 ".$this->request['ip'], $output);
+        $this->responseHandler->setData(array('title' => $this->request['ip'], "output" => implode("\n", array_reverse($output))));
     }
 
-    private function kbytesToString($kb)
+    public function kbytesToString($kb)
     {
         $units = array('TB','GB','MB','KB');
         $scale = 1024*1024*1024;
@@ -281,7 +243,7 @@ class Status extends Module
         return sprintf("%0.2f %s", ($kb/$scale), $units[$ui]);
     }
 
-    private function getCoreInformation()
+    public function getCoreInformation()
     {
         $data = file('/proc/stat');
         $cores = array();
@@ -301,7 +263,7 @@ class Status extends Module
         return $cores;
     }
 
-    private function getCpuPercentages($stat1, $stat2)
+    public function getCpuPercentages($stat1, $stat2)
     {
         if (count($stat1) !== count($stat2)) {
             return;

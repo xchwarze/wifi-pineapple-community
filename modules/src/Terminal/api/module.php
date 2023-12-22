@@ -1,39 +1,14 @@
 <?php
 
-namespace pineapple;
+namespace frieren\core;
 
-class Terminal extends Module
+/* Code modified by Frieren Auto Refactor */
+class Terminal extends Controller
 {
+    protected $endpointRoutes = ['getDependenciesStatus', 'managerDependencies', 'getDependenciesInstallStatus', 'startTerminal', 'stopTerminal', 'getStatus', 'getLog'];
     const TTYD_PATH = "/usr/bin/ttyd";
     const TTYD_SD_PATH = "/sd/usr/bin/ttyd";
     const LOG_PATH = "/pineapple/modules/Terminal/module.log";
-
-    public function route()
-    {
-        switch ($this->request->action) {
-            case "getDependenciesStatus":
-                $this->getDependenciesStatus();
-                break;
-            case "managerDependencies":
-                $this->managerDependencies();
-                break;
-            case "getDependenciesInstallStatus":
-                $this->getDependenciesInstallStatus();
-                break;
-            case "startTerminal":
-                $this->startTerminal();
-                break;
-            case "stopTerminal":
-                $this->stopTerminal();
-                break;
-            case "getStatus":
-                $this->getStatus();
-                break;
-            case "getLog":
-                $this->getLog();
-                break;
-        }
-    }
 
     protected function addLog($massage)
     {
@@ -43,7 +18,7 @@ class Terminal extends Module
 
     protected function getTerminalPath()
     {
-        if ($this->isSDAvailable() && file_exists(self::TTYD_SD_PATH)) {
+        if ($this->systemHelper->isSDAvailable() && file_exists(self::TTYD_SD_PATH)) {
             return self::TTYD_SD_PATH;
         }
 
@@ -72,12 +47,12 @@ class Terminal extends Module
             $response["installed"] = true;
         }
 
-        $this->response = $response;
+        $this->responseHandler->setData($response);
     }
 
     protected function checkPanelVersion()
     {
-        $version = \helper\getFirmwareVersion();
+        $version = $this->systemHelper->getFirmwareVersion();
         $version = str_replace("+", "", $version);
 
         return version_compare($version, "2.8.0") >= 0;
@@ -85,9 +60,9 @@ class Terminal extends Module
 
     protected function checkDependencyInstalled()
     {
-       if ($this->checkDependency("ttyd")) {
-            if (!$this->uciGet("ttyd.@ttyd[0].port")) {
-                $this->uciSet("ttyd.@ttyd[0].port", "1477");
+       if ($this->systemHelper->checkDependency("ttyd")) {
+            if (!$this->systemHelper->uciGet("ttyd.@ttyd[0].port")) {
+                $this->systemHelper->uciSet("ttyd.@ttyd[0].port", "1477");
                 //$this->uciSet("ttyd.@ttyd[0].index", "/pineapple/modules/Terminal/ttyd/iframe.html");
                 exec("/etc/init.d/ttyd disable");
             }
@@ -101,18 +76,18 @@ class Terminal extends Module
     protected function managerDependencies()
     {
         if (!$this->checkPanelVersion()) {
-            $this->response = ["success" => true];
+            $this->responseHandler->setData(["success" => true]);
             return true;    
         }
 
         $action = $this->checkDependencyInstalled() ? "remove" : "install";
-        $this->execBackground("/pineapple/modules/Terminal/scripts/dependencies.sh {$action}");
-        $this->response = ["success" => true];
+        $this->systemHelper->execBackground("/pineapple/modules/Terminal/scripts/dependencies.sh {$action}");
+        $this->responseHandler->setData(["success" => true]);
     }
 
     protected function getDependenciesInstallStatus()
     {
-        $this->response = ["success" => !file_exists("/tmp/terminal.progress")];
+        $this->responseHandler->setData(["success" => !file_exists("/tmp/terminal.progress")]);
     }
 
     protected function startTerminal()
@@ -126,19 +101,19 @@ class Terminal extends Module
         ];
         */
         $terminal = $this->getTerminalPath();
-        $status = \helper\checkRunning($terminal);
+        $status = $this->systemHelper->checkRunning($terminal);
         if (!$status) {
             $command = "{$terminal} -p 1477 -i br-lan /bin/login";
-            $this->execBackground($command);
+            $this->systemHelper->execBackground($command);
 
             sleep(1);
-            $status = \helper\checkRunning($terminal);
+            $status = $this->systemHelper->checkRunning($terminal);
             if (!$status) {
                 $this->addLog("Terminal could not be run! command: {$command}");
             }
         }
 
-        $this->response = ["success" => $status];
+        $this->responseHandler->setData(["success" => $status]);
     }
 
     protected function stopTerminal()
@@ -152,16 +127,16 @@ class Terminal extends Module
         ];
         */
         exec("/usr/bin/pkill ttyd");
-        $status = \helper\checkRunning($this->getTerminalPath());
+        $status = $this->systemHelper->checkRunning($this->getTerminalPath());
         if ($status) {
             $this->addLog("Terminal could not be stop! command: /usr/bin/pkill ttyd");
         }
-        $this->response = ["success" => !$status];
+        $this->responseHandler->setData(["success" => !$status]);
     }
 
     protected function getStatus()
     {
-        $this->response = ["status" => \helper\checkRunning($this->getTerminalPath())];
+        $this->responseHandler->setData(["status" => $this->systemHelper->checkRunning($this->getTerminalPath())]);
     }
 
     protected function getLog()
@@ -170,6 +145,6 @@ class Terminal extends Module
             touch(self::LOG_PATH);
         }
 
-        $this->response = ["moduleLog" => file_get_contents(self::LOG_PATH)];
+        $this->responseHandler->setData(["moduleLog" => file_get_contents(self::LOG_PATH)]);
     }
 }

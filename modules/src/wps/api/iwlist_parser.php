@@ -1,5 +1,6 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 class iwlist_parser
 {
     public function iwlist_parser()

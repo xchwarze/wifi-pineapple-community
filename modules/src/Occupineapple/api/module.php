@@ -1,61 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class Occupineapple extends Module
+/* Code modified by Frieren Auto Refactor */
+class Occupineapple extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'togglemdk3':
-                $this->togglemdk3();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'getLists':
-                $this->getLists();
-                break;
-            case 'showList':
-                $this->showList();
-                break;
-            case 'deleteList':
-                $this->deleteList();
-                break;
-            case 'saveListData':
-                $this->saveListData();
-                break;
-            case 'getSettings':
-                $this->getSettings();
-                break;
-            case 'setSettings':
-                $this->setSettings();
-                break;
-            case 'saveAutostartSettings':
-                $this->saveAutostartSettings();
-                break;
-            case 'togglemdk3OnBoot':
-                $this->togglemdk3OnBoot();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'togglemdk3', 'handleDependencies', 'handleDependenciesStatus', 'getInterfaces', 'getLists', 'showList', 'deleteList', 'saveListData', 'getSettings', 'setSettings', 'saveAutostartSettings', 'togglemdk3OnBoot'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("occupineapple.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("occupineapple.module.installed")));
     }
 
     protected function getDevice()
@@ -66,21 +18,21 @@ class Occupineapple extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/Occupineapple/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("mdk3")) {
-            $this->execBackground("/pineapple/modules/Occupineapple/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Occupineapple/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/Occupineapple/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Occupineapple/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function togglemdk3OnBoot()
+    public function togglemdk3OnBoot()
     {
         if (exec("cat /etc/rc.local | grep Occupineapple/scripts/autostart_occupineapple.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -91,31 +43,31 @@ class Occupineapple extends Module
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/Occupineapple.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function togglemdk3()
+    public function togglemdk3()
     {
-        if (!$this->checkRunning("mdk3")) {
-            $this->uciSet("occupineapple.run.interface", $this->request->interface);
-            $this->uciSet("occupineapple.run.list", $this->request->list);
+        if (!$this->systemHelper->checkRunning("mdk3")) {
+            $this->systemHelper->uciSet("occupineapple.run.interface", $this->request['interface']);
+            $this->systemHelper->uciSet("occupineapple.run.list", $this->request['list']);
 
-            $this->execBackground("/pineapple/modules/Occupineapple/scripts/occupineapple.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/Occupineapple/scripts/occupineapple.sh start");
         } else {
-            $this->uciSet("occupineapple.run.interface", '');
-            $this->uciSet("occupineapple.run.list", '');
+            $this->systemHelper->uciSet("occupineapple.run.interface", '');
+            $this->systemHelper->uciSet("occupineapple.run.list", '');
 
-            $this->execBackground("/pineapple/modules/Occupineapple/scripts/occupineapple.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/Occupineapple/scripts/occupineapple.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/Occupineapple.progress')) {
             if (!$this->checkDeps("mdk3")) {
@@ -135,7 +87,7 @@ class Occupineapple extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("mdk3")) {
+                if ($this->systemHelper->checkRunning("mdk3")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -164,38 +116,38 @@ class Occupineapple extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("mdk3")) {
-            if ($this->checkRunning("mdk3")) {
+            if ($this->systemHelper->checkRunning("mdk3")) {
                 exec("cat /tmp/occupineapple.log", $output);
                 if (!empty($output)) {
-                    $this->response = implode("\n", array_reverse($output));
+                    $this->responseHandler->setData(implode("\n", array_reverse($output)));
                 } else {
-                    $this->response = "Empty log...";
+                    $this->responseHandler->setData("Empty log...");
                 }
             } else {
-                $this->response = "Occupineapple is not running...";
+                $this->responseHandler->setData("Occupineapple is not running...");
             }
         } else {
-            $this->response = "mdk3 is not installed...";
+            $this->responseHandler->setData("mdk3 is not installed...");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("iwconfig 2> /dev/null | grep \"wlan*\" | awk '{print $1}'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray, "selected" => $this->uciGet("occupineapple.run.interface"));
+        $this->responseHandler->setData(array("interfaces" => $interfaceArray, "selected" => $this->systemHelper->uciGet("occupineapple.run.interface")));
     }
 
-    private function getLists()
+    public function getLists()
     {
         $listArray = array();
         $listList = array_reverse(glob("/pineapple/modules/Occupineapple/lists/*"));
@@ -203,76 +155,76 @@ class Occupineapple extends Module
         foreach ($listList as $list) {
             array_push($listArray, basename($list));
         }
-        $this->response = array("lists" => $listArray, "selected" => $this->uciGet("occupineapple.run.list"));
+        $this->responseHandler->setData(array("lists" => $listArray, "selected" => $this->systemHelper->uciGet("occupineapple.run.list")));
     }
 
-    private function showList()
+    public function showList()
     {
-        $listData = file_get_contents('/pineapple/modules/Occupineapple/lists/'.$this->request->list);
-        $this->response = array("listData" => $listData);
+        $listData = file_get_contents('/pineapple/modules/Occupineapple/lists/'.$this->request['list']);
+        $this->responseHandler->setData(array("listData" => $listData));
     }
 
-    private function deleteList()
+    public function deleteList()
     {
-        exec("rm -rf /pineapple/modules/Occupineapple/lists/".$this->request->list);
+        exec("rm -rf /pineapple/modules/Occupineapple/lists/".$this->request['list']);
     }
 
-    private function saveListData()
+    public function saveListData()
     {
-        $filename = "/pineapple/modules/Occupineapple/lists/".$this->request->list;
-        file_put_contents($filename, $this->request->listData);
+        $filename = "/pineapple/modules/Occupineapple/lists/".$this->request['list'];
+        file_put_contents($filename, $this->request['listData']);
     }
 
-    private function getSettings()
+    public function getSettings()
     {
         $settings = array(
-                    'speed' => $this->uciGet("occupineapple.settings.speed"),
-                    'channel' => $this->uciGet("occupineapple.settings.channel"),
-                    'adHoc' => $this->uciGet("occupineapple.settings.adHoc"),
-                    'wepBit' => $this->uciGet("occupineapple.settings.wepBit"),
-                    'wpaTKIP' => $this->uciGet("occupineapple.settings.wpaTKIP"),
-                    'wpaAES' => $this->uciGet("occupineapple.settings.wpaAES"),
-                    'validMAC' => $this->uciGet("occupineapple.settings.validMAC")
+                    'speed' => $this->systemHelper->uciGet("occupineapple.settings.speed"),
+                    'channel' => $this->systemHelper->uciGet("occupineapple.settings.channel"),
+                    'adHoc' => $this->systemHelper->uciGet("occupineapple.settings.adHoc"),
+                    'wepBit' => $this->systemHelper->uciGet("occupineapple.settings.wepBit"),
+                    'wpaTKIP' => $this->systemHelper->uciGet("occupineapple.settings.wpaTKIP"),
+                    'wpaAES' => $this->systemHelper->uciGet("occupineapple.settings.wpaAES"),
+                    'validMAC' => $this->systemHelper->uciGet("occupineapple.settings.validMAC")
                     );
-        $this->response = array('settings' => $settings);
+        $this->responseHandler->setData(array('settings' => $settings));
     }
 
-    private function setSettings()
+    public function setSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("occupineapple.settings.speed", $settings->speed);
-        $this->uciSet("occupineapple.settings.channel", $settings->channel);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("occupineapple.settings.speed", $settings->speed);
+        $this->systemHelper->uciSet("occupineapple.settings.channel", $settings->channel);
         if ($settings->adHoc) {
-            $this->uciSet("occupineapple.settings.adHoc", 1);
+            $this->systemHelper->uciSet("occupineapple.settings.adHoc", 1);
         } else {
-            $this->uciSet("occupineapple.settings.adHoc", 0);
+            $this->systemHelper->uciSet("occupineapple.settings.adHoc", 0);
         }
         if ($settings->wepBit) {
-            $this->uciSet("occupineapple.settings.wepBit", 1);
+            $this->systemHelper->uciSet("occupineapple.settings.wepBit", 1);
         } else {
-            $this->uciSet("occupineapple.settings.wepBit", 0);
+            $this->systemHelper->uciSet("occupineapple.settings.wepBit", 0);
         }
         if ($settings->wpaTKIP) {
-            $this->uciSet("occupineapple.settings.wpaTKIP", 1);
+            $this->systemHelper->uciSet("occupineapple.settings.wpaTKIP", 1);
         } else {
-            $this->uciSet("occupineapple.settings.wpaTKIP", 0);
+            $this->systemHelper->uciSet("occupineapple.settings.wpaTKIP", 0);
         }
         if ($settings->wpaAES) {
-            $this->uciSet("occupineapple.settings.wpaAES", 1);
+            $this->systemHelper->uciSet("occupineapple.settings.wpaAES", 1);
         } else {
-            $this->uciSet("occupineapple.settings.wpaAES", 0);
+            $this->systemHelper->uciSet("occupineapple.settings.wpaAES", 0);
         }
         if ($settings->validMAC) {
-            $this->uciSet("occupineapple.settings.validMAC", 1);
+            $this->systemHelper->uciSet("occupineapple.settings.validMAC", 1);
         } else {
-            $this->uciSet("occupineapple.settings.validMAC", 0);
+            $this->systemHelper->uciSet("occupineapple.settings.validMAC", 0);
         }
     }
 
-    private function saveAutostartSettings()
+    public function saveAutostartSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("occupineapple.autostart.interface", $settings->interface);
-        $this->uciSet("occupineapple.autostart.list", $settings->list);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("occupineapple.autostart.interface", $settings->interface);
+        $this->systemHelper->uciSet("occupineapple.autostart.list", $settings->list);
     }
 }

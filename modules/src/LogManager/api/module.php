@@ -1,37 +1,11 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-
-
-class LogManager extends Module
+/* Code modified by Frieren Auto Refactor */
+class LogManager extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshFilesList':
-                $this->refreshFilesList();
-                break;
-            case 'downloadFilesList':
-                $this->downloadFilesList();
-                break;
-            case 'deleteFilesList':
-                $this->deleteFilesList();
-                break;
-            case 'viewModuleFile':
-                $this->viewModuleFile();
-                break;
-            case 'deleteModuleFile':
-                $this->deleteModuleFile();
-                break;
-            case 'downloadModuleFile':
-                $this->downloadModuleFile();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshFilesList', 'downloadFilesList', 'deleteFilesList', 'viewModuleFile', 'deleteModuleFile', 'downloadModuleFile'];
 
-    private function dataSize($path)
+    public function dataSize($path)
     {
         $blah = exec("/usr/bin/du -sch $path | tail -1 | awk {'print $1'}");
         return $blah;
@@ -40,12 +14,12 @@ class LogManager extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/LogManager/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function downloadFilesList()
+    public function downloadFilesList()
     {
-        $files = $this->request->files;
+        $files = $this->request['files'];
 
         exec("mkdir /tmp/dl/");
         foreach ($files as $file) {
@@ -54,19 +28,19 @@ class LogManager extends Module
         exec("cd /tmp/dl/ && tar -czf /tmp/files.tar.gz *");
         exec("rm -rf /tmp/dl/");
 
-        $this->response = array("download" => $this->downloadFile("/tmp/files.tar.gz"));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/tmp/files.tar.gz")));
     }
 
-    private function deleteFilesList()
+    public function deleteFilesList()
     {
-        $files = $this->request->files;
+        $files = $this->request['files'];
 
         foreach ($files as $file) {
             exec("rm -rf ".$file);
         }
     }
 
-    private function refreshFilesList()
+    public function refreshFilesList()
     {
         $modules = array();
         foreach (glob('/pineapple/modules/*/log/*') as $file) {
@@ -115,28 +89,28 @@ class LogManager extends Module
 
         usort($modules, create_function('$a, $b', 'if($a["timestamp"] == $b["timestamp"]) return 0; return ($a["timestamp"] > $b["timestamp"]) ? -1 : 1;'));
 
-        $this->response = array("files" => $modules);
+        $this->responseHandler->setData(array("files" => $modules));
     }
 
-    private function viewModuleFile()
+    public function viewModuleFile()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime($this->request->file));
-        exec("strings ".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime($this->request['file']));
+        exec("strings ".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date, "name" => basename($this->request->file));
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date, "name" => basename($this->request['file'])));
         } else {
-            $this->response = array("output" => "Empty file...", "date" => $log_date, "name" => basename($this->request->file));
+            $this->responseHandler->setData(array("output" => "Empty file...", "date" => $log_date, "name" => basename($this->request['file'])));
         }
     }
 
-    private function deleteModuleFile()
+    public function deleteModuleFile()
     {
-        exec("rm -rf ".$this->request->file);
+        exec("rm -rf ".$this->request['file']);
     }
 
-    private function downloadModuleFile()
+    public function downloadModuleFile()
     {
-        $this->response = array("download" => $this->downloadFile($this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile($this->request['file'])));
     }
 }

@@ -1,4 +1,6 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
+
+/* Code modified by Frieren Auto Refactor */
 
 define('__MODULE_LOCATION__', "/pineapple/modules/SSIDManager/");
 define('__SSID_FILES__', __MODULE_LOCATION__ . "SSID_Files/");
@@ -6,39 +8,12 @@ define('__MODULE_INFO__', __MODULE_LOCATION__ . "module.info");
 
 /* The class name must be the name of your module, without spaces. */
 /* It must also extend the "Module" class. This gives your module access to API functions */
-class SSIDManager extends Module
+class SSIDManager extends Controller
 {
 
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'getContents':
-                $this->getContents();
-                break;
+    protected $endpointRoutes = ['getContents', 'getSSIDFilesList', 'deleteSSIDFile', 'archivePool', 'getSSIDFile', 'downloadSSIDFile'];
 
-            case 'getSSIDFilesList':
-                $this->getSSIDFilesList();
-                break;
-
-            case 'deleteSSIDFile':
-                $this->deleteSSIDFile();
-                break;
-
-            case 'archivePool':
-                $this->saveSSIDFile();
-                break;
-
-            case 'getSSIDFile':
-                $this->loadSSIDFile();
-                break;
-
-            case 'downloadSSIDFile':
-                $this->downloadSSIDFile();
-                break;
-        }
-    }
-
-    private function SSIDDirectoryPath()
+    public function SSIDDirectoryPath()
     {
         if (!file_exists(__SSID_FILES__)) {
             mkdir(__SSID_FILES__, 0755, true);
@@ -46,17 +21,17 @@ class SSIDManager extends Module
         return __SSID_FILES__;
     }
 
-    private function getContents()
+    public function getContents()
     {
         $moduleInfo = @json_decode(file_get_contents(__MODULE_INFO__));
 
-        $this->response = array("success" => true,
+        $this->responseHandler->setData(array("success" => true,
                     "version" => "version " . $moduleInfo->version,
-                    "content" => "");
+                    "content" => ""));
     }
 
 
-    private function getSSIDFilesList()
+    public function getSSIDFilesList()
     {
         $SSIDFilesPath = $this->SSIDDirectoryPath();
         $files_list =  glob($SSIDFilesPath . '*')  ;
@@ -64,32 +39,32 @@ class SSIDManager extends Module
         for ($i=0; $i<count($files_list); $i++) {
             $files_list[$i] = basename($files_list[$i]);
         }
-        $this->response = array("success"=>true, "filesList"=>$files_list);
+        $this->responseHandler->setData(array("success"=>true, "filesList"=>$files_list));
     }
 
-    private function saveSSIDFile()
+    public function saveSSIDFile()
     {
-        $filename = $this->SSIDDirectoryPath().$this->request->storeFileName;
-        file_put_contents($filename, $this->request->ssidPool);
-        $this->response = array("success" => true);
+        $filename = $this->SSIDDirectoryPath().$this->request['storeFileName'];
+        file_put_contents($filename, $this->request['ssidPool']);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function downloadSSIDFile()
+    public function downloadSSIDFile()
     {
-        $filename = $this->SSIDDirectoryPath().$this->request->file;
-        $this->response = array("download" => $this->downloadFile($filename));
+        $filename = $this->SSIDDirectoryPath().$this->request['file'];
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile($filename)));
     }
 
-    private function deleteSSIDFile()
+    public function deleteSSIDFile()
     {
-        unlink($this->SSIDDirectoryPath() . $this->request->file);
-        $this->response = array("success" => true);
+        unlink($this->SSIDDirectoryPath() . $this->request['file']);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function loadSSIDFile()
+    public function loadSSIDFile()
     {
-        $filename = $this->SSIDDirectoryPath() . $this->request->file;
+        $filename = $this->SSIDDirectoryPath() . $this->request['file'];
         $fileContent = file_get_contents($filename);
-        $this->response = array("success" => true,"content"=>$fileContent,"fileName"=>$filename);
+        $this->responseHandler->setData(array("success" => true,"content"=>$fileContent,"fileName"=>$filename));
     }
 }

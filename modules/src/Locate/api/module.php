@@ -1,29 +1,15 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 /*
  * Author: trashbo4t (github.com/trashbo4t)
  */
-
-class Locate extends Module
+class Locate extends Controller
 {
-	// CONSTANTS
+	protected $endpointRoutes = ['lookupIP', 'getIPFromFile', 'getIPs'];
+ // CONSTANTS
 	private $IP_DIR = '/pineapple/modules/Locate/ips';
 	private $ALL_IP_FILE = '/pineapple/modules/Locate/ips/all';
-	
-	public function route()
-	{
-		switch ($this->request->action) {
-			case 'lookupIP':
-				$this->lookupIP();
-				break;
-			case 'getIPFromFile':
-				$this->getIPFromFile();
-				break;
-			case 'getIPs':
-				$this->getIPs();
-				break;
-		}
-	}
 	public function getJson($link, $file)
 	{
 		$cmd = "wget -q $link -O $file";
@@ -67,9 +53,9 @@ class Locate extends Module
 	public function getIPFromFile()
 	{
 		$this->makeIPDir();
-		$file = $this->touchIPFile($this->request->ip);
+		$file = $this->touchIPFile($this->request['ip']);
 		$json = $this->getIPFile($file);
-		$this->response = $json;
+		$this->responseHandler->setData($json);
 	}
 	/*
 	*  lookupIP
@@ -79,13 +65,13 @@ class Locate extends Module
 	{
 		$this->makeIPDir();
 
-		$file = $this->touchIPFile($this->request->ip);
-		$link = $this->makeLink($this->request->ip);
+		$file = $this->touchIPFile($this->request['ip']);
+		$link = $this->makeLink($this->request['ip']);
 
 		$json = $this->getJson($link, $file);
 	
-		$this->addToIpFile($this->request->ip);
-		$this->response = $json;
+		$this->addToIpFile($this->request['ip']);
+		$this->responseHandler->setData($json);
 	}
 	/*
 	*  getIPs
@@ -96,7 +82,7 @@ class Locate extends Module
 		$this->makeIPDir();
 		$this->touchIPFile();
 
-		$this->response = array();
+		$this->responseHandler->setData(array());
 		
 		$lines = file($this->ALL_IP_FILE);
 		foreach ($lines as $line) 

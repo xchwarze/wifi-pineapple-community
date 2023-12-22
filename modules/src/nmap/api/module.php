@@ -1,52 +1,15 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 //putenv('LD_LIBRARY_PATH='.getenv('LD_LIBRARY_PATH').':/sd/lib:/sd/usr/lib');
 //putenv('PATH='.getenv('PATH').':/sd/usr/bin:/sd/usr/sbin');
-
-class nmap extends Module
+class nmap extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'togglenmap':
-                $this->togglenmap();
-                break;
-            case 'scanStatus':
-                $this->scanStatus();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'togglenmap', 'scanStatus', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory'];
 
     protected function checkDep($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("nmap.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("nmap.module.installed")));
     }
 
 //    protected function getDevice()
@@ -57,57 +20,57 @@ class nmap extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/nmap/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         error_log("handleDependencies()");
-        if (!$this->checkDependency("nmap")) {
-            $this->execBackground("/pineapple/modules/nmap/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+        if (!$this->systemHelper->checkDependency("nmap")) {
+            $this->systemHelper->execBackground("/pineapple/modules/nmap/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/nmap/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/nmap/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/nmap.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function scanStatus()
+    public function scanStatus()
     {
-        if (!$this->checkRunning("nmap")) {
-            $this->response = array('success' => true);
+        if (!$this->systemHelper->checkRunning("nmap")) {
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function togglenmap()
+    public function togglenmap()
     {
-        if (!$this->checkRunning("nmap")) {
+        if (!$this->systemHelper->checkRunning("nmap")) {
             error_log("nmap not running");
-            $full_cmd = $this->request->command . " -oN /tmp/nmap.scan 2>&1";
+            $full_cmd = $this->request['command'] . " -oN /tmp/nmap.scan 2>&1";
             shell_exec("echo -e \"{$full_cmd}\" > /tmp/nmap.run");
 
             error_log("calling run script");
-            $this->execBackground("/pineapple/modules/nmap/scripts/nmap.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/nmap/scripts/nmap.sh start");
         } else {
-            $this->execBackground("/pineapple/modules/nmap/scripts/nmap.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/nmap/scripts/nmap.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/nmap.progress')) {
-            if (!$this->checkDependency("nmap")) {
+            if (!$this->systemHelper->checkDependency("nmap")) {
                 $installed = false;
                 $install = "Not installed";
                 $installLabel = "danger";
@@ -121,7 +84,7 @@ class nmap extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("nmap")) {
+                if ($this->systemHelper->checkRunning("nmap")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -139,34 +102,34 @@ class nmap extends Module
             $statusLabel = "success";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
         // 2143000 is the installed size of nmap.
         $internalAvailable = (disk_free_space("/") - 64000) > 2143000;
 
-        $this->response = array("device" => $device, "internalAvailable" => $internalAvailable, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "internalAvailable" => $internalAvailable, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
-        if ($this->checkDependency("nmap")) {
-            if ($this->checkRunning("nmap") && file_exists("/tmp/nmap.scan")) {
+        if ($this->systemHelper->checkDependency("nmap")) {
+            if ($this->systemHelper->checkRunning("nmap") && file_exists("/tmp/nmap.scan")) {
                 $output = file_get_contents("/tmp/nmap.scan");
                 if (!empty($output)) {
-                    $this->response = $output;
+                    $this->responseHandler->setData($output);
                 } else {
-                    $this->response = "Empty log...";
+                    $this->responseHandler->setData("Empty log...");
                 }
             } else {
-                $this->response = "nmap is not running...";
+                $this->responseHandler->setData("nmap is not running...");
             }
         } else {
-            $this->response = "nmap is not installed...";
+            $this->responseHandler->setData("nmap is not installed...");
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/nmap/scan/*"));
@@ -187,25 +150,25 @@ class nmap extends Module
         };
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/nmap/scan/".$this->request->file));
-        exec("cat /pineapple/modules/nmap/scan/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/nmap/scan/".$this->request['file']));
+        exec("cat /pineapple/modules/nmap/scan/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty scan...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty scan...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/nmap/scan/".$this->request->file);
+        exec("rm -rf /pineapple/modules/nmap/scan/".$this->request['file']);
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/nmap/scan/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/nmap/scan/".$this->request['file'])));
     }
 }

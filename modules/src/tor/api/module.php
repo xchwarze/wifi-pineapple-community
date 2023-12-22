@@ -1,7 +1,9 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class Tor extends Module
+/* Code modified by Frieren Auto Refactor */
+class Tor extends Controller
 {
+    protected $endpointRoutes = ['refreshInfo', 'refreshStatus', 'handleDependencies', 'handleDependenciesStatus', 'toggletor', 'refreshHiddenServices', 'addHiddenService', 'removeHiddenService', 'addServiceForward', 'removeServiceForward'];
     private $progressFile = '/tmp/tor.progress';
     private $moduleConfigFile = '/etc/config/tor/config';
     private $dependenciesScriptFile = '/pineapple/modules/tor/scripts/dependencies.sh';
@@ -16,65 +18,27 @@ class Tor extends Module
     const WARNING = 'warning';
     const SUCCESS = 'success';
 
-    public function route()
+    public function success($value)
     {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'toggletor':
-                $this->toggletor();
-                break;
-            case 'refreshHiddenServices':
-                $this->refreshHiddenServices();
-                break;
-            case 'addHiddenService':
-                $this->addHiddenService();
-                break;
-            case 'removeHiddenService':
-                $this->removeHiddenService();
-                break;
-            case 'addServiceForward':
-                $this->addServiceForward();
-                break;
-            case 'removeServiceForward':
-                $this->removeServiceForward();
-                break;
-            default:
-                break;
-        }
+        $this->responseHandler->setData(array('success' => $value));
     }
 
-    private function success($value)
+    public function error($message)
     {
-        $this->response = array('success' => $value);
+        $this->responseHandler->setData(array('error' => $message));
     }
 
-    private function error($message)
-    {
-        $this->response = array('error' => $message);
-    }
-
-    private function isValidName($name)
+    public function isValidName($name)
     {
         return preg_match('/^[a-zA-Z0-9_]+$/', $name) === 1;
     }
 
-    private function isValidPort($port)
+    public function isValidPort($port)
     {
         return preg_match('/^[0-9]+$/', $port) === 1;
     }
 
-    private function isValidRedirectTo($redirect_to)
+    public function isValidRedirectTo($redirect_to)
     {
         return preg_match('/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$/', $redirect_to) === 1;
     }
@@ -87,7 +51,7 @@ class Tor extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/tor/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
     protected function checkRunning($processName)
@@ -95,26 +59,26 @@ class Tor extends Module
         return (exec("pgrep '{$processName}$'") != '');
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         $destination = "";
-        if (isset($this->request->destination)) {
-            $destination = $this->request->destination;
+        if (isset($this->request['destination'])) {
+            $destination = $this->request['destination'];
             if ($destination != "internal" && $destination != "sd") {
                 $this->error(self::INVALID_DESTINATION);
                 return;
             }
         }
 
-        if (!$this->checkDependency("tor")) {
-            $this->execBackground($this->dependenciesScriptFile . " install " . $destination);
+        if (!$this->systemHelper->checkDependency("tor")) {
+            $this->systemHelper->execBackground($this->dependenciesScriptFile . " install " . $destination);
         } else {
-            $this->execBackground($this->dependenciesScriptFile . " remove");
+            $this->systemHelper->execBackground($this->dependenciesScriptFile . " remove");
         }
         $this->success(true);
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (file_exists($this->progressFile)) {
             $this->success(false);
@@ -123,20 +87,20 @@ class Tor extends Module
         }
     }
 
-    private function toggletor()
+    public function toggletor()
     {
-        if ($this->checkRunning("tor")) {
+        if ($this->systemHelper->checkRunning("tor")) {
             exec("/etc/init.d/tor stop");
         } else {
             exec("/etc/init.d/tor start");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
         $installed = false;
         $install = "Not Installed";
         $processing = false;
@@ -149,7 +113,7 @@ class Tor extends Module
 
             $status = "Not running";
             $statusLabel = self::DANGER;
-        } elseif (!$this->checkDependency("tor")) {
+        } elseif (!$this->systemHelper->checkDependency("tor")) {
             // TOR is not installed, please install.
             $installLabel = self::DANGER;
 
@@ -161,7 +125,7 @@ class Tor extends Module
             $install = "Installed";
             $installLabel = self::SUCCESS;
 
-            if ($this->checkRunning("tor")) {
+            if ($this->systemHelper->checkRunning("tor")) {
                 $status = "Started";
                 $statusLabel = self::SUCCESS;
             } else {
@@ -170,17 +134,17 @@ class Tor extends Module
             }
         }
 
-        $this->response = array("device" => $device,
+        $this->responseHandler->setData(array("device" => $device,
                                 "sdAvailable" => $sdAvailable,
                                 "status" => $status,
                                 "statusLabel" => $statusLabel,
                                 "installed" => $installed,
                                 "install" => $install,
                                 "installLabel" => $installLabel,
-                                "processing" => $processing);
+                                "processing" => $processing));
     }
 
-    private function generateConfig()
+    public function generateConfig()
     {
         $output = file_get_contents("/etc/config/tor/torrc");
         $output .= "\n";
@@ -195,14 +159,14 @@ class Tor extends Module
         file_put_contents("/etc/tor/torrc", $output);
     }
 
-    private function reloadTor()
+    public function reloadTor()
     {
         $this->generateConfig();
         //Sending SIGHUP to tor process cause config reload.
         exec("pkill -sighup tor$");
     }
 
-    private function refreshHiddenServices()
+    public function refreshHiddenServices()
     {
         $hiddenServices = @json_decode(file_get_contents($this->moduleConfigFile));
         foreach ($hiddenServices as $hiddenService) {
@@ -211,12 +175,12 @@ class Tor extends Module
                 $hiddenService->hostname = trim($hostname);
             }
         }
-        $this->response = array("hiddenServices" => $hiddenServices);
+        $this->responseHandler->setData(array("hiddenServices" => $hiddenServices));
     }
 
-    private function addHiddenService()
+    public function addHiddenService()
     {
-        $name = $this->request->name;
+        $name = $this->request['name'];
         if (!$this->isValidName($name)) {
             $this->error(self::INVALID_NAME);
             return;
@@ -232,11 +196,11 @@ class Tor extends Module
         $this->reloadTor();
     }
 
-    private function removeHiddenService()
+    public function removeHiddenService()
     {
         $hiddenServices = @json_decode(file_get_contents($this->moduleConfigFile));
         foreach ($hiddenServices as $key => $hiddenService) {
-            if ($hiddenService->name == $this->request->name) {
+            if ($hiddenService->name == $this->request['name']) {
                 unset($hiddenServices[$key]);
             }
         }
@@ -244,11 +208,11 @@ class Tor extends Module
         $this->reloadTor();
     }
 
-    private function addServiceForward()
+    public function addServiceForward()
     {
-        $name = $this->request->name;
-        $port = $this->request->port;
-        $redirect_to = $this->request->redirect_to;
+        $name = $this->request['name'];
+        $port = $this->request['port'];
+        $redirect_to = $this->request['redirect_to'];
 
         if (!$this->isValidName($name)) {
             $this->error(self::INVALID_NAME);
@@ -277,11 +241,11 @@ class Tor extends Module
         $this->reloadTor();
     }
 
-    private function removeServiceForward()
+    public function removeServiceForward()
     {
-        $name = $this->request->name;
-        $port = $this->request->port;
-        $redirect_to = $this->request->redirect_to;
+        $name = $this->request['name'];
+        $port = $this->request['port'];
+        $redirect_to = $this->request['redirect_to'];
 
         $hiddenServices = @json_decode(file_get_contents($this->moduleConfigFile));
         foreach ($hiddenServices as $hiddenService) {

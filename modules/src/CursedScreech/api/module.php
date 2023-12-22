@@ -1,6 +1,8 @@
 <?php
 
-namespace pineapple;
+namespace frieren\core;
+
+/* Code modified by Frieren Auto Refactor */
 
 // Root level includes
 define('__INCLUDES__', "/pineapple/modules/CursedScreech/includes/");
@@ -64,93 +66,14 @@ if (!empty($_FILES)) {
 	die();
 }
 
-class CursedScreech extends Module {
-	public function route() {
-		switch ($this->request->action) {
-			case 'init':
-				$this->init();
-				break;
-			case 'depends':
-				$this->depends($this->request->task);
-				break;
-			case 'loadSettings':
-				$this->loadSettings();
-				break;
-			case 'updateSettings':
-				$this->updateSettings($this->request->settings);
-				break;
-			case 'readLog':
-				$this->retrieveLog($this->request->logName, $this->request->type);
-				break;
-			case 'getLogs':
-				$this->getLogs($this->request->type);
-				break;
-			case 'clearLog':
-				$this->clearLog($this->request->logName, $this->request->type);
-				break;
-			case 'deleteLog':
-				$this->deleteLog($this->request->logName, $this->request->type);
-				break;
-			case 'startProc':
-				$this->startProc($this->request->procName);
-				break;
-			case 'procStatus':
-				$this->procStatus($this->request->procName);
-				break;
-			case 'stopProc':
-				$this->stopProc($this->request->procName);
-				break;
-			case 'loadCertificates':
-				if (is_dir(__SSLSTORE__)) {
-					$this->loadCertificates();
-				} else {
-					$this->respond(false, "Papers is not installed. Please enter a path to your keys manually.");
-				}
-				break;
-			case 'loadTargets':
-				$this->loadTargets();
-				break;
-			case 'deleteTarget':
-				$this->deleteTarget($this->request->target);
-				break;
-			case 'sendCommand':
-				$this->sendCommand($this->request->command, $this->request->targets);
-				break;
-			case 'downloadLog':
-				$this->downloadLog($this->request->logName, $this->request->logType);
-				break;
-			case 'loadEZCmds':
-				$this->loadEZCmds();
-				break;
-			case 'saveEZCmds':
-				$this->saveEZCmds($this->request->ezcmds);
-				break;
-			case 'genPayload':
-				$this->genPayload($this->request->type);
-				break;
-			case 'clearDownloads':
-				$this->clearDownloads();
-				break;
-			case 'loadAvailableInterfaces':
-				$this->loadAvailableInterfaces();
-				break;
-			case 'getPayloads':
-				$this->getPayloads();
-				break;
-			case 'deletePayload':
-				$this->deletePayload($this->request->filePath);
-				break;
-			case 'cfgUploadLimit':
-				$this->cfgUploadLimit();
-				break;
-		}
-	}
+class CursedScreech extends Controller {
+	protected $endpointRoutes = ['init', 'depends', 'loadSettings', 'updateSettings', 'readLog', 'getLogs', 'clearLog', 'deleteLog', 'startProc', 'procStatus', 'stopProc', 'loadCertificates', 'loadTargets', 'deleteTarget', 'sendCommand', 'downloadLog', 'loadEZCmds', 'saveEZCmds', 'genPayload', 'clearDownloads', 'loadAvailableInterfaces', 'getPayloads', 'deletePayload', 'cfgUploadLimit'];
 	
 	/* ============================ */
 	/*        INIT FUNCTIONS        */
 	/* ============================ */
 	
-	private function init() {
+	public function init() {
 		if (!file_exists(__LOGS__)) {
 			if (!mkdir(__LOGS__, 0755, true)) {
 				$this->respond(false, "Failed to create logs directory");
@@ -179,7 +102,7 @@ class CursedScreech extends Module {
 	/*      DEPENDS FUNCTIONS       */
 	/* ============================ */
 	
-	private function depends($action) {
+	public function depends($action) {
 		$retData = array();
 		
 		if ($action == "install") {
@@ -211,7 +134,7 @@ class CursedScreech extends Module {
 	/*      SETTINGS FUNCTIONS      */
 	/* ============================ */
 	
-	private function loadSettings(){
+	public function loadSettings(){
 		$configs = array();
 		$config_file = fopen(__SETTINGS__, "r");
 		if ($config_file) {
@@ -226,7 +149,7 @@ class CursedScreech extends Module {
 		return $configs;
 	}
 	
-	private function updateSettings($settings) {
+	public function updateSettings($settings) {
 		// Load the current settings from file
 		$configs = $this->loadSettings();
 		
@@ -257,7 +180,7 @@ class CursedScreech extends Module {
 	/*       FOREST FUNCTIONS       */
 	/* ============================ */
 	
-	private function startProc($procName) {
+	public function startProc($procName) {
 		if ($procName == "kuro.py") {
 			file_put_contents(__ACTIVITYLOG__, "[+] Starting Kuro...\n", FILE_APPEND);
 		}
@@ -275,7 +198,7 @@ class CursedScreech extends Module {
 		}
 	}
 	
-	private function procStatus($procName) {
+	public function procStatus($procName) {
 		if (($status = $this->getPID($procName)) != "") {
 			$this->respond(true, null, $status);
 			return true;
@@ -284,7 +207,7 @@ class CursedScreech extends Module {
 		return false;
 	}
 	
-	private function stopProc($procName) {
+	public function stopProc($procName) {
 		// Check if the process is running, if so grab it's PID
 		if (($pid = $this->getPID($procName)) == "") {
 			$this->respond(true);
@@ -309,7 +232,7 @@ class CursedScreech extends Module {
 		return false;
 	}
 	
-	private function getPID($procName) {
+	public function getPID($procName) {
 		$data = array();
 		exec("pgrep -lf " . $procName, $data);
 		$output = explode(" ", $data[0]);
@@ -319,7 +242,7 @@ class CursedScreech extends Module {
 		return false;
 	}
 	
-	private function loadTargets() {
+	public function loadTargets() {
 		$targets = array();
 		$fh = fopen(__TARGETS__, "r");
 		if ($fh) {
@@ -335,7 +258,7 @@ class CursedScreech extends Module {
 		return $targets;
 	}
 	
-	private function deleteTarget($target) {
+	public function deleteTarget($target) {
 		$targetFile = explode("\n", file_get_contents(__TARGETS__));
 		$key = array_search($target, $targetFile, true);
 		if ($key !== False) {
@@ -350,7 +273,7 @@ class CursedScreech extends Module {
 		return true;
 	}
 	
-	private function sendCommand($cmd, $targets) {
+	public function sendCommand($cmd, $targets) {
 		if (count($targets) == 0) {
 			$this->respond(false);
 			return;
@@ -372,17 +295,17 @@ class CursedScreech extends Module {
 		}
 	}
 	
-	private function downloadLog($logName, $type) {
+	public function downloadLog($logName, $type) {
 		$dir = ($type == "forest") ? __FOREST__ : (($type == "targets") ? __TARGETLOGS__ : "");
 		if (file_exists($dir . $logName)) {
-			$this->respond(true, null, $this->downloadFile($dir . $logName));
+			$this->respond(true, null, $this->systemHelper->downloadFile($dir . $logName));
 			return true;
 		}
 		$this->respond(false);
 		return false;
 	}
 	
-	private function genPayload($type) {
+	public function genPayload($type) {
 		if ($type == "python") {
 			$dir = __API_PY__;
 			$payload = "payload.py";
@@ -446,14 +369,14 @@ class CursedScreech extends Module {
 		
 		// Check if a file exists in the downloads directory
 		if (count(scandir(__API_DL__)) > 2) {
-			$this->respond(true, null, $this->downloadFile(__API_DL__ . $zip));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__API_DL__ . $zip));
 			return true;
 		}
 		$this->respond(false);
 		return false;
 	}
 	
-	private function clearDownloads() {
+	public function clearDownloads() {
 		$files = scandir(__API_DL__);
 		$success = true;
 		foreach ($files as $file) {
@@ -466,7 +389,7 @@ class CursedScreech extends Module {
 		return $success;
 	}
 	
-	private function loadAvailableInterfaces() {
+	public function loadAvailableInterfaces() {
 		$data = array();
 		exec(__SCRIPTS__ . "getListeningInterfaces.sh", $data);
 		if ($data == NULL) {
@@ -480,7 +403,7 @@ class CursedScreech extends Module {
 	//    PAYLOAD FUNCTIONS    //
 	//=========================//
 	
-	private function getPayloads() {
+	public function getPayloads() {
 		$files = [];
 		
 		foreach (scandir(__PAYLOADS__) as $file) {
@@ -491,7 +414,7 @@ class CursedScreech extends Module {
 		return $files;
 	}
 	
-	private function deletePayload($filePath) {
+	public function deletePayload($filePath) {
 		if (!unlink($filePath)) {
 			$this->logError("Delete Payload", "Failed to delete payload at path " . $filePath);
 			$this->respond(false);
@@ -501,7 +424,7 @@ class CursedScreech extends Module {
 		return true;
 	}
 	
-	private function cfgUploadLimit() {
+	public function cfgUploadLimit() {
 		$data = array();
 		$res = exec("python " . __SCRIPTS__ . "cfgUploadLimit.py > /dev/null 2>&1 &", $data);
 		if ($res != "") {
@@ -517,7 +440,7 @@ class CursedScreech extends Module {
 	/*        EZ CMD FUNCTIONS      */
 	/* ============================ */
 	
-	private function loadEZCmds() {
+	public function loadEZCmds() {
 		$contents = explode("\n", file_get_contents(__EZCMDS__));
 		$cmdDict = array();
 		foreach ($contents as $line) {
@@ -529,7 +452,7 @@ class CursedScreech extends Module {
 		return $cmdDict;
 	}
 	
-	private function saveEZCmds($cmds) {
+	public function saveEZCmds($cmds) {
 		$fh = fopen(__EZCMDS__, "w");
 		if (!$fh) {
 			$this->respond(false);
@@ -545,14 +468,14 @@ class CursedScreech extends Module {
 	/*         MISCELLANEOUS        */
 	/* ============================ */
 	
-	private function respond($success, $msg = null, $data = null, $error = null) {
-		$this->response = array("success" => $success,"message" => $msg, "data" => $data, "error" => $error);
+	public function respond($success, $msg = null, $data = null, $error = null) {
+		$this->responseHandler->setData(array("success" => $success,"message" => $msg, "data" => $data, "error" => $error));
 	}
 	
 	/* ============================ */
 	/*         LOG FUNCTIONS        */
 	/* ============================ */
-	private function getLogs($type) {
+	public function getLogs($type) {
 		$dir = ($type == "error") ? __LOGS__ : (($type == "targets") ? __TARGETLOGS__ : __CHANGELOGS__);
 		$contents = array();
 		foreach (scandir($dir) as $log) {
@@ -562,7 +485,7 @@ class CursedScreech extends Module {
 		$this->respond(true, null, $contents);
 	}
 	
-	private function retrieveLog($logname, $type) {
+	public function retrieveLog($logname, $type) {
 		$dir = ($type == "error") ? __LOGS__ : (($type == "help") ? __HELPFILES__ : (($type == "forest") ? __FOREST__ : (($type == "targets") ? __TARGETLOGS__ : __CHANGELOGS__)));
 		$data = file_get_contents($dir . $logname);
 		if (!$data) {
@@ -572,14 +495,14 @@ class CursedScreech extends Module {
 		$this->respond(true, null, $data);
 	}
 	
-	private function clearLog($log,$type) {
+	public function clearLog($log,$type) {
 		$dir = ($type == "forest") ? __FOREST__ : (($type == "targets") ? __TARGETLOGS__ : "");
 		$fh = fopen($dir . $log, "w");
 		fclose($fh);
 		$this->respond(true);
 	}
 	
-	private function deleteLog($logname, $type) {
+	public function deleteLog($logname, $type) {
 		$dir = ($type == "error") ? __LOGS__ : (($type == "targets") ? __TARGETLOGS__ : __CHANGELOGS__);
 		$res = unlink($dir . $logname);
 		if (!$res) {
@@ -589,7 +512,7 @@ class CursedScreech extends Module {
 		$this->respond(true);
 	}
 	
-	private function logError($filename, $data) {
+	public function logError($filename, $data) {
 		$time = exec("date +'%H_%M_%S'");
 		$fh = fopen(__LOGS__ . str_replace(" ","_",$filename) . "_" . $time . ".txt", "w+");
 		fwrite($fh, $data);
@@ -600,12 +523,12 @@ class CursedScreech extends Module {
 	/*         KEY FUNCTIONS TO INTERFACE WITH PAPERS        */
 	/* ===================================================== */
 	
-	private function loadCertificates() {
+	public function loadCertificates() {
 		$certs = $this->getKeys(__SSLSTORE__);
 		$this->respond(true,null,$certs);
 	}
 	
-	private function getKeys($dir) {
+	public function getKeys($dir) {
 		$keyType = "TLS/SSL";
 		$keys = scandir($dir);
 		$certs = array();
@@ -632,7 +555,7 @@ class CursedScreech extends Module {
 		return $certs;
 	}
 	
-	private function objNameExistsInArray($name, $arr) {
+	public function objNameExistsInArray($name, $arr) {
 		foreach ($arr as $x) {
 			if ($x->Name == $name) {
 				return True;
@@ -641,7 +564,7 @@ class CursedScreech extends Module {
 		return False;
 	}
 	
-	private function keyIsEncrypted($keyName) {
+	public function keyIsEncrypted($keyName) {
 		$data = array();
 		$keyDir = __SSLSTORE__;
 		exec(__SCRIPTS__ . "testEncrypt.sh -k " . $keyName . " -d " . $keyDir . " 2>&1", $data);

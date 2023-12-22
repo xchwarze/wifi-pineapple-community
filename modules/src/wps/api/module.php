@@ -1,76 +1,22 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+
+/* Code modified by Frieren Auto Refactor */
 
 require_once('/pineapple/modules/wps/api/iwlist_parser.php');
 
-class wps extends Module
+class wps extends Controller
 {
+    protected $endpointRoutes = ['refreshInfo', 'refreshStatus', 'refreshOutput', 'handleDependencies', 'handleDependenciesStatus', 'getInterfaces', 'getMonitors', 'startMonitor', 'stopMonitor', 'scanForNetworks', 'getMACInfo', 'togglewps', 'getProcesses', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory'];
     public function __construct($request)
     {
-        parent::__construct($request, __CLASS__);
         $this->iwlistparse = new iwlist_parser();
-    }
-
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'getMonitors':
-                $this->getMonitors();
-                break;
-            case 'startMonitor':
-                $this->startMonitor();
-                break;
-            case 'stopMonitor':
-                $this->stopMonitor();
-                break;
-            case 'scanForNetworks':
-                $this->scanForNetworks();
-                break;
-            case 'getMACInfo':
-                $this->getMACInfo();
-                break;
-            case 'togglewps':
-                $this->togglewps();
-                break;
-            case 'getProcesses':
-                $this->getProcesses();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-        }
+        parent::__construct($request);
     }
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("wps.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("wps.module.installed")));
     }
 
     protected function getDevice()
@@ -86,40 +32,40 @@ class wps extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/wps/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("reaver")) {
             if (file_exists('/sd/modules/wps/scripts/dependencies.sh')) {
-                $this->execBackground("bash /sd/modules/wps/scripts/dependencies.sh install ".$this->request->destination);
-                $this->response = array('success' => true);
+                $this->systemHelper->execBackground("bash /sd/modules/wps/scripts/dependencies.sh install ".$this->request['destination']);
+                $this->responseHandler->setData(array('success' => true));
             } else {
-                $this->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh install ".$this->request->destination);
-                $this->response = array('success' => true);
+                $this->systemHelper->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh install ".$this->request['destination']);
+                $this->responseHandler->setData(array('success' => true));
             }
         } else {
             if (file_exists('/sd/modules/wps/scripts/dependencies.sh')) {
-                $this->execBackground("bash /sd/modules/wps/scripts/dependencies.sh remove");
-                $this->response = array('success' => true);
+                $this->systemHelper->execBackground("bash /sd/modules/wps/scripts/dependencies.sh remove");
+                $this->responseHandler->setData(array('success' => true));
             } else {
-                $this->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh remove");
-                $this->response = array('success' => true);
+                $this->systemHelper->execBackground("bash /pineapple/modules/wps/scripts/dependencies.sh remove");
+                $this->responseHandler->setData(array('success' => true));
             }
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/wps.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/wps.progress')) {
             if (!$this->checkDeps("iwlist")) {
@@ -136,7 +82,7 @@ class wps extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("reaver") || $this->checkRunning("bully")) {
+                if ($this->systemHelper->checkRunning("reaver") || $this->systemHelper->checkRunning("bully")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -154,30 +100,30 @@ class wps extends Module
             $statusLabel = "success";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing));
     }
 
-    private function togglewps()
+    public function togglewps()
     {
-        if (!($this->checkRunning("reaver") || $this->checkRunning("bully"))) {
-            $full_cmd = $this->request->command . " &> /pineapple/modules/wps/log/log_".time().".log";
-            $lazy = $this->request->command;
+        if (!($this->systemHelper->checkRunning("reaver") || $this->systemHelper->checkRunning("bully"))) {
+            $full_cmd = $this->request['command'] . " &> /pineapple/modules/wps/log/log_".time().".log";
+            $lazy = $this->request['command'];
             shell_exec("echo -e \"{$full_cmd}\" > /tmp/wps.run");
             shell_exec("echo -e \"{$lazy}\" > /tmp/lazy.read");
 
-            $this->execBackground("/pineapple/modules/wps/scripts/wps.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/wps/scripts/wps.sh start");
         } else {
-            $this->execBackground("/pineapple/modules/wps/scripts/wps.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/wps/scripts/wps.sh stop");
         }
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("reaver") && $this->checkDeps("bully")) {
-            if ($this->checkRunning("reaver") || $this->checkRunning("bully")) {
+            if ($this->systemHelper->checkRunning("reaver") || $this->systemHelper->checkRunning("bully")) {
                 $path = "/pineapple/modules/wps/log";
 
                 $latest_ctime = 0;
@@ -199,63 +145,63 @@ class wps extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", $output);
+                        $this->responseHandler->setData(implode("\n", $output));
                     } else {
-                        $this->response = "Empty log...";
+                        $this->responseHandler->setData("Empty log...");
                     }
                 }
             } else {
-                $this->response = "wps is not running...";
+                $this->responseHandler->setData("wps is not running...");
             }
         } else {
-            $this->response = "wps is not installed...";
+            $this->responseHandler->setData("wps is not installed...");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("iwconfig 2> /dev/null | grep \"wlan*\" | grep -v \"mon*\" | awk '{print $1}'", $interfaceArray);
 
-        $this->response = array("interfaces" => array_reverse($interfaceArray));
+        $this->responseHandler->setData(array("interfaces" => array_reverse($interfaceArray)));
     }
 
-    private function getMonitors()
+    public function getMonitors()
     {
         exec("iwconfig 2> /dev/null | grep \"mon*\" | awk '{print $1}'", $monitorArray);
 
-        $this->response = array("monitors" => $monitorArray);
+        $this->responseHandler->setData(array("monitors" => $monitorArray));
     }
 
-    private function startMonitor()
+    public function startMonitor()
     {
-        exec("airmon-ng start ".$this->request->interface);
+        exec("airmon-ng start ".$this->request['interface']);
     }
 
-    private function stopMonitor()
+    public function stopMonitor()
     {
-        exec("airmon-ng stop ".$this->request->monitor);
+        exec("airmon-ng stop ".$this->request['monitor']);
     }
 
-    private function scanForNetworks()
+    public function scanForNetworks()
     {
-        if ($this->request->duration && $this->request->monitor != "") {
+        if ($this->request['duration'] && $this->request['monitor'] != "") {
             exec("killall airodump-ng && rm -rf /tmp/wps-*");
-            $this->execBackground("airodump-ng -a --wps --output-format cap -w /tmp/wps ".$this->request->monitor." &> /dev/null");
-            sleep($this->request->duration);
+            $this->systemHelper->execBackground("airodump-ng -a --wps --output-format cap -w /tmp/wps ".$this->request['monitor']." &> /dev/null");
+            sleep($this->request['duration']);
             exec("killall airodump-ng");
             exec("wash -f /tmp/wps-01.cap > /tmp/wps-01.wash");
         }
         
         $apArray;
-        if($this->request->monitor != null){
-            $tempStation = substr($this->request->monitor, 0, -3);
-            exec("airmon-ng stop ".$this->request->monitor);
+        if($this->request['monitor'] != null){
+            $tempStation = substr($this->request['monitor'], 0, -3);
+            exec("airmon-ng stop ".$this->request['monitor']);
             $p = $this->iwlistparse->parseScanDev($tempStation);
             $apArray = $p[$tempStation];
             exec("airmon-ng start ".$tempStation);
         } else {
-            $p = $this->iwlistparse->parseScanDev($this->request->interface);
-            $apArray = $p[$this->request->interface];
+            $p = $this->iwlistparse->parseScanDev($this->request['interface']);
+            $apArray = $p[$this->request['interface']];
         }
 
         $returnArray = array();
@@ -285,7 +231,7 @@ class wps extends Module
                 $accessPoint['captureOnSelected'] = 0;
             }
 
-            if ($this->checkRunning("airodump-ng")) {
+            if ($this->systemHelper->checkRunning("airodump-ng")) {
                 $accessPoint['captureRunning'] = 1;
             } else {
                 $accessPoint['captureRunning'] = 0;
@@ -297,7 +243,7 @@ class wps extends Module
                 $accessPoint['deauthOnSelected'] = 0;
             }
 
-            if ($this->checkRunning("aireplay-ng")) {
+            if ($this->systemHelper->checkRunning("aireplay-ng")) {
                 $accessPoint['deauthRunning'] = 1;
             } else {
                 $accessPoint['deauthRunning'] = 0;
@@ -332,7 +278,7 @@ class wps extends Module
                 $accessPoint['auth'] = '';
             }
 
-            if ($this->request->duration && $this->request->monitor != "") {
+            if ($this->request['duration'] && $this->request['monitor'] != "") {
                 $accessPoint['wps'] = trim(exec("cat /tmp/wps-01.wash | tail -n +3 | grep ".$accessPoint['mac']." | awk '{ print $4; }'"));
                 $accessPoint['wpsLabel'] = "success";
                 
@@ -348,21 +294,21 @@ class wps extends Module
 
         exec("rm -rf /tmp/wps-*");
 
-        $this->response = $returnArray;
+        $this->responseHandler->setData($returnArray);
     }
 
-    private function getMACInfo()
+    public function getMACInfo()
     {
-        $content = file_get_contents("https://api.macvendors.com/".$this->request->mac);
-        $this->response = array('title' => $this->request->mac, "output" => $content);
+        $content = file_get_contents("https://api.macvendors.com/".$this->request['mac']);
+        $this->responseHandler->setData(array('title' => $this->request['mac'], "output" => $content));
     }
 
-    private function getProcesses()
+    public function getProcesses()
     {
         $returnArray = array();
 
         $process = array();
-        if (file_exists("/tmp/wps.run") && ($this->checkRunning("reaver") || $this->checkRunning("bully"))) {
+        if (file_exists("/tmp/wps.run") && ($this->systemHelper->checkRunning("reaver") || $this->systemHelper->checkRunning("bully"))) {
             $args = $this->parse_args(file_get_contents("/tmp/lazy.read"));
 
             $process['ssid'] = $args["e"];
@@ -378,10 +324,10 @@ class wps extends Module
             array_push($returnArray, $process);
         }
 
-        $this->response = $returnArray;
+        $this->responseHandler->setData($returnArray);
     }
 
-    private function parse_args($args)
+    public function parse_args($args)
     {
         if (is_string($args)) {
             $args = str_replace(array('=', "\'", '\"'), array('= ', '&#39;', '&#34;'), $args);
@@ -434,7 +380,7 @@ class wps extends Module
         return $out;
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/wps/log/*"));
@@ -455,25 +401,25 @@ class wps extends Module
         };
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/wps/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/wps/log/".$this->request['file'])));
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/wps/log/".$this->request->file));
-        exec("cat /pineapple/modules/wps/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/wps/log/".$this->request['file']));
+        exec("cat /pineapple/modules/wps/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/wps/log/".$this->request->file);
+        exec("rm -rf /pineapple/modules/wps/log/".$this->request['file']);
     }
 }

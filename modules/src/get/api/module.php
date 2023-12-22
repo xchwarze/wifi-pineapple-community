@@ -1,87 +1,47 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-require_once('DatabaseConnection.php');
+/* Code modified by Frieren Auto Refactor */
+
+'';
 
 define('__INCLUDES__', $pineapple->directory . "/includes/");
 define('__LOGS__', __INCLUDES__ . "logs/");
 
-class get extends Module
+class get extends Controller
 {
+    protected $endpointRoutes = ['getControlValues', 'handleIFrame', 'handleInfoGetter', 'handleDBLocation', 'getClientProfiles', 'viewInformation', 'deleteProfile', 'getComments', 'saveComments'];
     private $dbConnection;
     private $dbPath;
     const DATABASE = "/etc/pineapple/get.db";
     
-    private function prepareDatabase()
+    public function prepareDatabase()
     {
         if ( $this->doesLocationFileExist("/etc/pineapple/get_database_location") )
         {
             $dbPath = trim(file_get_contents("/etc/pineapple/get_database_location")) . "get.db";
-            $this->dbConnection = new DatabaseConnection($dbPath);
+            $this->dbConnection = new \frieren\orm\SQLite($dbPath);
         }
         else
         {
-            $this->dbConnection = new DatabaseConnection(self::DATABASE);
+            $this->dbConnection = new \frieren\orm\SQLite(self::DATABASE);
         }
         
-        $this->dbConnection->exec("CREATE TABLE IF NOT EXISTS info (id INTEGER NOT NULL, mac TEXT NOT NULL, ip TEXT, hostname TEXT, info TEXT NOT NULL, timestamp TEXT NOT NULL, PRIMARY KEY(id) );");
-        $this->dbConnection->exec("CREATE TABLE IF NOT EXISTS comments (id INTEGER NOT NULL, info_id INTEGER NOT NULL, mac TEXT NOT NULL, comments TEXT, PRIMARY KEY(id) );");
-    }
-    
-    public function route()
-    {
-        $this->prepareDatabase();
-
-        switch($this->request->action) {
-            case 'getControlValues':
-                $this->getControlValues();
-                break;
-
-            case 'handleIFrame':
-                $this->handleIFrame();
-                break;
-
-            case 'handleInfoGetter':
-                $this->handleInfoGetter();
-                break;
-
-            case 'handleDBLocation':
-                $this->handleDBLocation();
-                break;
-
-            case 'getClientProfiles':
-                $this->handlegetClientProfiles();
-                break;
-
-            case 'viewInformation':
-                $this->handleviewInformation();
-                break;
-
-            case 'deleteProfile':
-                $this->handledeleteProfile();
-                break;
-
-            case 'getComments':
-                $this->handlegetComments();
-                break;
-
-            case 'saveComments':
-                $this->handlesaveComments();
-                break;
-        }
+        $this->dbConnection->execLegacy("CREATE TABLE IF NOT EXISTS info (id INTEGER NOT NULL, mac TEXT NOT NULL, ip TEXT, hostname TEXT, info TEXT NOT NULL, timestamp TEXT NOT NULL, PRIMARY KEY(id) );");
+        $this->dbConnection->execLegacy("CREATE TABLE IF NOT EXISTS comments (id INTEGER NOT NULL, info_id INTEGER NOT NULL, mac TEXT NOT NULL, comments TEXT, PRIMARY KEY(id) );");
     }
 
 
     public function handlesaveComments()
     {
         $this->prepareDatabase();
-        $id  = $this->request->id;
-        $comments = $this->request->comments;
-        $mac = $this->request->mac;
-        $info_id = $this->request->id;
+        $id  = $this->request['id'];
+        $comments = $this->request['comments'];
+        $mac = $this->request['mac'];
+        $info_id = $this->request['id'];
         $record_needs_to_be_updated = false;
 
         // lets first try to query for the info. If it exists, we will have a row, and the loop will set the flag to true
-        $result = $this->dbConnection->query("SELECT * FROM comments WHERE info_id = '%s';", $info_id);
+        $result = $this->dbConnection->queryLegacy("SELECT * FROM comments WHERE info_id = '%s';", $info_id);
 
         foreach($result as $row) {
             $count = $row['mac'];
@@ -106,77 +66,77 @@ class get extends Module
 
         if ( $record_needs_to_be_updated == true )
         {
-            $this->dbConnection->exec("UPDATE comments SET mac = '%s', comments = '%s' WHERE info_id = '%s';", $mac, $comments, $info_id);
+            $this->dbConnection->execLegacy("UPDATE comments SET mac = '%s', comments = '%s' WHERE info_id = '%s';", $mac, $comments, $info_id);
             $message = "Updated comments for mac [" . $mac . "]";
             #$this->logError("mylog.txt", $message);
         }   
         else
         {
-            $this->dbConnection->exec("INSERT INTO comments (info_id, mac, comments) VALUES('%s','%s','%s');", $info_id, $mac, $comments);
+            $this->dbConnection->execLegacy("INSERT INTO comments (info_id, mac, comments) VALUES('%s','%s','%s');", $info_id, $mac, $comments);
             $message = "Saved comments for mac [" . $mac . "]";
             #$this->logError("mylog.txt", $message);
         }
         
         $control_message = $message;
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message
-                                );
+                                ));
     }
 
     public function handlegetComments() {
         $this->prepareDatabase();
-        $id  = $this->request->id;
-        $mac = $this->request->mac;
+        $id  = $this->request['id'];
+        $mac = $this->request['mac'];
         
-        $result = $this->dbConnection->query("SELECT comments FROM comments WHERE id = '%s';", $id);
+        $result = $this->dbConnection->queryLegacy("SELECT comments FROM comments WHERE id = '%s';", $id);
 
         $message = "Comments Section displaying info for [" . $mac . "]";
         $control_message = $message;
         $comments = $result[0]["comments"];
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message,
                                 "mac" => $mac,
                                 "comments" => $comments
-                                );
+                                ));
     }
 
 
     public function handledeleteProfile() {
         $this->prepareDatabase();
-        $id  = $this->request->id;
-        $mac = $this->request->mac;
+        $id  = $this->request['id'];
+        $mac = $this->request['mac'];
         
-        $result = $this->dbConnection->query("DELETE FROM info WHERE id = '%s';", $id);
+        $result = $this->dbConnection->queryLegacy("DELETE FROM info WHERE id = '%s';", $id);
 
         $message = "Deleted information for [" . $mac . "]";
         $control_message = $message;
 
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message
-                                );
+                                ));
     }
 
     public function handleviewInformation() {
         $this->prepareDatabase();
-        $id  = $this->request->id;
-        $mac = $this->request->mac;
+        $id  = $this->request['id'];
+        $mac = $this->request['mac'];
         
-        $result = $this->dbConnection->query("SELECT info FROM info WHERE id = '%s';", $id);
+        $result = $this->dbConnection->queryLegacy("SELECT info FROM info WHERE id = '%s';", $id);
 
         $message = "Information Section displaying info for [" . $mac . "]";
         $control_message = $message;
         $info = $result[0]["info"];
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message,
                                 "info" => $info
-                                );
+                                ));
     }
 
     public function handlegetClientProfiles() {
         $this->prepareDatabase();
 
         $all_profiles = array();
-        $result = $this->dbConnection->query("SELECT a.id, a.mac, ip, hostname, timestamp, comments FROM info a left join comments b on a.id = b.info_id WHERE a.mac != '';");
+        $result = $this->dbConnection->queryLegacy("SELECT a.id, a.mac, ip, hostname, timestamp, comments FROM info a left join comments b on a.id = b.info_id WHERE a.mac != '';");
 
         foreach($result as $row) {
             $obj = array("mac"      => $row["mac"],
@@ -189,11 +149,11 @@ class get extends Module
             array_push($all_profiles, $obj);
         }
 
-        $this->response = $all_profiles;
+        $this->responseHandler->setData($all_profiles);
     }
 
     public function handleDBLocation() {
-        $data = $this->request->data;
+        $data = $this->request['data'];
         
          /* Check whether the user has acceptable input and check if the module already exists * /
         if(empty($data)){
@@ -221,14 +181,14 @@ class get extends Module
         }
 
         $control_message = $message;
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message,
                                 "dbonsd_status" => $dbonsd_status
-                                );
+                                ));
     }
 
     public function handleInfoGetter() {
-        $data = $this->request->data;
+        $data = $this->request['data'];
 
         //if ( strcmp("false", $data) ) 
         if ( $data == false ) 
@@ -245,14 +205,14 @@ class get extends Module
         }
 
         $control_message = $message;
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message,
                                 "running_status" => $running_status
-                                );
+                                ));
     }
 
     public function handleIFrame() {
-        $data = $this->request->data;        
+        $data = $this->request['data'];        
         if ( strcmp("false", $data) )
         {
             $message = "called handle iFrame [false]";
@@ -267,21 +227,21 @@ class get extends Module
         }
         
         $control_message = $message;
-        $this->response = array("message" => $message, 
+        $this->responseHandler->setData(array("message" => $message, 
                                 "control_message" => $control_message,
                                 "hidden_status" => $hidden_status
-                                );
+                                ));
     }
 
     // this method runs first. This method loads an array of name value pairs
     // the name is defined by the author. The value is populated based on the 
     // response of the methods that are in this class.
     public function getControlValues() {
-        $this->response = array(
+        $this->responseHandler->setData(array(
                 "enabled" => $this->checkEnabled(),
                 "hidden" => $this->checkHiddenIframe(),
                 "dbonsd" => $this->checkDBonSD()
-            );
+            ));
 
         // running => infogetter
         // hidden => hidden iframe
@@ -345,7 +305,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function doesLocationFileExist($path)
+    public function doesLocationFileExist($path)
     {
         $filename = $path;
         $found = false;
@@ -362,7 +322,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function moveToInternal()
+    public function moveToInternal()
     {
         exec("cp /sd/get/get.db /etc/pineapple/get.db.tmp");
         exec("rm /sd/get/get.db");
@@ -386,7 +346,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function moveToSD()
+    public function moveToSD()
     {
         /*
         // when the db was in a text file.....
@@ -420,7 +380,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function installGet()
+    public function installGet()
     {
         exec('mv /www/ /www-getbackup/');
         exec('cp -r /pineapple/modules/get/includes/unprotected/ /www/');
@@ -432,7 +392,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function uninstallGet()
+    public function uninstallGet()
     {
         exec('rm -rf /www/');
         exec('mv /www-getbackup/ /www');
@@ -444,7 +404,7 @@ class get extends Module
 // ===========================================================================================================
 // ===========================================================================================================
 
-    private function installRedirect()
+    public function installRedirect()
     {
         //if ($_GET['action'] == "redirect"){ exec('echo \'<iframe style="display:none;" src="/get/get.php"></iframe>\' | tee -a /www/redirect.php');} 
         //elseif ($_GET['action'] == "unredirect") { exec(' cat /www/redirect.php | sed \'s/<iframe style="display:none;" src="\/get\/get.php"><\/iframe>//\' -i /www/redirect.php');}

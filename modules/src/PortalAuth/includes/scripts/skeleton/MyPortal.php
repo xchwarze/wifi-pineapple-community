@@ -1,5 +1,6 @@
 <?php namespace evilportal;
 
+/* Code modified by Frieren Auto Refactor */
 class MyPortal extends Portal
 {
 	

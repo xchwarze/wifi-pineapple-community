@@ -1,61 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class ngrep extends Module
+/* Code modified by Frieren Auto Refactor */
+class ngrep extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'togglengrep':
-                $this->togglengrep();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'getProfiles':
-                $this->getProfiles();
-                break;
-            case 'showProfile':
-                $this->showProfile();
-                break;
-            case 'deleteProfile':
-                $this->deleteProfile();
-                break;
-            case 'saveProfileData':
-                $this->saveProfileData();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'togglengrep', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory', 'getInterfaces', 'getProfiles', 'showProfile', 'deleteProfile', 'saveProfileData'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("ngrep.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("ngrep.module.installed")));
     }
 
     protected function getDevice()
@@ -66,42 +18,42 @@ class ngrep extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/ngrep/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("ngrep")) {
-            $this->execBackground("/pineapple/modules/ngrep/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/ngrep/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/ngrep/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/ngrep/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/ngrep.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function togglengrep()
+    public function togglengrep()
     {
-        if (!$this->checkRunning("ngrep")) {
-            $full_cmd = $this->request->command . " -O /pineapple/modules/ngrep/log/log_".time().".pcap >> /pineapple/modules/ngrep/log/log_".time().".log";
+        if (!$this->systemHelper->checkRunning("ngrep")) {
+            $full_cmd = $this->request['command'] . " -O /pineapple/modules/ngrep/log/log_".time().".pcap >> /pineapple/modules/ngrep/log/log_".time().".log";
             shell_exec("echo -e \"{$full_cmd}\" > /tmp/ngrep.run");
 
-            $this->execBackground("/pineapple/modules/ngrep/scripts/ngrep.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/ngrep/scripts/ngrep.sh start");
         } else {
-            $this->execBackground("/pineapple/modules/ngrep/scripts/ngrep.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/ngrep/scripts/ngrep.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/ngrep.progress')) {
             if (!$this->checkDeps("ngrep")) {
@@ -118,7 +70,7 @@ class ngrep extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("ngrep")) {
+                if ($this->systemHelper->checkRunning("ngrep")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -136,16 +88,16 @@ class ngrep extends Module
             $statusLabel = "success";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("ngrep")) {
-            if ($this->checkRunning("ngrep")) {
+            if ($this->systemHelper->checkRunning("ngrep")) {
                 $path = "/pineapple/modules/ngrep/log";
 
                 $latest_ctime = 0;
@@ -163,8 +115,8 @@ class ngrep extends Module
                 if ($latest_filename != "") {
                     $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/ngrep/log/".$latest_filename));
 
-                    if ($this->request->filter != "") {
-                        $filter = $this->request->filter;
+                    if ($this->request['filter'] != "") {
+                        $filter = $this->request['filter'];
 
                         $cmd = "cat /pineapple/modules/ngrep/log/".$latest_filename." | ".$filter;
                     } else {
@@ -173,22 +125,22 @@ class ngrep extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->responseHandler->setData(implode("\n", array_reverse($output)));
                     } else {
-                        $this->response = "Empty log...";
+                        $this->responseHandler->setData("Empty log...");
                     }
                 }
             } else {
-                $this->response = "ngrep is not running...";
+                $this->responseHandler->setData("ngrep is not running...");
             }
         } else {
-            $this->response = "ngrep is not installed...";
+            $this->responseHandler->setData("ngrep is not installed...");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
-        $this->response = array();
+        $this->responseHandler->setData(array());
         exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g'", $interfaceArray);
 
         foreach ($interfaceArray as $interface) {
@@ -196,7 +148,7 @@ class ngrep extends Module
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/ngrep/log/*.pcap"));
@@ -217,32 +169,32 @@ class ngrep extends Module
         };
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/ngrep/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/ngrep/log/".$this->request['file'])));
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/ngrep/log/".$this->request->file));
-        exec("strings /pineapple/modules/ngrep/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/ngrep/log/".$this->request['file']));
+        exec("strings /pineapple/modules/ngrep/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        $file = basename($this->request->file, ".pcap");
+        $file = basename($this->request['file'], ".pcap");
         exec("rm -rf /pineapple/modules/ngrep/log/".$file.".*");
     }
 
-    private function getProfiles()
+    public function getProfiles()
     {
-        $this->response = array();
+        $this->responseHandler->setData(array());
         $profileList = array_reverse(glob("/pineapple/modules/ngrep/profiles/*"));
         array_push($this->response, array("text" => "--", "value" => "--"));
         foreach ($profileList as $profile) {
@@ -251,20 +203,20 @@ class ngrep extends Module
         }
     }
 
-    private function showProfile()
+    public function showProfile()
     {
-        $profileData = file_get_contents('/pineapple/modules/ngrep/profiles/'.$this->request->profile);
-        $this->response = array("profileData" => $profileData);
+        $profileData = file_get_contents('/pineapple/modules/ngrep/profiles/'.$this->request['profile']);
+        $this->responseHandler->setData(array("profileData" => $profileData));
     }
 
-    private function deleteProfile()
+    public function deleteProfile()
     {
-        exec("rm -rf /pineapple/modules/ngrep/profiles/".$this->request->profile);
+        exec("rm -rf /pineapple/modules/ngrep/profiles/".$this->request['profile']);
     }
 
-    private function saveProfileData()
+    public function saveProfileData()
     {
-        $filename = "/pineapple/modules/ngrep/profiles/".$this->request->profile;
-        file_put_contents($filename, $this->request->profileData);
+        $filename = "/pineapple/modules/ngrep/profiles/".$this->request['profile'];
+        file_put_contents($filename, $this->request['profileData']);
     }
 }

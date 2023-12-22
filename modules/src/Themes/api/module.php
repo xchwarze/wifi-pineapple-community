@@ -1,11 +1,12 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 /*
  * Author: trashbo4t (github.com/trashbo4t)
  */
-
-class Themes extends Module
+class Themes extends Controller
 {
+    protected $endpointRoutes = ['getThemeList', 'themeFields', 'deleteTheme', 'activateTheme', 'getThemeCode', 'submitThemeCode', 'getCurrentTheme', 'createNewTheme', 'restoreDefault', 'backupFiles', 'replaceImage'];
     // CONSTANTS
     private $MODULE_DIR = '/pineapple/modules/Themes/';
     private $CSS_DIR = '/pineapple/modules/Themes/css/';
@@ -75,45 +76,6 @@ class Themes extends Module
         "yellow" => "cccc00",
         "pink"   => "99003d",
     );
-
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'getThemeList':
-                $this->handleGetThemeList();
-                break;
-            case 'themeFields':
-                $this->getThemeFields();
-                break;
-            case 'deleteTheme':
-                $this->handleDeleteTheme();
-                break;
-            case 'activateTheme':
-                $this->activateTheme();
-                break;
-            case 'getThemeCode':
-                $this->getThemeCode();
-                break;
-            case 'submitThemeCode':
-                $this->submitThemeCode();
-                break;
-            case 'getCurrentTheme':
-	            $this->getCurrentTheme();
-		        break;
-            case 'createNewTheme':
-                $this->handleCreateNewTheme();
-                break;
-            case 'restoreDefault':
-                $this->restoreDefault();
-                break;
-            case 'backupFiles':
-                $this->backupFiles();
-		        break;
-	        case 'replaceImage':
-    	    	$this->replaceImage();
-	    	    break;
-	    }
-    }
     // Get the CURRENT_<MODULE_ICON> file, which is 1 line with the current color of the icon
     public function currentFile($name)
     {
@@ -123,13 +85,13 @@ class Themes extends Module
     // Move an image from light->dark or vice versa
     public function replaceImage() 
     {
-        $img = $this->request->img;
+        $img = $this->request['img'];
 	    switch ($img) 
 	    {
             // Pineapple Logo
 	        case 'Logo':
-		        $this->response = array("message" => "Logo Changed");
-		        if ($this->request->light) {
+		        $this->responseHandler->setData(array("message" => "Logo Changed"));
+		        if ($this->request['light']) {
         			exec("cp $this->BACKUP_LOGO /pineapple/img/logo.png");
                     exec("echo light > $this->CURRENT_LOGO");
                 }
@@ -138,12 +100,12 @@ class Themes extends Module
                     exec("echo dark > $this->CURRENT_LOGO");
                     exec('cp /pineapple/modules/Themes/img/logo-dark.png /pineapple/img/logo.png');
                 }
-                $this->response = array("message" => "Logo Changed");
+                $this->responseHandler->setData(array("message" => "Logo Changed"));
                 break;
 
                 // Pineapple favicon.ico Image
             case 'Icon':
-                if ($this->request->light) {
+                if ($this->request['light']) {
                     exec("echo light > $this->CURRENT_FAVICON");
                     exec("cp $this->BACKUP_FAVICON /pineapple/img/favicon.ico");
                 }
@@ -152,12 +114,12 @@ class Themes extends Module
                     exec("echo dark > $this->CURRENT_FAVICON");
                     exec('cp /pineapple/modules/Themes/img/favicon-dark.ico /pineapple/img/favicon.ico');
                 }
-                $this->response = array("message" => "Icon Changed");
+                $this->responseHandler->setData(array("message" => "Icon Changed"));
                 break;
 
             // Pineapple Throbber gif
             case 'Throbber':
-                if ($this->request->light) {
+                if ($this->request['light']) {
                     exec("echo light > $this->CURRENT_THROBBER");
                     exec("cp $this->BACKUP_THROBBER /pineapple/img/throbber.gif");
                 }
@@ -166,7 +128,7 @@ class Themes extends Module
                     exec("echo dark > $this->CURRENT_THROBBER");
                     exec('cp /pineapple/modules/Themes/img/throbber-dark.gif /pineapple/img/throbber.gif');
                 }
-                $this->response = array("message" => "Throbber Changed");
+                $this->responseHandler->setData(array("message" => "Throbber Changed"));
                 break;
 
             // Modify all of the module Icons
@@ -176,26 +138,26 @@ class Themes extends Module
                     $current = $this->currentFile($module);
                     $success = $this->replaceModuleImage(
                         $module,
-                        $this->request->color,
-                        $this->request->brightness
+                        $this->request['color'],
+                        $this->request['brightness']
                     );
                 }
-                $this->response = array(
+                $this->responseHandler->setData(array(
                     "success" => true,
-                    "message" => "All module icons changed to {$this->request->color}-{$this->request->brightness}"
-                );
+                    "message" => "All module icons changed to {$this->request['color']}-{$this->request['brightness']}"
+                ));
                 break;
             // Assume module Icon
             default:
                 $success = $this->replaceModuleImage(
-                    $this->request->img,
-                    $this->request->color,
-                    $this->request->brightness
+                    $this->request['img'],
+                    $this->request['color'],
+                    $this->request['brightness']
                 );
-                $this->response = array(
+                $this->responseHandler->setData(array(
                     "success" => $success,
-                    "message" => "{$this->request->img} icon changed to {$this->request->color}-{$this->request->brightness}"
-                );
+                    "message" => "{$this->request['img']} icon changed to {$this->request['color']}-{$this->request['brightness']}"
+                ));
                 break;
         }
     }
@@ -290,12 +252,12 @@ class Themes extends Module
 
 	    $throbber = file('/pineapple/modules/Themes/img/CURRENT_THROBBER')[0];
         $throbber = trim(preg_replace('/\s+/', ' ', $throbber));
-        $this->response = array(
+        $this->responseHandler->setData(array(
             "current" => $line, 
             "logo" => $logo, 
             "icon" => $icon, 
             "throbber" => $throbber,
-        );
+        ));
         foreach ($this->ALL_MODULES as $module) 
         {
             $current = $this->currentFile($module);
@@ -348,10 +310,10 @@ class Themes extends Module
                 $module
             );
         }
-        $this->response = array(
+        $this->responseHandler->setData(array(
             "success" => $success, 
             "message" => "Restored all files"
-        );
+        ));
     }
     /* 
     *  restoreModuleIcon
@@ -392,8 +354,8 @@ class Themes extends Module
     */
     public function getThemeCode()
     {
-        $code = file_get_contents($this->CSS_DIR . $this->request->name);
-        $this->response = array("code" => $code, "file" => $this->CSS_DIR . $this->request->name);
+        $code = file_get_contents($this->CSS_DIR . $this->request['name']);
+        $this->responseHandler->setData(array("code" => $code, "file" => $this->CSS_DIR . $this->request['name']));
     }
     /*
     *  getThemeFields
@@ -402,8 +364,8 @@ class Themes extends Module
     public function getThemeFields()
     {
 	    $allFields = array();
-        $code = file_get_contents($this->CSS_DIR . $this->request->name);
-        $this->response = array("code" => $code);
+        $code = file_get_contents($this->CSS_DIR . $this->request['name']);
+        $this->responseHandler->setData(array("code" => $code));
     }
     /*
     *  activateTheme
@@ -411,21 +373,21 @@ class Themes extends Module
     */
     public function activateTheme()
     {
-        $themeName = $this->request->name;
+        $themeName = $this->request['name'];
         $cmd = exec("cp {$this->CSS_DIR}{$themeName} /pineapple/css/main.css");
 	    if ($cmd == 0) {
     		$this->setCurrentTheme($themeName);
 		    $message = $themeName . " is now active.";
-        	$this->response = array("return" => true, "message" => $message);
+        	$this->responseHandler->setData(array("return" => true, "message" => $message));
 	    }
 	    else
 	    {
     		$message = "Could not move theme" . $themeName . "(Something is wrong..)";
-        	$this->response = array("return" => false,"message" => $message);
+        	$this->responseHandler->setData(array("return" => false,"message" => $message));
 	    }
     }
     /* Credits to SteveRusin at http://php.net/manual/en/ref.strings.php */
-    private function endsWith($str, $sub)
+    public function endsWith($str, $sub)
     {
         return (substr($str, strlen($str) - strlen($sub)) === $sub);
     }
@@ -435,14 +397,14 @@ class Themes extends Module
     */
     public function handleDeleteTheme()
     {
-        $themeName = $this->request->name;
+        $themeName = $this->request['name'];
 	    exec("rm {$this->CSS_DIR}{$themeName}");
 	    if (!file_exists("/pineapple/modules/Themes/css/" . $themeName)) {
             $message = "Deleted " . $themeName;
         } else {
             $message = "Error deleting " . $themeName;
         }
-        $this->response = array("message" => $message);
+        $this->responseHandler->setData(array("message" => $message));
     }
     /*
     *  submitThemeCode
@@ -450,16 +412,16 @@ class Themes extends Module
     */
     public function submitThemeCode()
     {
-	$code = $this->request->themeCode;
-        $themeName = $this->request->name;
-        $fileName = $this->request->fileName;
+	$code = $this->request['themeCode'];
+        $themeName = $this->request['name'];
+        $fileName = $this->request['fileName'];
         file_put_contents($this->CSS_DIR . $themeName, $code);
         $message = (!file_exists($this->CSS_DIR . $themeName)) ? "Created " . $themeName : "Updated " . $themeName;
         
-        $this->response = array(
+        $this->responseHandler->setData(array(
             "message" => $message,
 	    "filename" => $fileName
-        );
+        ));
    }
    /*
    *  handleGetThemeList
@@ -477,7 +439,7 @@ class Themes extends Module
                 array_push($all_themes, $obj);
             }
         }
-        $this->response = $all_themes;
+        $this->responseHandler->setData($all_themes);
     }
     /*
     *  handleCreateNewTheme
@@ -486,16 +448,16 @@ class Themes extends Module
     public function handleCreateNewTheme()
     {
     	$themePath = $this->CSS_DIR;
-        $themeName = str_replace(' ', '_', $this->request->themeName);
+        $themeName = str_replace(' ', '_', $this->request['themeName']);
 	    if (!$this->endswith($themeName, '.css')) {
     		$themeName = $themeName . ".css";
 	    }
         if (file_exists($themePath . $themeName)) {
-            $this->response = array("create_success" => false, "create_message" => "A theme named {$themeName} already exists.");
+            $this->responseHandler->setData(array("create_success" => false, "create_message" => "A theme named {$themeName} already exists."));
 	    return;
         }
         exec("cp {$this->SKELETON_CSS} {$themePath}{$themeName}");
-        $this->response = array("create_success" => true, "create_message" => "Created {$themeName}");
+        $this->responseHandler->setData(array("create_success" => true, "create_message" => "Created {$themeName}"));
     }
     /*
     * backupFiles
@@ -550,13 +512,13 @@ class Themes extends Module
                 array_push($modules, "Wrote to {$current}.");
             }
         }
-        $this->response = array(
+        $this->responseHandler->setData(array(
             "success" => $success, 
             "message" => $success ? 
                 "Created a backup file for all files" : 
                     "Failed to backup files! Tread lightly",
             "modules" => $modules
-        );
+        ));
     }
     public function backupModuleIcon($currentFile) {
         if (!file_exists($currentFile)) {

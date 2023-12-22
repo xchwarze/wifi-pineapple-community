@@ -1,105 +1,76 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class HackRF extends Module
+/* Code modified by Frieren Auto Refactor */
+
+class HackRF extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'hackrfInfo':
-            $this->hackrfInfo();
-            break;
+    protected $endpointRoutes = ['hackrfInfo', 'hackrfInstall', 'hackrfUninstall', 'hackrfChecker', 'hackrfTransfer', 'hackrfStop', 'hackrfLog'];
 
-            case 'hackrfInstall':
-            $this->hackrfInstall();
-            break;
-
-            case 'hackrfUninstall':
-            $this->hackrfUninstall();
-            break;
-
-            case 'hackrfChecker':
-            $this->hackrfChecker();
-            break;
-
-            case 'hackrfTransfer':
-            $this->hackrfTransfer();
-            break;
-
-            case 'hackrfStop':
-            $this->hackrfStop();
-            break;
-
-            case 'hackrfLog':
-            $this->hackrfLog();
-            break;
-        }
-    }
-
-    private function hackrfInfo()
+    public function hackrfInfo()
     {
         exec('hackrf_info', $message);
         $message = implode("\n", $message);
 
         if ($message == "No HackRF boards found.") {
-            $this->response = array("foundBoard" => false);
-        } else if ($this->checkDependency('hackrf_info') == false) {
-            $this->response = array("foundBoard" => false);
+            $this->responseHandler->setData(array("foundBoard" => false));
+        } else if ($this->systemHelper->checkDependency('hackrf_info') == false) {
+            $this->responseHandler->setData(array("foundBoard" => false));
         } else {
-            $this->response = array("foundBoard" => true,
-                "availableHackRFs" => $message);
+            $this->responseHandler->setData(array("foundBoard" => true,
+                "availableHackRFs" => $message));
         }
     }
 
-    private function hackrfChecker()
+    public function hackrfChecker()
     {
-        if ($this->checkDependency('hackrf_info')) {
-            $this->response = array("installed" => true);
+        if ($this->systemHelper->checkDependency('hackrf_info')) {
+            $this->responseHandler->setData(array("installed" => true));
         } else {
-            $this->response = array("installed" => false);
+            $this->responseHandler->setData(array("installed" => false));
         }
     }
 
-    private function hackrfInstall()
+    public function hackrfInstall()
     {
-        if ($this->getDevice() == 'tetra') {
-            $this->execBackground('opkg update && opkg install hackrf-mini');    
+        if ($this->systemHelper->getDevice() == 'tetra') {
+            $this->systemHelper->execBackground('opkg update && opkg install hackrf-mini');    
         } else {
-            $this->execBackground('opkg update && opkg install hackrf-mini --dest sd');
+            $this->systemHelper->execBackground('opkg update && opkg install hackrf-mini --dest sd');
         }
         exec('echo "Welcome to HackRF!" > /tmp/hackrf_log');
 
-        $this->response = array("installing" => true);
+        $this->responseHandler->setData(array("installing" => true));
     }
 
-    private function hackrfUninstall()
+    public function hackrfUninstall()
     {
         exec('opkg remove hackrf-mini');
         unlink('/tmp/hackrf_log');
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function hackrfTransfer()
+    public function hackrfTransfer()
     {
-        $mode         = $this->request->mode;
-        $sampleRate   = $this->request->sampleRate;
-        $centerFreq   = $this->request->centerFreq;
-        $filename     = $this->request->filename;
-        $amp          = $this->request->amp;
-        $antPower     = $this->request->antpower;
-        $txRepeat     = $this->request->txRepeat;
-        $txIfCheckbox = $this->request->txIfCheckbox;
-        $txIfGain     = $this->request->txIfGain;
-        $rxIfCheckbox = $this->request->rxIfCheckbox;
-        $rxBbCheckbox = $this->request->rxBbCheckbox;
-        $rxIfGain     = $this->request->rxIfGain;
-        $rxBbGain     = $this->request->rxBbGain;
+        $mode         = $this->request['mode'];
+        $sampleRate   = $this->request['sampleRate'];
+        $centerFreq   = $this->request['centerFreq'];
+        $filename     = $this->request['filename'];
+        $amp          = $this->request['amp'];
+        $antPower     = $this->request['antpower'];
+        $txRepeat     = $this->request['txRepeat'];
+        $txIfCheckbox = $this->request['txIfCheckbox'];
+        $txIfGain     = $this->request['txIfGain'];
+        $rxIfCheckbox = $this->request['rxIfCheckbox'];
+        $rxBbCheckbox = $this->request['rxBbCheckbox'];
+        $rxIfGain     = $this->request['rxIfGain'];
+        $rxBbGain     = $this->request['rxBbGain'];
 
         if(!$sampleRate) {
-            $this->response = array("success" => false, "error" => "samplerate");
+            $this->responseHandler->setData(array("success" => false, "error" => "samplerate"));
         } else if(!$centerFreq) {
-            $this->response = array("success" => false, "error" => "centerfreq");
+            $this->responseHandler->setData(array("success" => false, "error" => "centerfreq"));
         } else if(!$filename) {
-            $this->response = array("success" => false, "error" => "filename");
+            $this->responseHandler->setData(array("success" => false, "error" => "filename"));
         } else {
             if ($mode == "rx") {
                 $mode = "-r";
@@ -154,26 +125,26 @@ class HackRF extends Module
             }
 
             unlink("/tmp/hackrf_log");
-            $this->execBackground("$command > /tmp/hackrf_log 2>&1");
-            $this->response = array("success" => true);
+            $this->systemHelper->execBackground("$command > /tmp/hackrf_log 2>&1");
+            $this->responseHandler->setData(array("success" => true));
         }
     }
 
-    private function hackrfStop()
+    public function hackrfStop()
     {
         exec("killall hackrf_transfer");
 
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function hackrfLog()
+    public function hackrfLog()
     {
         $log  = '/tmp/hackrf_log';
         if(file_exists($log)) {
             $log = file_get_contents($log);
-            $this->response = array("success" => true, "log" => $log);
+            $this->responseHandler->setData(array("success" => true, "log" => $log));
         } else {
-            $this->response = array("success" => true, "log" => "Welcome to HackRF!");
+            $this->responseHandler->setData(array("success" => true, "log" => "Welcome to HackRF!"));
         }
     }
 }

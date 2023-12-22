@@ -1,61 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class Responder extends Module
+/* Code modified by Frieren Auto Refactor */
+class Responder extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'toggleResponder':
-                $this->toggleResponder();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-            case 'toggleResponderOnBoot':
-                $this->toggleResponderOnBoot();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'saveAutostartSettings':
-                $this->saveAutostartSettings();
-                break;
-            case 'getSettings':
-                $this->getSettings();
-                break;
-            case 'setSettings':
-                $this->setSettings();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'toggleResponder', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory', 'toggleResponderOnBoot', 'getInterfaces', 'saveAutostartSettings', 'getSettings', 'setSettings'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("responder.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("responder.module.installed")));
     }
 
     protected function checkRunning($processName)
@@ -71,30 +23,30 @@ class Responder extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/Responder/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("python")) {
-            $this->execBackground("/pineapple/modules/Responder/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Responder/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/Responder/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Responder/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/Responder.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function toggleResponderOnBoot()
+    public function toggleResponderOnBoot()
     {
         if (exec("cat /etc/rc.local | grep Responder/scripts/autostart_responder.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -105,27 +57,27 @@ class Responder extends Module
         }
     }
 
-    private function toggleResponder()
+    public function toggleResponder()
     {
-        if (!$this->checkRunning("Responder.py")) {
-            $this->uciSet("responder.run.interface", $this->request->interface);
+        if (!$this->systemHelper->checkRunning("Responder.py")) {
+            $this->systemHelper->uciSet("responder.run.interface", $this->request['interface']);
 
-            $this->execBackground("/pineapple/modules/Responder/scripts/responder.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/Responder/scripts/responder.sh start");
         } else {
-            $this->uciSet("responder.run.interface", '');
+            $this->systemHelper->uciSet("responder.run.interface", '');
 
-            $this->execBackground("/pineapple/modules/Responder/scripts/responder.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/Responder/scripts/responder.sh stop");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray, "selected" => $this->uciGet("responder.run.interface"));
+        $this->responseHandler->setData(array("interfaces" => $interfaceArray, "selected" => $this->systemHelper->uciGet("responder.run.interface")));
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/Responder.progress')) {
             if (!$this->checkDeps("python")) {
@@ -145,7 +97,7 @@ class Responder extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("Responder.py")) {
+                if ($this->systemHelper->checkRunning("Responder.py")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -175,19 +127,19 @@ class Responder extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("python")) {
-            if ($this->checkRunning("Responder.py")) {
+            if ($this->systemHelper->checkRunning("Responder.py")) {
                 if (file_exists("/pineapple/modules/Responder/dep/responder/logs/Responder-Session.log")) {
-                    if ($this->request->filter != "") {
-                        $filter = $this->request->filter;
+                    if ($this->request['filter'] != "") {
+                        $filter = $this->request['filter'];
 
                         $cmd = "strings /pineapple/modules/Responder/dep/responder/logs/Responder-Session.log | ".$filter;
                     } else {
@@ -196,22 +148,22 @@ class Responder extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->responseHandler->setData(implode("\n", array_reverse($output)));
                     } else {
-                        $this->response = "Empty log...";
+                        $this->responseHandler->setData("Empty log...");
                     }
                 } else {
-                    $this->response = "Empty log...";
+                    $this->responseHandler->setData("Empty log...");
                 }
             } else {
-                $this->response = "Responder is not running...";
+                $this->responseHandler->setData("Responder is not running...");
             }
         } else {
-            $this->response = "Responder is not installed...";
+            $this->responseHandler->setData("Responder is not installed...");
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/Responder/log/*"));
@@ -232,65 +184,65 @@ class Responder extends Module
         };
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/Responder/log/".$this->request->file));
-        exec("strings /pineapple/modules/Responder/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/Responder/log/".$this->request['file']));
+        exec("strings /pineapple/modules/Responder/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/Responder/log/".$this->request->file);
+        exec("rm -rf /pineapple/modules/Responder/log/".$this->request['file']);
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/Responder/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/Responder/log/".$this->request['file'])));
     }
 
-    private function saveAutostartSettings()
+    public function saveAutostartSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("responder.autostart.interface", $settings->interface);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("responder.autostart.interface", $settings->interface);
     }
 
-    private function getSettings()
+    public function getSettings()
     {
         $settings = array(
-                    'SQL' => $this->uciGet("responder.settings.SQL"),
-                    'SMB' => $this->uciGet("responder.settings.SMB"),
-                    'Kerberos' => $this->uciGet("responder.settings.Kerberos"),
-                    'FTP' => $this->uciGet("responder.settings.FTP"),
-                    'POP' => $this->uciGet("responder.settings.POP"),
-                    'SMTP' => $this->uciGet("responder.settings.SMTP"),
-                    'IMAP' => $this->uciGet("responder.settings.IMAP"),
-                    'HTTP' => $this->uciGet("responder.settings.HTTP"),
-                    'HTTPS' => $this->uciGet("responder.settings.HTTPS"),
-                    'DNS' => $this->uciGet("responder.settings.DNS"),
-                    'LDAP' => $this->uciGet("responder.settings.LDAP"),
-                    'basic' => $this->uciGet("responder.settings.basic"),
-                    'wredir' => $this->uciGet("responder.settings.wredir"),
-                    'NBTNS' => $this->uciGet("responder.settings.NBTNS"),
-                    'fingerprint' => $this->uciGet("responder.settings.fingerprint"),
-                    'wpad' => $this->uciGet("responder.settings.wpad"),
-                    'forceWpadAuth' => $this->uciGet("responder.settings.forceWpadAuth"),
-                    'proxyAuth' => $this->uciGet("responder.settings.proxyAuth"),
-                    'forceLmDowngrade' => $this->uciGet("responder.settings.forceLmDowngrade"),
-                    'verbose' => $this->uciGet("responder.settings.verbose"),
-                    'analyse' => $this->uciGet("responder.settings.analyse")
+                    'SQL' => $this->systemHelper->uciGet("responder.settings.SQL"),
+                    'SMB' => $this->systemHelper->uciGet("responder.settings.SMB"),
+                    'Kerberos' => $this->systemHelper->uciGet("responder.settings.Kerberos"),
+                    'FTP' => $this->systemHelper->uciGet("responder.settings.FTP"),
+                    'POP' => $this->systemHelper->uciGet("responder.settings.POP"),
+                    'SMTP' => $this->systemHelper->uciGet("responder.settings.SMTP"),
+                    'IMAP' => $this->systemHelper->uciGet("responder.settings.IMAP"),
+                    'HTTP' => $this->systemHelper->uciGet("responder.settings.HTTP"),
+                    'HTTPS' => $this->systemHelper->uciGet("responder.settings.HTTPS"),
+                    'DNS' => $this->systemHelper->uciGet("responder.settings.DNS"),
+                    'LDAP' => $this->systemHelper->uciGet("responder.settings.LDAP"),
+                    'basic' => $this->systemHelper->uciGet("responder.settings.basic"),
+                    'wredir' => $this->systemHelper->uciGet("responder.settings.wredir"),
+                    'NBTNS' => $this->systemHelper->uciGet("responder.settings.NBTNS"),
+                    'fingerprint' => $this->systemHelper->uciGet("responder.settings.fingerprint"),
+                    'wpad' => $this->systemHelper->uciGet("responder.settings.wpad"),
+                    'forceWpadAuth' => $this->systemHelper->uciGet("responder.settings.forceWpadAuth"),
+                    'proxyAuth' => $this->systemHelper->uciGet("responder.settings.proxyAuth"),
+                    'forceLmDowngrade' => $this->systemHelper->uciGet("responder.settings.forceLmDowngrade"),
+                    'verbose' => $this->systemHelper->uciGet("responder.settings.verbose"),
+                    'analyse' => $this->systemHelper->uciGet("responder.settings.analyse")
                     );
-        $this->response = array('settings' => $settings);
+        $this->responseHandler->setData(array('settings' => $settings));
     }
 
-    private function setSettings()
+    public function setSettings()
     {
-        $settings = $this->request->settings;
+        $settings = $this->request['settings'];
         if ($settings->SQL) {
             $this->updateSetting("SQL", 1);
         } else {
@@ -348,64 +300,64 @@ class Responder extends Module
         }
 
         if ($settings->basic) {
-            $this->uciSet("responder.settings.basic", 1);
+            $this->systemHelper->uciSet("responder.settings.basic", 1);
         } else {
-            $this->uciSet("responder.settings.basic", 0);
+            $this->systemHelper->uciSet("responder.settings.basic", 0);
         }
         if ($settings->wredir) {
-            $this->uciSet("responder.settings.wredir", 1);
+            $this->systemHelper->uciSet("responder.settings.wredir", 1);
         } else {
-            $this->uciSet("responder.settings.wredir", 0);
+            $this->systemHelper->uciSet("responder.settings.wredir", 0);
         }
         if ($settings->NBTNS) {
-            $this->uciSet("responder.settings.NBTNS", 1);
+            $this->systemHelper->uciSet("responder.settings.NBTNS", 1);
         } else {
-            $this->uciSet("responder.settings.NBTNS", 0);
+            $this->systemHelper->uciSet("responder.settings.NBTNS", 0);
         }
         if ($settings->fingerprint) {
-            $this->uciSet("responder.settings.fingerprint", 1);
+            $this->systemHelper->uciSet("responder.settings.fingerprint", 1);
         } else {
-            $this->uciSet("responder.settings.fingerprint", 0);
+            $this->systemHelper->uciSet("responder.settings.fingerprint", 0);
         }
         if ($settings->wpad) {
-            $this->uciSet("responder.settings.wpad", 1);
+            $this->systemHelper->uciSet("responder.settings.wpad", 1);
         } else {
-            $this->uciSet("responder.settings.wpad", 0);
+            $this->systemHelper->uciSet("responder.settings.wpad", 0);
         }
         if ($settings->forceWpadAuth) {
-            $this->uciSet("responder.settings.forceWpadAuth", 1);
+            $this->systemHelper->uciSet("responder.settings.forceWpadAuth", 1);
         } else {
-            $this->uciSet("responder.settings.forceWpadAuth", 0);
+            $this->systemHelper->uciSet("responder.settings.forceWpadAuth", 0);
         }
         if ($settings->proxyAuth) {
-            $this->uciSet("responder.settings.proxyAuth", 1);
+            $this->systemHelper->uciSet("responder.settings.proxyAuth", 1);
         } else {
-            $this->uciSet("responder.settings.proxyAuth", 0);
+            $this->systemHelper->uciSet("responder.settings.proxyAuth", 0);
         }
         if ($settings->forceLmDowngrade) {
-            $this->uciSet("responder.settings.forceLmDowngrade", 1);
+            $this->systemHelper->uciSet("responder.settings.forceLmDowngrade", 1);
         } else {
-            $this->uciSet("responder.settings.forceLmDowngrade", 0);
+            $this->systemHelper->uciSet("responder.settings.forceLmDowngrade", 0);
         }
         if ($settings->verbose) {
-            $this->uciSet("responder.settings.verbose", 1);
+            $this->systemHelper->uciSet("responder.settings.verbose", 1);
         } else {
-            $this->uciSet("responder.settings.verbose", 0);
+            $this->systemHelper->uciSet("responder.settings.verbose", 0);
         }
         if ($settings->analyse) {
-            $this->uciSet("responder.settings.analyse", 1);
+            $this->systemHelper->uciSet("responder.settings.analyse", 1);
         } else {
-            $this->uciSet("responder.settings.analyse", 0);
+            $this->systemHelper->uciSet("responder.settings.analyse", 0);
         }
     }
 
-    private function updateSetting($setting, $value)
+    public function updateSetting($setting, $value)
     {
         if ($value) {
-            $this->uciSet("responder.settings.".$setting, 1);
+            $this->systemHelper->uciSet("responder.settings.".$setting, 1);
             exec("/bin/sed -i 's/^".$setting." .*/".$setting." = On/g' /pineapple/modules/Responder/dep/responder/Responder.conf");
         } else {
-            $this->uciSet("responder.settings.".$setting, 0);
+            $this->systemHelper->uciSet("responder.settings.".$setting, 0);
             exec("/bin/sed -i 's/^".$setting." .*/".$setting." = Off/g' /pineapple/modules/Responder/dep/responder/Responder.conf");
         }
     }

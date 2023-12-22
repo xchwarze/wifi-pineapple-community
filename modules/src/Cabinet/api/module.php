@@ -1,45 +1,14 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class Cabinet extends Module
+/* Code modified by Frieren Auto Refactor */
+class Cabinet extends Controller
 {
 
-	public function route()
+	protected $endpointRoutes = ['getDirectoryContents', 'getParentDirectory', 'deleteFile', 'editFile', 'getFileContents', 'createFolder', 'download'];
+
+	public function getDirectoryContents()
 	{
-		switch($this->request->action) {
-			case 'getDirectoryContents':
-				$this->getDirectoryContents();
-				break;
-
-			case 'getParentDirectory':
-				$this->getParentDirectory();
-				break;
-
-			case 'deleteFile':
-				$this->deleteFile();
-				break;
-
-			case 'editFile':
-				$this->editFile();
-				break;
-
-			case 'getFileContents':
-				$this->getFileContents();
-				break;
-
-			case 'createFolder':
-				$this->createFolder();
-				break;
-
-            case 'download':
-                $this->response = $this->download($this->request->filePath);
-                break;
-
-		}
-	}
-
-	private function getDirectoryContents()
-	{
-		$dir = $this->request->directory;
+		$dir = $this->request['directory'];
 
 		$success = false;
 		$contents = array();
@@ -54,13 +23,13 @@ class Cabinet extends Module
 			$success = true;
 		}
 
-		$this->response = array("success" => $success, "contents" => $contents, "directory" => $dir);
+		$this->responseHandler->setData(array("success" => $success, "contents" => $contents, "directory" => $dir));
 
 	}
 
-	private function getParentDirectory()
+	public function getParentDirectory()
 	{
-		$dir = $this->request->directory;
+		$dir = $this->request['directory'];
 		$success = false;
 		$parent = "";
 
@@ -69,13 +38,13 @@ class Cabinet extends Module
 			$success = true;
 		}
 
-		$this->response = array("success" => $success, "parent" => $parent);
+		$this->responseHandler->setData(array("success" => $success, "parent" => $parent));
 
 	}
 
-	private function deleteFile()
+	public function deleteFile()
 	{
-		$f = $this->request->file;
+		$f = $this->request['file'];
 		$success = false;
 
 		if (file_exists($f)) {
@@ -86,14 +55,14 @@ class Cabinet extends Module
 			$success = true;
 		}
 
-		$this->response = array("success" => $success);
+		$this->responseHandler->setData(array("success" => $success));
 
 	}
 
-	private function editFile()
+	public function editFile()
 	{
-		$f = $this->request->file;
-		$data = $this->request->contents;
+		$f = $this->request['file'];
+		$data = $this->request['contents'];
 		$success = false;
 
 		file_put_contents($f, $data);
@@ -101,12 +70,12 @@ class Cabinet extends Module
 			$success = true;
 		}
 
-		$this->response = array("success" => $success);
+		$this->responseHandler->setData(array("success" => $success));
 	}
 
-	private function getFileContents()
+	public function getFileContents()
 	{
-		$f = $this->request->file;
+		$f = $this->request['file'];
 		$success = false;
 		$content = "";
 		$size = "0 Bytes";
@@ -117,14 +86,14 @@ class Cabinet extends Module
 			$size = $this->readableFileSize($f);
 		}
 
-		$this->response = array("success" => $success, "content" => $content, "size" => $size);
+		$this->responseHandler->setData(array("success" => $success, "content" => $content, "size" => $size));
 
 	}
 
-	private function createFolder()
+	public function createFolder()
 	{
-		$dir = $this->request->directory;
-		$name = $this->request->name;
+		$dir = $this->request['directory'];
+		$name = $this->request['name'];
 		$success = false;
 
 		if (!is_dir($dir . '/' . $name)) {
@@ -132,7 +101,7 @@ class Cabinet extends Module
 			mkdir($dir . "/" . $name);
 		}
 
-		$this->response = array("success" => $success);
+		$this->responseHandler->setData(array("success" => $success));
 	}
 
     /**
@@ -140,12 +109,13 @@ class Cabinet extends Module
      * @param: The path to the file to download
      * @return array : array
      */
-    private function download($filePath)
+    public function download()
     {
+        $filePath = $this->request['filePath'];
         if (file_exists($filePath)) {
-            return array("success" => true, "message" => null, "download" => $this->downloadFile($filePath));
+            $this->responseHandler->setData( array("success" => true, "message" => null, "download" => $this->systemHelper->downloadFile($filePath)) );
         } else {
-            return array("success" => false, "message" => "File does not exist", "download" => null);
+            $this->responseHandler->setData( array("success" => false, "message" => "File does not exist", "download" => null) );
         }
     }
 
@@ -154,7 +124,7 @@ class Cabinet extends Module
      * @param $file: The file to get size of
      * @return string: File size plus unit. Exp: 3.14M
      */
-    private function readableFileSize($file) {
+    public function readableFileSize($file) {
         $size = filesize($file);
 
         if ($size == null)

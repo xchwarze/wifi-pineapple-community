@@ -1,6 +1,8 @@
 <?php
 
-namespace pineapple;
+namespace frieren\core;
+/* Code modified by Frieren Auto Refactor */
+
 define('__INCLUDES__', "/pineapple/modules/Papers/includes/");
 define('__SCRIPTS__', __INCLUDES__ . "scripts/");
 define('__SSLSTORE__', __INCLUDES__ . "ssl/");
@@ -50,76 +52,10 @@ if (!empty($_FILES)) {
 }
 
 
-class Papers extends Module
+class Papers extends Controller
 {
-	public function route() {
-		switch ($this->request->action) {
-			case 'init':
-				$this->init();
-				break;
-			case 'checkDepends':
-				$this->checkDepends();
-				break;
-			case 'installDepends':
-				$this->installDepends();
-				break;
-			case 'removeDepends':
-				$this->removeDepends();
-				break;
-			case 'buildCert':
-				$this->buildCert($this->request->parameters);
-				break;
-			case 'encryptKey':
-				$this->respond($this->encryptKey($this->request->keyName, $this->request->keyType, $this->request->keyAlgo, $this->request->keyPass));
-				break;
-			case 'decryptKey':
-				$this->respond($this->decryptKey($this->request->keyName, $this->request->keyType, $this->request->keyPass));
-				break;
-			case 'genSSHKeys':
-				$this->genSSHKeys($this->request->parameters);
-				break;
-			case 'loadCertificates':
-				$this->loadCertificates();
-				break;
-			case 'loadCertProps':
-				$this->loadCertificateProperties($this->request->certName);
-        break;
-      case 'loadSSHKeys':
-        $this->loadSSHKeys($this->request->keyName);
-        break;
-			case 'downloadKeys':
-				$this->downloadKeys($this->request->parameters->name, $this->request->parameters->type);
-				break;
-			case 'clearDownloadArchive':
-				$this->clearDownloadArchive();
-				break;
-			case 'removeCertificate':
-				$this->removeCertificate($this->request->params->cert, $this->request->params->type);
-				break;
-			case 'securePineapple':
-				$this->securePineapple($this->request->params->cert, $this->request->params->type);
-				break;
-			case 'getNginxSSLCerts':
-				$this->getNginxSSLCerts();
-				break;
-			case 'unSSLPineapple':
-				$this->unSSLPineapple();
-				break;
-			case 'revokeSSHKey':
-				$this->revokeSSHKey($this->request->key);
-				break;
-			case 'getLogs':
-				$this->getLogs($this->request->type);
-				break;
-			case 'readLog':
-				$this->retrieveLog($this->request->parameters, $this->request->type);
-				break;
-			case 'deleteLog':
-				$this->deleteLog($this->request->parameters);
-				break;
-		}
-	}
-	private function init() {
+	protected $endpointRoutes = ['init', 'checkDepends', 'installDepends', 'removeDepends', 'buildCert', 'encryptKey', 'decryptKey', 'genSSHKeys', 'loadCertificates', 'loadCertProps', 'loadSSHKeys', 'downloadKeys', 'clearDownloadArchive', 'removeCertificate', 'securePineapple', 'getNginxSSLCerts', 'unSSLPineapple', 'revokeSSHKey', 'getLogs', 'readLog', 'deleteLog'];
+	public function init() {
 		if (!file_exists(__LOGS__)) {
 			if (!mkdir(__LOGS__, 0755, true)) {
 				$this->respond(false, "Failed to create logs directory");
@@ -151,7 +87,7 @@ class Papers extends Module
 			}
 		}
 	}
-	private function checkDepends() {
+	public function checkDepends() {
 		$retData = array();
 		exec(__SCRIPTS__ . "checkDepends.sh", $retData);
 		if (implode(" ", $retData) == "Installed") {
@@ -160,7 +96,7 @@ class Papers extends Module
 			$this->respond(false);
 		}
 	}
-	private function installDepends() {
+	public function installDepends() {
 		$retData = array();
 		exec(__SCRIPTS__ . "installDepends.sh", $retData);
 		if (implode(" ", $retData) == "Complete") {
@@ -169,12 +105,12 @@ class Papers extends Module
 			$this->respond(false);
 		}
 	}
-	private function removeDepends() {
+	public function removeDepends() {
 		// removeDepends.sh doesn't return anything whether successful or not
 		exec(__SCRIPTS__ . "removeDepends.sh");
 		$this->respond(true);
 	}
-	private function genSSHKeys($paramsObj) {
+	public function genSSHKeys($paramsObj) {
 		$keyInfo = array();
 		$params = (array)$paramsObj;
 		
@@ -203,7 +139,7 @@ class Papers extends Module
 		}
 		$this->respond(true);
 	}
-	private function buildCert($paramsObj) {
+	public function buildCert($paramsObj) {
 		$certInfo = array();
 		$req = array();
 		$params = (array)$paramsObj;
@@ -291,7 +227,7 @@ class Papers extends Module
 		$this->respond(true, "Keys created successfully!");
 	}
 	
-	private function encryptKey($keyName, $keyType, $algo, $pass) {
+	public function encryptKey($keyName, $keyType, $algo, $pass) {
     $retData = array();
     $cmdString = "encryptRSAKeys.sh --encrypt -k {$keyName}.key -a {$algo}";
 
@@ -308,7 +244,7 @@ class Papers extends Module
 		return true;
 	}
 	
-	private function decryptKey($keyName, $keyType, $pass) {
+	public function decryptKey($keyName, $keyType, $pass) {
     $retData = array();
     $cmdString = "decryptRSAKeys.sh -k {$keyName}.key";
 
@@ -329,7 +265,7 @@ class Papers extends Module
 		Generates an OpenSSL config file based on the passed in requirements ($req)
 		and returns the path to the file.
 	*/
-	private function generateSSLConfig($keyName, $req) {
+	public function generateSSLConfig($keyName, $req) {
 		$conf = file_get_contents(__SSL_TEMPLATE__);
 		
 		foreach ($req as $k => $v) {
@@ -358,13 +294,13 @@ class Papers extends Module
 		return $path;
 	}
 
-	private function loadCertificates() {
+	public function loadCertificates() {
 		$certs = $this->getKeys(__SSLSTORE__);
 		$certs = array_merge($certs, $this->getKeys(__SSHSTORE__));
 		$this->respond(true,null,$certs);
 	}
 	
-	private function loadCertificateProperties($cert) {
+	public function loadCertificateProperties($cert) {
 		$retData = array();
 		$res = [];
 		
@@ -390,7 +326,7 @@ class Papers extends Module
 		return true;
   }
   
-  private function loadSSHKeys($name) {
+  public function loadSSHKeys($name) {
     $this->respond(true, null, array(
       "privkey" => file_get_contents(__SSHSTORE__ . "{$name}.key"),
       "pubkey" => file_get_contents(__SSHSTORE__ . "{$name}.pub"))
@@ -398,7 +334,7 @@ class Papers extends Module
     return true;
   }
 	
-	private function getKeys($dir) {
+	public function getKeys($dir) {
 		$keyType = ($dir == __SSLSTORE__) ? "TLS/SSL" : "SSH";
 		$keys = scandir($dir);
 		$certs = array();
@@ -425,7 +361,7 @@ class Papers extends Module
 		return $certs;
 	}
 	
-	private function checkSSHKeyAuth($keyName, $keyType) {
+	public function checkSSHKeyAuth($keyName, $keyType) {
 		if ($keyType != "SSH") {return false;}
 		$res = exec(__SCRIPTS__ . "checkSSHKey.sh -k " . $keyName);
 		if ($res == "TRUE") {
@@ -434,12 +370,12 @@ class Papers extends Module
 		return false;
 	}
 	
-	private function revokeSSHKey($keyName) {
+	public function revokeSSHKey($keyName) {
 		exec(__SCRIPTS__ . "revokeSSHKey.sh -k " . $keyName);
 		$this->respond(true);
 	}
 
-	private function keyIsEncrypted($keyName, $keyType) {
+	public function keyIsEncrypted($keyName, $keyType) {
 		$data = array();
     $keyDir = ($keyType == "SSH") ? __SSHSTORE__ : __SSLSTORE__;
     $type = ($keyType == "SSH") ? "SSH" : "RSA";
@@ -451,7 +387,7 @@ class Papers extends Module
 		}
 	}
 
-	private function downloadKeys($keyName, $keyType) {
+	public function downloadKeys($keyName, $keyType) {
 		$argString = "-o " . $keyName . ".zip -f \"";
 
 		// Grab all of the keys, certs, and containers
@@ -484,13 +420,13 @@ class Papers extends Module
 
 		// Begin downloading the archive
 		if ($archiveExists) {
-			$this->respond(true, null, $this->downloadFile(__DOWNLOAD__ . $keyName . ".zip"));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__DOWNLOAD__ . $keyName . ".zip"));
 		} else {
 			$this->respond(false, "Failed to create archive.");
 		}
 	}
 
-	private function clearDownloadArchive() {
+	public function clearDownloadArchive() {
 		foreach (scandir(__DOWNLOAD__) as $file) {
 			if (substr($file, 0, 1) == ".") {continue;}
 			unlink(__DOWNLOAD__ . $file);
@@ -502,7 +438,7 @@ class Papers extends Module
 		$this->respond(true);
 	}
 
-	private function objNameExistsInArray($name, $arr) {
+	public function objNameExistsInArray($name, $arr) {
 		foreach ($arr as $x) {
 			if ($x->Name == $name) {
 				return True;
@@ -511,7 +447,7 @@ class Papers extends Module
 		return False;
 	}
 
-	private function removeCertificate($delCert, $keyType) {
+	public function removeCertificate($delCert, $keyType) {
 		$res = True;
 		$msg = "Failed to delete the following files:";
 		$keyDir = ($keyType == "SSH") ? __SSHSTORE__ : __SSLSTORE__;
@@ -527,11 +463,11 @@ class Papers extends Module
 		$this->respond($res, $msg);
 	}
 
-	private function respond($success, $msg = null, $data = null, $error = null) {
-		$this->response = array("success" => $success,"message" => $msg, "data" => $data, "error" => $error);
+	public function respond($success, $msg = null, $data = null, $error = null) {
+		$this->responseHandler->setData(array("success" => $success,"message" => $msg, "data" => $data, "error" => $error));
 	}
 
-	private function getNginxSSLCerts() {
+	public function getNginxSSLCerts() {
 		$res = $this->checkSSLConfig();
 		if ($res == "") {
 			$this->respond(false, array("[!] SSL keys not configured in nginx.conf"));
@@ -540,13 +476,13 @@ class Papers extends Module
 		}
 	}
 
-	private function checkSSLConfig() {
+	public function checkSSLConfig() {
 		$retData = array();
 		exec(__SCRIPTS__ . "cfgNginx.py --getSSLCerts", $retData);
 		return implode(" ", $retData);
 	}
 
-	private function unSSLPineapple() {
+	public function unSSLPineapple() {
 		// First check if SSL is configured
 		if ($this->checkSSLConfig() == "") {
 			$this->respond(true);
@@ -570,7 +506,7 @@ class Papers extends Module
 		$this->respond($status);
 	}
 
-	private function securePineapple($certName, $keyType) {
+	public function securePineapple($certName, $keyType) {
 		// Check the key type to determine whether we are adding an SSH key or SSL keys
 		if ($keyType == "SSH") {
 			// Modify authorized_keys file
@@ -582,7 +518,7 @@ class Papers extends Module
 		}
 	}
 	
-	private function SSLPineapple($certName) {
+	public function SSLPineapple($certName) {
 		// Check if nginx SSL directory exists
 		$nginx_ssl_dir = "/etc/nginx/ssl/";
 		if (!file_exists($nginx_ssl_dir)) {
@@ -619,7 +555,7 @@ class Papers extends Module
 		$this->respond(false, "An error occurred.  Check the logs for details.");
 	}
 
-	private function replaceSSLCerts($certName) {
+	public function replaceSSLCerts($certName) {
 		// Remove the old keys from the SSL store
 		$this->removeKeysFromNginx();
 
@@ -639,7 +575,7 @@ class Papers extends Module
 		$this->respond(false);
 		return;
 	}
-	private function copyKeysToNginx($certName) {
+	public function copyKeysToNginx($certName) {
 		// Copy selected key pair to the SSL directory
 		$retData = array();
 		$res = exec(__SCRIPTS__ . "copyKeys.sh " . __SSLSTORE__ . $certName, $retData);
@@ -649,7 +585,7 @@ class Papers extends Module
 		}
 		return True;
 	}
-	private function removeKeysFromNginx() {
+	public function removeKeysFromNginx() {
 		$keys = $this->checkSSLConfig();
 		$retData = array();
 		$res = exec(__SCRIPTS__ . "removeKeys.sh {$keys}", $retData);
@@ -659,7 +595,7 @@ class Papers extends Module
 		}
 		return True;
 	}
-	private function getLogs($type) {
+	public function getLogs($type) {
 		$dir = ($type == "error") ? __LOGS__ : __CHANGELOGS__;
 		$contents = array();
 		foreach (scandir($dir) as $log) {
@@ -668,13 +604,13 @@ class Papers extends Module
 		}
 		$this->respond(true, null, $contents);
 	}
-	private function logError($filename, $data) {
+	public function logError($filename, $data) {
 		$time = exec("date +'%H_%M_%S'");
 		$fh = fopen(__LOGS__ . str_replace(" ","_",$filename) . "_" . $time . ".txt", "w+");
 		fwrite($fh, $data);
 		fclose($fh);
 	}
-	private function retrieveLog($logname, $type) {
+	public function retrieveLog($logname, $type) {
 		switch($type) {
                 case "error":
                     $dir = __LOGS__;
@@ -693,7 +629,7 @@ class Papers extends Module
 		}
 		$this->respond(true, null, $data);
 	}
-	private function deleteLog($logname) {
+	public function deleteLog($logname) {
 		$data = unlink(__LOGS__ . $logname);
 		if (!$data) {
 			$this->respond(false, "Failed to delete log.");

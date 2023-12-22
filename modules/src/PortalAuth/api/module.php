@@ -1,6 +1,8 @@
 <?php
 
-namespace pineapple;
+namespace frieren\core;
+
+/* Code modified by Frieren Auto Refactor */
 
 define('__INCLUDES__', "/pineapple/modules/PortalAuth/includes/");
 define('__CONFIG__', __INCLUDES__ . "config");
@@ -97,148 +99,15 @@ if (!empty($_FILES)) {
 }
 
 
-class PortalAuth extends Module
+class PortalAuth extends Controller
 {
-	public function route() {
-		switch($this->request->action) {
-			case 'init':
-				$this->init();
-				break;
-			case 'depends':
-				$this->depends($this->request->params);
-				break;
-			case 'getConfigs':
-				$this->getConfigs();
-				break;
-			case 'updateConfigs':
-				$this->saveConfigData($this->request->params);
-				break;
-			case 'checkTestServerConfig':
-				$this->tserverConfigured();
-				break;
-			case 'readLog':
-				$this->retrieveLog($this->request->file, $this->request->type);
-				break;
-			case 'deleteLog':
-				$this->deleteLog($this->request->file);
-				break;
-			case 'isOnline':
-				$this->checkIsOnline();
-				break;
-			case 'checkPortalExists':
-				$this->portalExists();
-				break;
-			case 'getLogs':
-				$this->getLogs($this->request->type);
-				break;
-			case 'getInjectionSets':
-				$this->getInjectionSets();
-				break;
-			case 'clonedPortalExists':
-				$this->clonedPortalExists($this->request->name);
-				break;
-			case 'clonePortal':
-				$this->clonePortal($this->request->name, $this->request->options, $this->request->inject, $this->request->payloads);
-				break;
-			case 'checkPASSRunning':
-				$this->getPID();
-				break;
-			case 'startServer':
-				$this->startServer();
-				break;
-			case 'stopServer':
-				$this->stopServer();
-				break;
-			case 'getCode':
-				$this->loadPASSCode();
-				break;
-			case 'restoreCode':
-				switch($this->request->file) {
-					case 'pass':
-						$this->restoreFile(__PASSSRV__, __PASSBAK__);
-						break;
-					default:
-						$base = __INJECTS__ . $this->request->set . "/";
-						$ext = ($this->request->file == "MyPortal") ? ".php" : ".txt";
-						$path = $base . $this->request->file . $ext;
-						$pathBak = $base . "backups/" . $this->request->file . $ext;
-						$this->restoreFile($path, $pathBak);
-						break;
-				}
-				break;
-			case 'saveCode':
-				switch($this->request->file) {
-					case 'pass':
-						$this->saveClonerFile(__PASSSRV__, $this->request->data);
-						break;
-					default:
-						$base = __INJECTS__ . $this->request->set . "/";
-						$ext = ($this->request->file == "MyPortal") ? ".php" : ".txt";
-						$path = $base . $this->request->file . $ext;
-						$this->saveClonerFile($path, $this->request->data);
-						break;
-				}
-				break;
-			case 'backupCode':
-				switch($this->request->file) {
-					case 'pass':
-						$this->saveClonerFile(__PASSSRV__, $this->request->data);
-						$this->backupFile(__PASSSRV__, __PASSBAK__);
-						break;
-					default:
-						$base = __INJECTS__ . $this->request->set . "/";
-						$ext = ($this->request->file == "MyPortal") ? ".php" : ".txt";
-						$path = $base . $this->request->file . $ext;
-						$pathBak = $base . "backups/" . $this->request->file . $ext;
-						$this->saveClonerFile($path, $this->request->data);
-						$this->backupFile($path, $pathBak);
-						break;
-				}
-				break;
-			case 'clearLog':
-				$this->clearLog($this->request->file);
-				break;
-			case 'download':
-				$this->download($this->request->file);
-				break;
-			case 'getInjectCode':
-				$this->getInjectCode($this->request->injectSet);
-				break;
-			case 'downloadInjectSet':
-				$this->exportInjectionSet($this->request->set);
-				break;
-			case 'deleteInjectSet':
-				$this->deleteInjectionSet($this->request->set);
-				break;
-			case 'createInjectionSet':
-				$this->createInjectionSet($this->request->name);
-				break;
-			case 'getCapturedCreds':
-				$this->getCapturedCreds();
-				break;
-			case 'clearCapturedCreds':
-				$this->clearCapturedCreds();
-				break;
-			case 'getPayloads':
-				$this->getPayloads();
-				break;
-			case 'deletePayload':
-				$this->deletePayload($this->request->filePath);
-				break;
-			case 'cfgUploadLimit':
-				$this->cfgUploadLimit();
-				break;
-			case 'clearDownloads':
-				$this->clearDownloads();
-				break;
-		}
-	}
+	protected $endpointRoutes = ['init', 'depends', 'getConfigs', 'updateConfigs', 'checkTestServerConfig', 'readLog', 'deleteLog', 'isOnline', 'checkPortalExists', 'getLogs', 'getInjectionSets', 'clonedPortalExists', 'clonePortal', 'checkPASSRunning', 'startServer', 'stopServer', 'getCode', 'restoreCode', 'saveCode', 'backupCode', 'clearLog', 'download', 'getInjectCode', 'downloadInjectSet', 'deleteInjectSet', 'createInjectionSet', 'getCapturedCreds', 'clearCapturedCreds', 'getPayloads', 'deletePayload', 'cfgUploadLimit', 'clearDownloads'];
 	
 	/* ============================ */
 	/*        INIT FUNCTIONS        */
 	/* ============================ */
 	
-	private function init() {
+	public function init() {
 		if (!file_exists(__LOGS__)) {
 			if (!mkdir(__LOGS__, 0755, true)) {
 				$this->respond(false, "Failed to create logs directory at " . __LOGS__);
@@ -258,7 +127,7 @@ class PortalAuth extends Module
 	//    DEPENDENCY FUNCTIONS    //
 	//============================//
 	
-	private function tserverConfigured() {
+	public function tserverConfigured() {
 		$configs = $this->loadConfigData();
 		if (empty($configs['testSite']) || empty($configs['dataExpected'])) {
 			$this->respond(false);
@@ -267,12 +136,12 @@ class PortalAuth extends Module
 		$this->respond(true);
 	}
 	
-	private function getConfigs() {
+	public function getConfigs() {
 			$configs = $this->loadConfigData();
 			$this->respond(true, null, $configs);
 	}
 	
-	private function depends($action) {
+	public function depends($action) {
 		$retData = array();
 		exec(__SCRIPTS__ . "depends.sh " . $action, $retData);
 		switch (implode(" ", $retData)) {
@@ -291,7 +160,7 @@ class PortalAuth extends Module
 	//    MISC FUNCTIONS    //
 	//======================//
 	
-	private function checkIsOnline() {
+	public function checkIsOnline() {
 		$connected = @fsockopen("www.wifipineapple.com", 443);
 		if ($connected) {
 			fclose($connected);
@@ -300,7 +169,7 @@ class PortalAuth extends Module
 		}
 		$this->respond(false);
 	}
-	private function getCapturedCreds() {
+	public function getCapturedCreds() {
 		if (file_exists(__AUTHLOG__)) {
 			$this->respond(true, null, file_get_contents(__AUTHLOG__));
 			return;
@@ -308,7 +177,7 @@ class PortalAuth extends Module
 		$this->respond(false);
 	}
 	
-	private function clearCapturedCreds() {
+	public function clearCapturedCreds() {
 		$res = true;
 		if (file_exists(__AUTHLOG__)) {
 			$fh = fopen(__AUTHLOG__, "w");
@@ -319,15 +188,15 @@ class PortalAuth extends Module
 		return $res;
 	}
 
-	private function respond($success, $msg = null, $data = null) {
-		$this->response = array("success" => $success,"message" => $msg, "data" => $data);
+	public function respond($success, $msg = null, $data = null) {
+		$this->responseHandler->setData(array("success" => $success,"message" => $msg, "data" => $data));
 	}
 	
 	//========================//
 	//    PORTAL FUNCTIONS    //
 	//========================//
 	
-	private function portalExists() {
+	public function portalExists() {
 		$configs = $this->loadConfigData();
 		$pageData = [];
 		exec("curl " . $configs['testSite'], $pageData);
@@ -338,7 +207,7 @@ class PortalAuth extends Module
 		}
 	}
 	
-	private function clonePortal($name, $opts, $injectionSet, $payloads) {
+	public function clonePortal($name, $opts, $injectionSet, $payloads) {
 		
 		$configs = $this->loadConfigData();
 		if ($this->clonedPortalExists($name)) {
@@ -436,7 +305,7 @@ class PortalAuth extends Module
 		$this->respond(false);
 	}
 	
-	private function clonedPortalExists($name) {
+	public function clonedPortalExists($name) {
 		$configs = $this->loadConfigData();
 		if (file_exists($configs['p_archive'] . $name)) {
 			$this->respond(true);
@@ -450,7 +319,7 @@ class PortalAuth extends Module
 	//    PASS FUNCTIONS    //
 	//======================//
 	
-	private function startServer() {
+	public function startServer() {
 		$ret = exec("python " . __PASSSRV__ . " > /dev/null 2>&1 &");
 		if ($this->getPID() != false) {
 			$dt = array();
@@ -466,7 +335,7 @@ class PortalAuth extends Module
 		return false;
 	}
 	
-	private function stopServer() {
+	public function stopServer() {
 		$pid = $this->getPID();
 		if ($pid != false) {
 			$ret = exec("kill " . $pid);
@@ -485,7 +354,7 @@ class PortalAuth extends Module
 		return true;
 	}
 	
-	private function getPID() {
+	public function getPID() {
 		$data = array();
 		$ret = exec("pgrep -lf pass.py", $data);
 		$output = explode(" ", $data[0]);
@@ -497,7 +366,7 @@ class PortalAuth extends Module
 		return false;
 	}
 	
-	private function loadPASSCode() {
+	public function loadPASSCode() {
 		$data = file_get_contents(__PASSSRV__);
 		if (!$data) {
 			$this->respond(false);
@@ -511,7 +380,7 @@ class PortalAuth extends Module
 	//    FILE SAVE FUNCTIONS    //
 	//===========================//
 	
-	private function saveClonerFile($filename, $data) {
+	public function saveClonerFile($filename, $data) {
 		$fh = fopen($filename, "w+");
 		if ($fh) {
 			fwrite($fh, $data);
@@ -523,7 +392,7 @@ class PortalAuth extends Module
 		return false;
 	}
 	
-	private function saveConfigData($data) {
+	public function saveConfigData($data) {
 		$fh = fopen(__CONFIG__, "w+");
 		if ($fh) {
 			foreach ($data as $key => $value) {
@@ -537,7 +406,7 @@ class PortalAuth extends Module
 		return false;
 	}
 	
-	private function loadConfigData() {
+	public function loadConfigData() {
 		$configs = array();
 		$config_file = fopen(__CONFIG__, "r");
 		if ($config_file) {
@@ -551,7 +420,7 @@ class PortalAuth extends Module
 		return $configs;
 	}
 	
-	private function backupFile($fileName, $backupFile) {
+	public function backupFile($fileName, $backupFile) {
 		// Attempt to create a backups directory in case it doesn't exist
 		mkdir(dirname($backupFile));
 		if (copy($fileName, $backupFile)) {
@@ -566,7 +435,7 @@ class PortalAuth extends Module
 	//    FILE RESTORATION FUNCTIONS    //
 	//==================================//
 	
-	private function restoreFile($oldFile, $newFile) {
+	public function restoreFile($oldFile, $newFile) {
 		$fileData = file_get_contents($newFile);
 		if ($fileData) {
 			$this->saveClonerFile($oldFile, $fileData);
@@ -581,7 +450,7 @@ class PortalAuth extends Module
 	//    INJECTION SET FUNCTIONS    //
 	//===============================//
 	
-	private function createInjectionSet($setName) {
+	public function createInjectionSet($setName) {
 		// Check if the directory exists
 		if (file_exists(__INJECTS__ . $setName)) {
 			$this->logError("New_Injection_Set", "Failed to create new injection set because the name provided is already in use.");
@@ -607,7 +476,7 @@ class PortalAuth extends Module
 		return true;
 	}
 	
-	private function cloneInjectionSet($set) {
+	public function cloneInjectionSet($set) {
 		
 		// Create a random name for the cloned directory
 		do {
@@ -639,7 +508,7 @@ class PortalAuth extends Module
 		return $newDir;
 	}
 	
-	private function exportInjectionSet($setName) {
+	public function exportInjectionSet($setName) {
 		
 		if (!file_exists(__INCLUDES__ . "downloads")) {
 			mkdir(__INCLUDES__ . "downloads");
@@ -653,18 +522,18 @@ class PortalAuth extends Module
 			return false;
 		}
 		$file = __INCLUDES__ . "downloads/" . $setName . ".tar.gz";
-		$this->respond(true, null, $this->downloadFile($file));
+		$this->respond(true, null, $this->systemHelper->downloadFile($file));
 		return true;
 	}
 	
-	private function getInjectionSets() {
+	public function getInjectionSets() {
 		$dirs = scandir(__INJECTS__);
 		array_shift($dirs); array_shift($dirs);
 		array_unshift($dirs, "Select...");
 		$this->respond(true, null, $dirs);
 	}
 	
-	private function getInjectCode($set) {
+	public function getInjectCode($set) {
 		$failed = false;
 		$injectFiles = array();
 		if (!$injectFiles['injectjs'] = $this->getInjectionFile("injectJS.txt", $set)){
@@ -689,14 +558,14 @@ class PortalAuth extends Module
 		return true;
 	}
 	
-	private function getInjectionFile($fileName, $setName) {
+	public function getInjectionFile($fileName, $setName) {
 		if (file_exists(__INJECTS__ . $setName . "/" . $fileName)) {
 			return file_get_contents(__INJECTS__ . $setName . "/" . $fileName);
 		}
 		return false;
 	}
 	
-	private function deleteInjectionSet($setName) {
+	public function deleteInjectionSet($setName) {
 		$this->rrmdir(__INJECTS__ . $setName);
 		if (is_dir(__INJECTS__ . $setName)) {
 			$this->respond(false);
@@ -710,7 +579,7 @@ class PortalAuth extends Module
 	//    PAYLOAD FUNCTIONS    //
 	//=========================//
 	
-	private function getPayloads() {
+	public function getPayloads() {
 		$files = [];
 		
 		foreach ([__WINDL__, __OSXDL__, __ANDROIDDL__, __IOSDL__] as $dir) {
@@ -723,7 +592,7 @@ class PortalAuth extends Module
 		return $files;
 	}
 	
-	private function deletePayload($filePath) {
+	public function deletePayload($filePath) {
 		if (!unlink($filePath)) {
 			$this->logError("Delete Payload", "Failed to delete payload at path " . $filePath);
 			$this->respond(false);
@@ -733,7 +602,7 @@ class PortalAuth extends Module
 		return true;
 	}
 	
-	private function cfgUploadLimit() {
+	public function cfgUploadLimit() {
 		$data = array();
 		$res = exec("python " . __SCRIPTS__ . "cfgUploadLimit.py > /dev/null 2>&1 &", $data);
 		if ($res != "") {
@@ -749,7 +618,7 @@ class PortalAuth extends Module
 	//    ACTIVITY AND TARGET LOG FUNCTIONS    //
 	//=========================================//
 	
-	private function clearLog($log) {
+	public function clearLog($log) {
 		if ($log == "activity") {
 			$fh = fopen(__PASSLOG__, "w+");
 			fclose($fh);
@@ -763,21 +632,21 @@ class PortalAuth extends Module
 		}
 	}
 	
-	private function download($file) {
+	public function download($file) {
 		if ($file == "activity") {
-			$this->respond(true, null, $this->downloadFile(__PASSLOG__));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__PASSLOG__));
 		} else if ($file == "targets") {
-			$this->respond(true, null, $this->downloadFile(__TARGETLOG__));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__TARGETLOG__));
 		} else if ($file == "networkclient_windows") {
-			$this->respond(true, null, $this->downloadFile(__COMPILEWIN__));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__COMPILEWIN__));
 		} else if ($file == "networkclient_osx") {
-			$this->respond(true, null, $this->downloadFile(__COMPILEOSX__));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__COMPILEOSX__));
 		} else if ($file == "networkclient_cs_api") {
-			$this->respond(true, null, $this->downloadFile(__CSAPI__));
+			$this->respond(true, null, $this->systemHelper->downloadFile(__CSAPI__));
 		}
 	}
 	
-	private function clearDownloads() {
+	public function clearDownloads() {
 		$files = scandir(__INCLUDES__ . "downloads/");
 		foreach ($files as $file) {
 			if ($file == "." || $file == "..") {continue;}
@@ -800,7 +669,7 @@ class PortalAuth extends Module
 		fclose($fh);
 	}
 
-	private function getLogs($type) {
+	public function getLogs($type) {
 		$dir = ($type == "error") ? __LOGS__ : __CHANGELOGS__;
 		$contents = array();
 		foreach (scandir($dir) as $log) {
@@ -810,7 +679,7 @@ class PortalAuth extends Module
 		$this->respond(true, null, $contents);
 	}
 
-	private function retrieveLog($logname, $type) {
+	public function retrieveLog($logname, $type) {
         switch($type) {
                 case "error":
                     $dir = __LOGS__;
@@ -833,13 +702,13 @@ class PortalAuth extends Module
 		$this->respond(true, null, $data);
 	}
 
-	private function deleteLog($logname) {
+	public function deleteLog($logname) {
 		$res = unlink(__LOGS__ . $logname);
 		$this->respond($res);
 		return $res;
 	}
 
-	private function rrmdir($dir) {
+	public function rrmdir($dir) {
 		if (is_dir($dir)) {
 			$objects = scandir($dir);
 			foreach ($objects as $object) {

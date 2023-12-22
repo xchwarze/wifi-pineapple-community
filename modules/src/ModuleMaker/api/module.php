@@ -1,52 +1,37 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 /**
 * Foxtrot (C) 2016 <foxtrotnull@gmail.com>
 **/
-
-class ModuleMaker extends Module
+class ModuleMaker extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'generateModule':
-            $this->generateModule();
-            break;
+    protected $endpointRoutes = ['generateModule', 'getInstalledModules', 'removeModule'];
 
-            case 'getInstalledModules':
-            $this->getInstalledModules();
-            break;
-
-            case 'removeModule':
-            $this->removeModule();
-            break;
-        }
-    }
-
-    private function generateModule()
+    public function generateModule()
     {
         /* Make life easier */
-        $moduleTitle = $this->request->moduleTitle;
-        $moduleDescription = $this->request->moduleDesc;
-        $moduleVersion = $this->request->moduleVersion;
-        $moduleAuthor = str_replace(' ', '', $this->request->moduleAuthor);
+        $moduleTitle = $this->request['moduleTitle'];
+        $moduleDescription = $this->request['moduleDesc'];
+        $moduleVersion = $this->request['moduleVersion'];
+        $moduleAuthor = str_replace(' ', '', $this->request['moduleAuthor']);
         $moduleName = str_replace(' ', '', $moduleTitle);
         $modulePath = "/pineapple/modules/{$moduleName}";
         $templates = "/pineapple/modules/ModuleMaker/Extra";
 
         /* Check whether the user has acceptable input and check if the module already exists */
         if(empty($moduleTitle)){
-            $this->error = "The module name cannot be empty.";
+            $this->responseHandler->setError("The module name cannot be empty.");
         } elseif (file_exists($modulePath)) {
-            $this->error = "A module with this name already exists.";
+            $this->responseHandler->setError("A module with this name already exists.");
         } elseif(empty($moduleDescription)){
-            $this->error = "You must specify a description.";
+            $this->responseHandler->setError("You must specify a description.");
         } elseif(!is_numeric($moduleVersion)){
-            $this->error = "Module version must be in the form of X.X";
+            $this->responseHandler->setError("Module version must be in the form of X.X");
         } elseif(substr_count($moduleVersion, '.') <1 || substr_count($moduleVersion, '.') >1){
-            $this->error = "Module version must only contain one period.";
+            $this->responseHandler->setError("Module version must only contain one period.");
         } elseif(empty($moduleAuthor)){
-            $this->error = "You must supply an Author.";
+            $this->responseHandler->setError("You must supply an Author.");
         }
 
         /* If an error is set, return early */
@@ -73,11 +58,11 @@ class ModuleMaker extends Module
 
 
         /* Once the module has been created, set the response to success */
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
 
     }
 
-    private function getInstalledModules()
+    public function getInstalledModules()
     {
         $modules = array();
         $modulesDirectories = scandir('/pineapple/modules');
@@ -103,7 +88,7 @@ class ModuleMaker extends Module
                 $modules[$moduleDirectory] = $module;
             }
         }
-        $this->response = array("installedModules" => $modules);
+        $this->responseHandler->setData(array("installedModules" => $modules));
     }
 }
 

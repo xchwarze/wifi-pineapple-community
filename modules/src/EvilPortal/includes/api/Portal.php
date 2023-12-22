@@ -1,5 +1,6 @@
 <?php namespace evilportal;
 
+/* Code modified by Frieren Auto Refactor */
 abstract class Portal
 {
     protected $request;
@@ -40,7 +41,7 @@ abstract class Portal
      */
     protected final function notify($message)
     {
-        $this->execBackground("notify {$message}");
+        $this->systemHelper->execBackground("notify {$message}");
     }
 
     /**
@@ -83,7 +84,7 @@ abstract class Portal
      */
     protected function handleAuthorization()
     {
-        if (isset($this->request->target)) {
+        if (isset($this->request['target'])) {
             $this->authorizeClient($_SERVER['REMOTE_ADDR']);
             $this->onSuccess();
             $this->redirect();
@@ -99,7 +100,7 @@ abstract class Portal
      */
     protected function redirect()
     {
-        header("Location: {$this->request->target}", true, 302);
+        header("Location: {$this->request['target']}", true, 302);
     }
 
     /**

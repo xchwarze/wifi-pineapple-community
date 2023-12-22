@@ -1,44 +1,32 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class DWall extends Module
+/* Code modified by Frieren Auto Refactor */
+class DWall extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'enable':
-                $this->enable();
-                break;
-            case 'disable':
-                $this->disable();
-                break;
-            case 'getStatus':
-                $this->getStatus();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['enable', 'disable', 'getStatus'];
 
-    private function enable()
+    public function enable()
     {
         $this->disable();
 
-        $this->execBackground("python /pineapple/modules/DWall/assets/DWall.py");
-        $this->execBackground("/usr/sbin/http_sniffer br-lan");
-        $this->response = array("success" => true);
+        $this->systemHelper->execBackground("python /pineapple/modules/DWall/assets/DWall.py");
+        $this->systemHelper->execBackground("/usr/sbin/http_sniffer br-lan");
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function disable()
+    public function disable()
     {
         exec("killall http_sniffer");
         exec("kill \$(ps -aux | grep DWall | head -n1 | awk '{print $2}')");
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function getStatus()
+    public function getStatus()
     {
         if (trim(exec("ps -aux | grep [D]Wall.py")) != "" && trim(exec("ps -aux | grep [h]ttp_sniffer")) != "") {
-            $this->response = array("running" => true);
+            $this->responseHandler->setData(array("running" => true));
         } else {
-            $this->response = array("running" => false);
+            $this->responseHandler->setData(array("running" => false));
         }
     }
 }

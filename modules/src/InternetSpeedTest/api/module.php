@@ -1,42 +1,22 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 /*
  * Author: trashbo4t (github.com/trashbo4t)
  */
-
-class InternetSpeedTest extends Module
+class InternetSpeedTest extends Controller
 {
-	// CONSTANTS
+	protected $endpointRoutes = ['clearTests', 'clearLogFile', 'startSpeedTest', 'getSpeedTestFromFile', 'getPreviousTests'];
+ // CONSTANTS
 	private $SPEED_TEST_DIR = '/pineapple/modules/InternetSpeedTest/tests';
 	private $ALL_TESTS_FILE = '/pineapple/modules/InternetSpeedTest/tests/all';
 	private $LOG_FILE = '/pineapple/modules/InternetSpeedTest/log.txt';
-	
-	public function route()
-	{
-		switch ($this->request->action) {
-			case 'clearTests':
-				$this->clearTests();
-				break;
-			case 'clearLogFile':
-				$this->clearLogFile();
-				break;
-			case 'startSpeedTest':
-				$this->startSpeedTest();
-				break;
-			case 'getSpeedTestFromFile':
-				$this->getSpeedTestFromFile();
-				break;
-			case 'getPreviousTests':
-				$this->getPreviousTests();
-				break;
-		}
-	}
 
 	//
 	// log
 	// this function will write to the log file inside the IST directory
 	//
-	private function log($msg)
+	public function log($msg)
 	{
 		exec("echo {$msg} >> {$this->LOG_FILE}");
 	}
@@ -45,7 +25,7 @@ class InternetSpeedTest extends Module
 	// clearLogFile
 	// this function will wipe the log file inside the IST directory
 	//
-	private function clearLogFile()
+	public function clearLogFile()
 	{
 		exec("echo '' > {$this->LOG_FILE}");
 	}
@@ -80,7 +60,7 @@ class InternetSpeedTest extends Module
 	// clearTests
 	// this function will wipe all of the tests and test file inside the IST directory
 	//
-	private function clearTests()
+	public function clearTests()
 	{
 		exec("rm  {$this->ALL_TESTS_FILE}");
 		exec("rm -rf {$this->SPEED_TEST_DIR}");
@@ -134,12 +114,12 @@ class InternetSpeedTest extends Module
 	public function getSpeedTestFromFile()
 	{
 		$this->log("requesting file");
-		$this->log($this->request->file);
+		$this->log($this->request['file']);
 
 		$this->makeSpeedTestsDir();
-		$file = $this->touchSpeedTestFile($this->request->file);
+		$file = $this->touchSpeedTestFile($this->request['file']);
 		$output = $this->getSpeedTestFile($file);
-		$this->response = $output;
+		$this->responseHandler->setData($output);
 
 		$this->log($output);
 	}
@@ -165,7 +145,7 @@ class InternetSpeedTest extends Module
 	
 		$this->addToSpeedTestFile($file);
 
-		$this->response = $output;
+		$this->responseHandler->setData($output);
 	}
 	
 	//
@@ -178,7 +158,7 @@ class InternetSpeedTest extends Module
 		$this->makeSpeedTestsDir();
 		$this->touchSpeedTestFile();
 
-		$this->response = array();
+		$this->responseHandler->setData(array());
 		
 		$lines = file($this->ALL_TESTS_FILE);
 		foreach ($lines as $line) 

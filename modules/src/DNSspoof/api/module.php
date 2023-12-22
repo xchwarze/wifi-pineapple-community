@@ -1,67 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class DNSspoof extends Module
+/* Code modified by Frieren Auto Refactor */
+class DNSspoof extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                    $this->refreshInfo();
-                    break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'toggleDNSspoof':
-                $this->toggleDNSspoof();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-            case 'toggleDNSspoofOnBoot':
-                $this->toggleDNSspoofOnBoot();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'saveAutostartSettings':
-                $this->saveAutostartSettings();
-                break;
-            case 'saveLandingPageData':
-                $this->saveLandingPageData();
-                break;
-            case 'getLandingPageData':
-                $this->getLandingPageData();
-                break;
-            case 'saveHostsData':
-                $this->saveHostsData();
-                break;
-            case 'getHostsData':
-                $this->getHostsData();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'toggleDNSspoof', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory', 'toggleDNSspoofOnBoot', 'getInterfaces', 'saveAutostartSettings', 'saveLandingPageData', 'getLandingPageData', 'saveHostsData', 'getHostsData'];
 
     protected function checkDep($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("dnsspoof.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("dnsspoof.module.installed")));
     }
 
     protected function getDevice()
@@ -72,30 +18,30 @@ class DNSspoof extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/DNSspoof/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDep("dnsspoof")) {
-            $this->execBackground("/pineapple/modules/DNSspoof/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/DNSspoof/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/DNSspoof/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/DNSspoof/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/DNSspoof.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function toggleDNSspoofOnBoot()
+    public function toggleDNSspoofOnBoot()
     {
         if (exec("cat /etc/rc.local | grep DNSspoof/scripts/autostart_dnsspoof.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -106,30 +52,30 @@ class DNSspoof extends Module
         }
     }
 
-    private function toggleDNSspoof()
+    public function toggleDNSspoof()
     {
-        if (!$this->checkRunning("dnsspoof")) {
-            $this->uciSet("dnsspoof.run.interface", $this->request->interface);
+        if (!$this->systemHelper->checkRunning("dnsspoof")) {
+            $this->systemHelper->uciSet("dnsspoof.run.interface", $this->request['interface']);
 
-            $this->execBackground("/pineapple/modules/DNSspoof/scripts/dnsspoof.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/DNSspoof/scripts/dnsspoof.sh start");
         } else {
-            $this->uciSet("dnsspoof.run.interface", '');
+            $this->systemHelper->uciSet("dnsspoof.run.interface", '');
 
-            $this->execBackground("/pineapple/modules/DNSspoof/scripts/dnsspoof.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/DNSspoof/scripts/dnsspoof.sh stop");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray, "selected" => $this->uciGet("dnsspoof.run.interface"));
+        $this->responseHandler->setData(array("interfaces" => $interfaceArray, "selected" => $this->systemHelper->uciGet("dnsspoof.run.interface")));
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/DNSspoof.progress')) {
-            if (!$this->checkDependency("dnsspoof")) {
+            if (!$this->systemHelper->checkDependency("dnsspoof")) {
                 $installed = false;
                 $install = "Not installed";
                 $installLabel = "danger";
@@ -146,7 +92,7 @@ class DNSspoof extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("dnsspoof")) {
+                if ($this->systemHelper->checkRunning("dnsspoof")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -175,16 +121,16 @@ class DNSspoof extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
-        if ($this->checkDependency("dnsspoof")) {
-            if ($this->checkRunning("dnsspoof")) {
+        if ($this->systemHelper->checkDependency("dnsspoof")) {
+            if ($this->systemHelper->checkRunning("dnsspoof")) {
                 $path = "/pineapple/modules/DNSspoof/log";
 
                 $latest_ctime = 0;
@@ -202,8 +148,8 @@ class DNSspoof extends Module
                 if ($latest_filename != "") {
                     $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/DNSspoof/log/".$latest_filename));
 
-                    if ($this->request->filter != "") {
-                        $filter = $this->request->filter;
+                    if ($this->request['filter'] != "") {
+                        $filter = $this->request['filter'];
 
                         $cmd = "cat /pineapple/modules/DNSspoof/log/".$latest_filename." | ".$filter;
                     } else {
@@ -212,20 +158,20 @@ class DNSspoof extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->responseHandler->setData(implode("\n", array_reverse($output)));
                     } else {
-                        $this->response = "Empty log...";
+                        $this->responseHandler->setData("Empty log...");
                     }
                 }
             } else {
-                $this->response = "DNSspoof is not running...";
+                $this->responseHandler->setData("DNSspoof is not running...");
             }
         } else {
-            $this->response = "DNSspoof is not installed...";
+            $this->responseHandler->setData("DNSspoof is not installed...");
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/DNSspoof/log/*"));
@@ -246,55 +192,55 @@ class DNSspoof extends Module
         };
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/DNSspoof/log/".$this->request->file));
-        exec("cat /pineapple/modules/DNSspoof/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/DNSspoof/log/".$this->request['file']));
+        exec("cat /pineapple/modules/DNSspoof/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/DNSspoof/log/".$this->request->file);
+        exec("rm -rf /pineapple/modules/DNSspoof/log/".$this->request['file']);
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/DNSspoof/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/DNSspoof/log/".$this->request['file'])));
     }
 
-    private function saveAutostartSettings()
+    public function saveAutostartSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("dnsspoof.autostart.interface", $settings->interface);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("dnsspoof.autostart.interface", $settings->interface);
     }
 
-    private function saveLandingPageData()
+    public function saveLandingPageData()
     {
         $filename = '/www/index.php';
-        file_put_contents($filename, $this->request->configurationData);
+        file_put_contents($filename, $this->request['configurationData']);
     }
 
-    private function getLandingPageData()
+    public function getLandingPageData()
     {
         $configurationData = file_get_contents('/www/index.php');
-        $this->response = array("configurationData" => $configurationData);
+        $this->responseHandler->setData(array("configurationData" => $configurationData));
     }
 
-    private function saveHostsData()
+    public function saveHostsData()
     {
         $filename = '/etc/pineapple/spoofhost';
-        file_put_contents($filename, $this->request->configurationData);
+        file_put_contents($filename, $this->request['configurationData']);
     }
 
-    private function getHostsData()
+    public function getHostsData()
     {
         $configurationData = file_get_contents('/etc/pineapple/spoofhost');
-        $this->response = array("configurationData" => $configurationData);
+        $this->responseHandler->setData(array("configurationData" => $configurationData));
     }
 }

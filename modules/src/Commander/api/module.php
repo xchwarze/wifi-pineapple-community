@@ -1,61 +1,39 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class Commander extends Module
+/* Code modified by Frieren Auto Refactor */
+class Commander extends Controller
 {
-    public function route()
+    protected $endpointRoutes = ['startCommander', 'stopCommander', 'getConfiguration', 'saveConfiguration', 'restoreDefaultConfiguration'];
+
+    public function startCommander()
     {
-        switch ($this->request->action) {
-            case 'startCommander':
-                $this->startCommander();
-                break;
-
-            case 'stopCommander':
-                $this->stopCommander();
-                break;
-
-            case 'getConfiguration':
-                $this->getConfiguration();
-                break;
-
-            case 'saveConfiguration':
-                $this->saveConfiguration();
-                break;
-
-            case 'restoreDefaultConfiguration':
-                $this->restoreDefaultConfiguration();
-                break;
-        }
+        $this->systemHelper->execBackground('cd /pineapple/modules/Commander/Python && python commander.py');
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function startCommander()
-    {
-        $this->execBackground('cd /pineapple/modules/Commander/Python && python commander.py');
-        $this->response = array("success" => true);
-    }
-
-    private function stopCommander()
+    public function stopCommander()
     {
         exec('kill -9 $(pgrep -f commander)');
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function getConfiguration()
+    public function getConfiguration()
     {
         $config = file_get_contents('/pineapple/modules/Commander/Python/commander.conf');
-        $this->response = array("CommanderConfiguration" => $config);
+        $this->responseHandler->setData(array("CommanderConfiguration" => $config));
     }
 
-    private function saveConfiguration()
+    public function saveConfiguration()
     {
-        $config = $this->request->CommanderConfiguration;
+        $config = $this->request['CommanderConfiguration'];
         file_put_contents('/pineapple/modules/Commander/Python/commander.conf', $config);
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 
-    private function restoreDefaultConfiguration()
+    public function restoreDefaultConfiguration()
     {
         $defaultConfig = file_get_contents('/pineapple/modules/Commander/assets/default.conf');
         file_put_contents('/pineapple/modules/Commander/Python/commander.conf', $defaultConfig);
-        $this->response = array("success" => true);
+        $this->responseHandler->setData(array("success" => true));
     }
 }

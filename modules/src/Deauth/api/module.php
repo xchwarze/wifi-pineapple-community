@@ -1,61 +1,15 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
+/* Code modified by Frieren Auto Refactor */
 //putenv('LD_LIBRARY_PATH='.getenv('LD_LIBRARY_PATH').':/sd/lib:/sd/usr/lib');
 //putenv('PATH='.getenv('PATH').':/sd/usr/bin:/sd/usr/sbin');
-
-class Deauth extends Module
+class Deauth extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'togglemdk3':
-                $this->togglemdk3();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'getInterfaces':
-                $this->getInterfaces();
-                break;
-            case 'scanForNetworks':
-                $this->scanForNetworks();
-                break;
-            case 'getSettings':
-                $this->getSettings();
-                break;
-            case 'setSettings':
-                $this->setSettings();
-                break;
-            case 'saveAutostartSettings':
-                $this->saveAutostartSettings();
-                break;
-            case 'togglemdk3OnBoot':
-                $this->togglemdk3OnBoot();
-                break;
-            case 'getListsData':
-                $this->getListsData();
-                break;
-            case 'saveListsData':
-                $this->saveListsData();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'togglemdk3', 'handleDependencies', 'handleDependenciesStatus', 'getInterfaces', 'scanForNetworks', 'getSettings', 'setSettings', 'saveAutostartSettings', 'togglemdk3OnBoot', 'getListsData', 'saveListsData'];
 
     protected function checkDep($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("deauth.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("deauth.module.installed")));
     }
 
     protected function getDevice()
@@ -66,21 +20,21 @@ class Deauth extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/Deauth/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDep("mdk3")) {
-            $this->execBackground("/pineapple/modules/Deauth/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Deauth/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/Deauth/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/Deauth/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function togglemdk3OnBoot()
+    public function togglemdk3OnBoot()
     {
         if (exec("cat /etc/rc.local | grep Deauth/scripts/autostart_deauth.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -91,29 +45,29 @@ class Deauth extends Module
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/Deauth.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function togglemdk3()
+    public function togglemdk3()
     {
-        if (!$this->checkRunning("mdk3")) {
-            $this->uciSet("deauth.run.interface", $this->request->interface);
+        if (!$this->systemHelper->checkRunning("mdk3")) {
+            $this->systemHelper->uciSet("deauth.run.interface", $this->request['interface']);
 
-            $this->execBackground("/pineapple/modules/Deauth/scripts/deauth.sh start");
+            $this->systemHelper->execBackground("/pineapple/modules/Deauth/scripts/deauth.sh start");
         } else {
-            $this->uciSet("deauth.run.interface", '');
+            $this->systemHelper->uciSet("deauth.run.interface", '');
 
-            $this->execBackground("/pineapple/modules/Deauth/scripts/deauth.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/Deauth/scripts/deauth.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/Deauth.progress')) {
             if (!$this->checkDep("mdk3")) {
@@ -133,7 +87,7 @@ class Deauth extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("mdk3")) {
+                if ($this->systemHelper->checkRunning("mdk3")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -162,40 +116,40 @@ class Deauth extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
-        if ($this->checkDependency("mdk3")) {
-            if ($this->checkRunning("mdk3")) {
+        if ($this->systemHelper->checkDependency("mdk3")) {
+            if ($this->systemHelper->checkRunning("mdk3")) {
                 exec("cat /tmp/deauth.log", $output);
                 if (!empty($output)) {
-                    $this->response = implode("\n", array_reverse($output));
+                    $this->responseHandler->setData(implode("\n", array_reverse($output)));
                 } else {
-                    $this->response = "Empty log...";
+                    $this->responseHandler->setData("Empty log...");
                 }
             } else {
-                $this->response = "Deauth is not running...";
+                $this->responseHandler->setData("Deauth is not running...");
             }
         } else {
-            $this->response = "mdk3 is not installed...";
+            $this->responseHandler->setData("mdk3 is not installed...");
         }
     }
 
-    private function getInterfaces()
+    public function getInterfaces()
     {
         exec("iwconfig 2> /dev/null | grep \"wlan*\" | awk '{print $1}'", $interfaceArray);
 
-        $this->response = array("interfaces" => $interfaceArray, "selected" => $this->uciGet("deauth.run.interface"));
+        $this->responseHandler->setData(array("interfaces" => $interfaceArray, "selected" => $this->systemHelper->uciGet("deauth.run.interface")));
     }
 
-    private function scanForNetworks()
+    public function scanForNetworks()
     {
-        $interface = escapeshellarg($this->request->interface);
+        $interface = escapeshellarg($this->request['interface']);
         if (substr($interface, -4, -1) === "mon") {
             if ($interface == "'wlan1mon'") {
                 exec("killall pineap");
@@ -235,46 +189,46 @@ class Deauth extends Module
                 array_push($returnArray, $accessPoint);
             }
         }
-        $this->response = $returnArray;
+        $this->responseHandler->setData($returnArray);
     }
 
-    private function getSettings()
+    public function getSettings()
     {
         $settings = array(
-                    'speed' => $this->uciGet("deauth.settings.speed"),
-                    'channels' => $this->uciGet("deauth.settings.channels"),
-                    'mode' => $this->uciGet("deauth.settings.mode")
+                    'speed' => $this->systemHelper->uciGet("deauth.settings.speed"),
+                    'channels' => $this->systemHelper->uciGet("deauth.settings.channels"),
+                    'mode' => $this->systemHelper->uciGet("deauth.settings.mode")
                     );
-        $this->response = array('settings' => $settings);
+        $this->responseHandler->setData(array('settings' => $settings));
     }
 
-    private function setSettings()
+    public function setSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("deauth.settings.speed", $settings->speed);
-        $this->uciSet("deauth.settings.channels", $settings->channels);
-        $this->uciSet("deauth.settings.mode", $settings->mode);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("deauth.settings.speed", $settings->speed);
+        $this->systemHelper->uciSet("deauth.settings.channels", $settings->channels);
+        $this->systemHelper->uciSet("deauth.settings.mode", $settings->mode);
     }
 
-    private function saveAutostartSettings()
+    public function saveAutostartSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("deauth.autostart.interface", $settings->interface);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("deauth.autostart.interface", $settings->interface);
     }
 
-    private function getListsData()
+    public function getListsData()
     {
         $blacklistData = file_get_contents('/pineapple/modules/Deauth/lists/blacklist.lst');
         $whitelistData = file_get_contents('/pineapple/modules/Deauth/lists/whitelist.lst');
-        $this->response = array("blacklistData" => $blacklistData, "whitelistData" => $whitelistData );
+        $this->responseHandler->setData(array("blacklistData" => $blacklistData, "whitelistData" => $whitelistData ));
     }
 
-    private function saveListsData()
+    public function saveListsData()
     {
         $filename = '/pineapple/modules/Deauth/lists/blacklist.lst';
-        file_put_contents($filename, $this->request->blacklistData);
+        file_put_contents($filename, $this->request['blacklistData']);
 
         $filename = '/pineapple/modules/Deauth/lists/whitelist.lst';
-        file_put_contents($filename, $this->request->whitelistData);
+        file_put_contents($filename, $this->request['whitelistData']);
     }
 }

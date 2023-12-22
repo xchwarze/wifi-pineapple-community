@@ -1,49 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class OnlineHashCrack extends Module
+/* Code modified by Frieren Auto Refactor */
+class OnlineHashCrack extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'clearOutput':
-                $this->clearOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'submitWPAOnline':
-                $this->submitWPAOnline();
-                break;
-            case 'submitWPAOnlineStatus':
-                $this->submitWPAOnlineStatus();
-                break;
-            case 'getSettings':
-                $this->getSettings();
-                break;
-            case 'setSettings':
-                $this->setSettings();
-                break;
-            case 'getCapFiles':
-                $this->getCapFiles();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'clearOutput', 'refreshStatus', 'handleDependencies', 'handleDependenciesStatus', 'submitWPAOnline', 'submitWPAOnlineStatus', 'getSettings', 'setSettings', 'getCapFiles'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("onlinehashcrack.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("onlinehashcrack.module.installed")));
     }
 
     protected function getDevice()
@@ -54,36 +18,36 @@ class OnlineHashCrack extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/OnlineHashCrack/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if(!$this->checkDeps("curl"))
         {
-            $this->execBackground("/pineapple/modules/OnlineHashCrack/scripts/dependencies.sh install " . $this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/OnlineHashCrack/scripts/dependencies.sh install " . $this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         }
         else
         {
-            $this->execBackground("/pineapple/modules/OnlineHashCrack/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/OnlineHashCrack/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/OnlineHashCrack.progress'))
         {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         }
         else
         {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/OnlineHashCrack.progress'))
         {
@@ -110,68 +74,68 @@ class OnlineHashCrack extends Module
             $processing = true;
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if (file_exists("/tmp/onlinehashcrack.log"))
         {
             $output = file_get_contents("/tmp/onlinehashcrack.log");
             if(!empty($output))
-                $this->response = $output;
+                $this->responseHandler->setData($output);
             else
-                $this->response = " ";
+                $this->responseHandler->setData(" ");
         }
         else
         {
-             $this->response = " ";
+             $this->responseHandler->setData(" ");
         }
     }
 
-    private function clearOutput()
+    public function clearOutput()
     {
         exec("rm -rf /tmp/onlinehashcrack.log");
     }
 
-    private function submitWPAOnlineStatus()
+    public function submitWPAOnlineStatus()
     {
         if (!file_exists('/tmp/OnlineHashCrack.progress'))
         {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         }
         else
         {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function submitWPAOnline()
+    public function submitWPAOnline()
     {
-        $this->execBackground("/pineapple/modules/OnlineHashCrack/scripts/submit_wpa.sh ".$this->request->file);
-        $this->response = array('success' => true);
+        $this->systemHelper->execBackground("/pineapple/modules/OnlineHashCrack/scripts/submit_wpa.sh ".$this->request['file']);
+        $this->responseHandler->setData(array('success' => true));
     }
 
-    private function getSettings()
+    public function getSettings()
     {
         $settings = array(
-                    'email' => $this->uciGet("onlinehashcrack.settings.email")
+                    'email' => $this->systemHelper->uciGet("onlinehashcrack.settings.email")
                     );
-        $this->response = array('settings' => $settings);
+        $this->responseHandler->setData(array('settings' => $settings));
     }
 
-    private function setSettings()
+    public function setSettings()
     {
-        $settings = $this->request->settings;
-        $this->uciSet("onlinehashcrack.settings.email", $settings->email);
+        $settings = $this->request['settings'];
+        $this->systemHelper->uciSet("onlinehashcrack.settings.email", $settings->email);
     }
 
-    private function getCapFiles()
+    public function getCapFiles()
     {
         exec("find -L /pineapple/modules/ -type f -name \"*.**cap\" -o -name \"*.**pcap\" -o -name \"*.**pcapng\" -o -name \"*.**hccapx\" 2>&1", $filesArray);
-        $this->response = array("files" => $filesArray);
+        $this->responseHandler->setData(array("files" => $filesArray));
     }
 }

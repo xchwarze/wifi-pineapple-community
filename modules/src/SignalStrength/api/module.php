@@ -1,34 +1,16 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class SignalStrength extends Module {
-	public function route()
-	{
-		switch ($this->request->action) {
-			case 'getVersionInfo':
-			$this->getVersionInfo();
-			break;
-			case 'getWirelessInterfaces':
-			$this->getWirelessInterfaces();
-			break;
-			case 'getInterfaceScan':
-			$this->getInterfaceScan();
-			break;
-			case 'getInterfaceStatus':
-			$this->getInterfaceStatus();
-			break;
-			case 'toggleInterface':
-			$this->toggleInterface();
-			break;
-		}
-	}
+/* Code modified by Frieren Auto Refactor */
+class SignalStrength extends Controller {
+	protected $endpointRoutes = ['getVersionInfo', 'getWirelessInterfaces', 'getInterfaceScan', 'getInterfaceStatus', 'toggleInterface'];
 
 	protected function getVersionInfo() {
 		$moduleInfo = @json_decode(file_get_contents("/pineapple/modules/SignalStrength/module.info"));
-		$this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+		$this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
 	}
 
 	protected function getInterfaceScan() {
-		exec('iwlist "'.$this->request->selectedInterface.'" scanning | egrep "Cell |Channel|Quality|ESSID"', $interfaceScan);
+		exec('iwlist "'.$this->request['selectedInterface'].'" scanning | egrep "Cell |Channel|Quality|ESSID"', $interfaceScan);
 		$interfaceScanArray = array();
 		for($x=0;$x<count($interfaceScan);$x+=5) {                                             
 			$bssid = substr($interfaceScan[$x], strpos($wlan0ScanOutput[$x], ":") +29);     
@@ -38,12 +20,12 @@ class SignalStrength extends Module {
 			$essid = substr($interfaceScan[$x+4], strpos($interfaceScan[$x+4], ":") +1); 
 			array_push($interfaceScanArray, array("bssid" => $bssid, "channel" => $channel, "quality" => $quality, "strength" => $strength, "essid" => $essid));
                 }                                                                                        
-                $this->response = array('interfaceScan' => $interfaceScanArray);
+                $this->responseHandler->setData(array('interfaceScan' => $interfaceScanArray));
 	}
 
 	protected function getWirelessInterfaces() {
 		exec("iwconfig 2> /dev/null | grep \"wlan*\" | awk '{print $1}'", $interfaces);
-		$this->response = array('interfaces' => $interfaces);
+		$this->responseHandler->setData(array('interfaces' => $interfaces));
 	}
 
 	protected function getInterfaceStatus() {
@@ -55,11 +37,11 @@ class SignalStrength extends Module {
 			if ($interfaceStatus[$y+1] == "UP") { $status = "Up"; }
 			array_push($interfaceStatusArray, array("interface" => $interface, "status" => $status));
 		}
-		$this->response = array('interfaceStatus' => $interfaceStatusArray);
+		$this->responseHandler->setData(array('interfaceStatus' => $interfaceStatusArray));
 	}
 
 	protected function toggleInterface() {
-		$toggle = ($this->request->status == "Down") ? 'up' : 'down';
-		exec('ifconfig "'.$this->request->interface.'" "'.$toggle.'"', $toggleResponse);
+		$toggle = ($this->request['status'] == "Down") ? 'up' : 'down';
+		exec('ifconfig "'.$this->request['interface'].'" "'.$toggle.'"', $toggleResponse);
 	}
 }

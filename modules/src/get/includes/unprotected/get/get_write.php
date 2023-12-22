@@ -1,7 +1,6 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
     
-    require_once("/pineapple/api/DatabaseConnection.php");
-    
+    /* Code modified by Frieren Auto Refactor */
     $dbConnection = "";
     $dbPath = "";
     $report = "";
@@ -11,11 +10,11 @@
     if ( doesLocationFileExist("/etc/pineapple/get_database_location") )
     {
         $dbPath = trim(file_get_contents("/etc/pineapple/get_database_location")) . "get.db";
-        $dbConnection = new DatabaseConnection($dbPath);
+        $dbConnection = new \frieren\orm\SQLite($dbPath);
     }
     else
     {
-        $dbConnection = new DatabaseConnection(self::DATABASE);
+        $dbConnection = new \frieren\orm\SQLite(self::DATABASE);
         $dbPath = trim(self::DATABASE);
     }
     
@@ -52,7 +51,9 @@ tr:nth-child(odd) {background-color: #333; }
 tr:nth-child(1) {background-color: #DDD; color:#000;}
 </style>
 
-<?php namespace pineapple;
+<?php namespace frieren\core;
+    /* Code modified by Frieren Auto Refactor */
+
     function doesLocationFileExist($path)
     {
         $filename = $path;
@@ -67,7 +68,7 @@ tr:nth-child(1) {background-color: #DDD; color:#000;}
 
     function saveDataToDatabase($dbConnection, $dbPath, $mac, $ip, $hostname, $code, $timestamp)
     {
-        $dbConnection->exec("INSERT INTO info (mac, ip, hostname, info, timestamp) VALUES('%s','%s','%s','%s', '%s');", $mac, $ip, $hostname, $code, $timestamp);
+        $dbConnection->execLegacy("INSERT INTO info (mac, ip, hostname, info, timestamp) VALUES('%s','%s','%s','%s', '%s');", $mac, $ip, $hostname, $code, $timestamp);
     }
 
 ?>

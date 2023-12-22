@@ -1,63 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-
-
-class SSLsplit extends Module
+/* Code modified by Frieren Auto Refactor */
+class SSLsplit extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'toggleSSLsplit':
-                $this->toggleSSLsplit();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'refreshHistory':
-                $this->refreshHistory();
-                break;
-            case 'viewHistory':
-                $this->viewHistory();
-                break;
-            case 'deleteHistory':
-                $this->deleteHistory();
-                break;
-            case 'downloadHistory':
-                $this->downloadHistory();
-                break;
-            case 'toggleSSLsplitOnBoot':
-                $this->toggleSSLsplitOnBoot();
-                break;
-            case 'handleCertificate':
-                $this->handleCertificate();
-                break;
-            case 'handleCertificateStatus':
-                $this->handleCertificateStatus();
-                break;
-            case 'saveConfigurationData':
-                $this->saveConfigurationData();
-                break;
-            case 'getConfigurationData':
-                $this->getConfigurationData();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'toggleSSLsplit', 'handleDependencies', 'handleDependenciesStatus', 'refreshHistory', 'viewHistory', 'deleteHistory', 'downloadHistory', 'toggleSSLsplitOnBoot', 'handleCertificate', 'handleCertificateStatus', 'saveConfigurationData', 'getConfigurationData'];
 
     protected function checkDeps($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("sslsplit.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("sslsplit.module.installed")));
     }
 
     protected function getDevice()
@@ -68,50 +18,50 @@ class SSLsplit extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/SSLsplit/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleCertificate()
+    public function handleCertificate()
     {
         if (!file_exists("/pineapple/modules/SSLsplit/cert/certificate.crt")) {
-            $this->execBackground("/pineapple/modules/SSLsplit/scripts/generate_certificate.sh");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/SSLsplit/scripts/generate_certificate.sh");
+            $this->responseHandler->setData(array('success' => true));
         } else {
             exec("rm -rf /pineapple/modules/SSLsplit/cert/certificate.*");
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleCertificateStatus()
+    public function handleCertificateStatus()
     {
         if (!file_exists('/tmp/SSLsplit_certificate.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDeps("sslsplit")) {
-            $this->execBackground("/pineapple/modules/SSLsplit/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/SSLsplit/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/SSLsplit/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/SSLsplit/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/SSLsplit.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function toggleSSLsplitOnBoot()
+    public function toggleSSLsplitOnBoot()
     {
         if (exec("cat /etc/rc.local | grep SSLsplit/scripts/autostart_sslsplit.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -122,16 +72,16 @@ class SSLsplit extends Module
         }
     }
 
-    private function toggleSSLsplit()
+    public function toggleSSLsplit()
     {
-        if (!$this->checkRunning("sslsplit")) {
-            $this->execBackground("/pineapple/modules/SSLsplit/scripts/sslsplit.sh start");
+        if (!$this->systemHelper->checkRunning("sslsplit")) {
+            $this->systemHelper->execBackground("/pineapple/modules/SSLsplit/scripts/sslsplit.sh start");
         } else {
-            $this->execBackground("/pineapple/modules/SSLsplit/scripts/sslsplit.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/SSLsplit/scripts/sslsplit.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/SSLsplit.progress')) {
             if (!$this->checkDeps("sslsplit")) {
@@ -151,7 +101,7 @@ class SSLsplit extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("sslsplit")) {
+                if ($this->systemHelper->checkRunning("sslsplit")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -203,22 +153,22 @@ class SSLsplit extends Module
             $generating = false;
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed,
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed,
                                 "certificate" => $certificate, "certificateLabel" => $certificateLabel, "generating" => $generating, "generated" => $generated,
                                 "install" => $install, "installLabel" => $installLabel,
-                                "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+                                "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if ($this->checkDeps("sslsplit")) {
-            if ($this->checkRunning("sslsplit")) {
+            if ($this->systemHelper->checkRunning("sslsplit")) {
                 if (file_exists("/pineapple/modules/SSLsplit/connections.log")) {
-                    if ($this->request->filter != "") {
-                        $filter = $this->request->filter;
+                    if ($this->request['filter'] != "") {
+                        $filter = $this->request['filter'];
 
                         $cmd = "cat /pineapple/modules/SSLsplit/connections.log"." | ".$filter;
                     } else {
@@ -227,22 +177,22 @@ class SSLsplit extends Module
 
                     exec($cmd, $output);
                     if (!empty($output)) {
-                        $this->response = implode("\n", array_reverse($output));
+                        $this->responseHandler->setData(implode("\n", array_reverse($output)));
                     } else {
-                        $this->response = "Empty connections log...";
+                        $this->responseHandler->setData("Empty connections log...");
                     }
                 } else {
-                    $this->response =  "No connections log...";
+                    $this->responseHandler->setData("No connections log...");
                 }
             } else {
-                $this->response = "SSLsplit is not running...";
+                $this->responseHandler->setData("SSLsplit is not running...");
             }
         } else {
-            $this->response = "SSLsplit is not installed...";
+            $this->responseHandler->setData("SSLsplit is not installed...");
         }
     }
 
-    private function refreshHistory()
+    public function refreshHistory()
     {
         $this->streamFunction = function () {
             $log_list = array_reverse(glob("/pineapple/modules/SSLsplit/log/*"));
@@ -263,37 +213,37 @@ class SSLsplit extends Module
         };
     }
 
-    private function viewHistory()
+    public function viewHistory()
     {
-        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/SSLsplit/log/".$this->request->file));
-        exec("cat /pineapple/modules/SSLsplit/log/".$this->request->file, $output);
+        $log_date = gmdate("F d Y H:i:s", filemtime("/pineapple/modules/SSLsplit/log/".$this->request['file']));
+        exec("cat /pineapple/modules/SSLsplit/log/".$this->request['file'], $output);
 
         if (!empty($output)) {
-            $this->response = array("output" => implode("\n", $output), "date" => $log_date);
+            $this->responseHandler->setData(array("output" => implode("\n", $output), "date" => $log_date));
         } else {
-            $this->response = array("output" => "Empty log...", "date" => $log_date);
+            $this->responseHandler->setData(array("output" => "Empty log...", "date" => $log_date));
         }
     }
 
-    private function deleteHistory()
+    public function deleteHistory()
     {
-        exec("rm -rf /pineapple/modules/SSLsplit/log/".$this->request->file);
+        exec("rm -rf /pineapple/modules/SSLsplit/log/".$this->request['file']);
     }
 
-    private function downloadHistory()
+    public function downloadHistory()
     {
-        $this->response = array("download" => $this->downloadFile("/pineapple/modules/SSLsplit/log/".$this->request->file));
+        $this->responseHandler->setData(array("download" => $this->systemHelper->downloadFile("/pineapple/modules/SSLsplit/log/".$this->request['file'])));
     }
 
-    private function saveConfigurationData()
+    public function saveConfigurationData()
     {
         $filename = '/pineapple/modules/SSLsplit/rules/iptables';
-        file_put_contents($filename, $this->request->configurationData);
+        file_put_contents($filename, $this->request['configurationData']);
     }
 
-    private function getConfigurationData()
+    public function getConfigurationData()
     {
         $configurationData = file_get_contents('/pineapple/modules/SSLsplit/rules/iptables');
-        $this->response = array("configurationData" => $configurationData);
+        $this->responseHandler->setData(array("configurationData" => $configurationData));
     }
 }

@@ -1,49 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class DNSMasqSpoof extends Module
+/* Code modified by Frieren Auto Refactor */
+class DNSMasqSpoof extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'toggleDNSMasqSpoof':
-                $this->toggleDNSMasqSpoof();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'toggleDNSMasqSpoofOnBoot':
-                $this->toggleDNSMasqSpoofOnBoot();
-                break;
-            case 'saveLandingPageData':
-                $this->saveLandingPageData();
-                break;
-            case 'getLandingPageData':
-                $this->getLandingPageData();
-                break;
-            case 'saveHostsData':
-                $this->saveHostsData();
-                break;
-            case 'getHostsData':
-                $this->getHostsData();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'refreshStatus', 'toggleDNSMasqSpoof', 'handleDependencies', 'handleDependenciesStatus', 'toggleDNSMasqSpoofOnBoot', 'saveLandingPageData', 'getLandingPageData', 'saveHostsData', 'getHostsData'];
 
     protected function checkDep($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("dnsmasqspoof.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("dnsmasqspoof.module.installed")));
     }
 
     protected function getDevice()
@@ -59,30 +23,30 @@ class DNSMasqSpoof extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/DNSMasqSpoof/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDep("dnsmasq")) {
-            $this->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dependencies.sh install ".$this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dependencies.sh install ".$this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/DNSMasqSpoof.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function toggleDNSMasqSpoofOnBoot()
+    public function toggleDNSMasqSpoofOnBoot()
     {
         if (exec("cat /etc/rc.local | grep DNSMasqSpoof/scripts/autostart_dnsmasqspoof.sh") == "") {
             exec("sed -i '/exit 0/d' /etc/rc.local");
@@ -93,19 +57,19 @@ class DNSMasqSpoof extends Module
         }
     }
 
-    private function toggleDNSMasqSpoof()
+    public function toggleDNSMasqSpoof()
     {
-        if (!$this->checkRunning("dnsmasq")) {
-            $this->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dnsmasqspoof.sh start");
+        if (!$this->systemHelper->checkRunning("dnsmasq")) {
+            $this->systemHelper->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dnsmasqspoof.sh start");
         } else {
-            $this->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dnsmasqspoof.sh stop");
+            $this->systemHelper->execBackground("/pineapple/modules/DNSMasqSpoof/scripts/dnsmasqspoof.sh stop");
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/DNSMasqSpoof.progress')) {
-            if (!$this->checkDependency("dnsmasq")) {
+            if (!$this->systemHelper->checkDependency("dnsmasq")) {
                 $installed = false;
                 $install = "Not installed";
                 $installLabel = "danger";
@@ -122,7 +86,7 @@ class DNSMasqSpoof extends Module
                 $installLabel = "success";
                 $processing = false;
 
-                if ($this->checkRunning("dnsmasq")) {
+                if ($this->systemHelper->checkRunning("dnsmasq")) {
                     $status = "Stop";
                     $statusLabel = "danger";
                 } else {
@@ -151,46 +115,46 @@ class DNSMasqSpoof extends Module
             $bootLabelOFF = "danger";
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "status" => $status, "statusLabel" => $statusLabel, "installed" => $installed, "install" => $install, "installLabel" => $installLabel, "bootLabelON" => $bootLabelON, "bootLabelOFF" => $bootLabelOFF, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
-        if ($this->checkDependency("dnsmasq")) {
-            if ($this->checkRunning("dnsmasq")) {
-                $this->response = "DNSMasq Spoof is running...";
+        if ($this->systemHelper->checkDependency("dnsmasq")) {
+            if ($this->systemHelper->checkRunning("dnsmasq")) {
+                $this->responseHandler->setData("DNSMasq Spoof is running...");
             } else {
-                $this->response = "DNSMasq Spoof is not running...";
+                $this->responseHandler->setData("DNSMasq Spoof is not running...");
             }
         } else {
-            $this->response = "DNSMasq Spoof is not installed...";
+            $this->responseHandler->setData("DNSMasq Spoof is not installed...");
         }
     }
 
-    private function saveLandingPageData()
+    public function saveLandingPageData()
     {
         $filename = '/www/index.php';
-        file_put_contents($filename, $this->request->configurationData);
+        file_put_contents($filename, $this->request['configurationData']);
     }
 
-    private function getLandingPageData()
+    public function getLandingPageData()
     {
         $configurationData = file_get_contents('/www/index.php');
-        $this->response = array("configurationData" => $configurationData);
+        $this->responseHandler->setData(array("configurationData" => $configurationData));
     }
 
-    private function saveHostsData()
+    public function saveHostsData()
     {
         $filename = '/pineapple/modules/DNSMasqSpoof/hosts/dnsmasq.hosts';
-        file_put_contents($filename, $this->request->configurationData);
+        file_put_contents($filename, $this->request['configurationData']);
     }
 
-    private function getHostsData()
+    public function getHostsData()
     {
         $configurationData = file_get_contents('/pineapple/modules/DNSMasqSpoof/hosts/dnsmasq.hosts');
-        $this->response = array("configurationData" => $configurationData);
+        $this->responseHandler->setData(array("configurationData" => $configurationData));
     }
 }

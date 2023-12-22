@@ -1,61 +1,13 @@
-<?php namespace pineapple;
+<?php namespace frieren\core;
 
-class KeyManager extends Module
+/* Code modified by Frieren Auto Refactor */
+class KeyManager extends Controller
 {
-    public function route()
-    {
-        switch ($this->request->action) {
-            case 'refreshInfo':
-                $this->refreshInfo();
-                break;
-            case 'refreshOutput':
-                $this->refreshOutput();
-                break;
-            case 'clearOutput':
-                $this->clearOutput();
-                break;
-            case 'refreshStatus':
-                $this->refreshStatus();
-                break;
-            case 'handleDependencies':
-                $this->handleDependencies();
-                break;
-            case 'handleDependenciesStatus':
-                $this->handleDependenciesStatus();
-                break;
-            case 'handleKey':
-                $this->handleKey();
-                break;
-            case 'handleKeyStatus':
-                $this->handleKeyStatus();
-                break;
-            case 'saveKnownHostsData':
-                $this->saveKnownHostsData();
-                break;
-            case 'getKnownHostsData':
-                $this->getKnownHostsData();
-                break;
-            case 'addToKnownHosts':
-                $this->addToKnownHosts();
-                break;
-            case 'addToKnownHostsStatus':
-                $this->addToKnownHostsStatus();
-                break;
-            case 'copyToRemoteHost':
-                $this->copyToRemoteHost();
-                break;
-            case 'copyToRemoteHostStatus':
-                $this->copyToRemoteHostStatus();
-                break;
-            case 'getSettings':
-                $this->getSettings();
-                break;
-        }
-    }
+    protected $endpointRoutes = ['refreshInfo', 'refreshOutput', 'clearOutput', 'refreshStatus', 'handleDependencies', 'handleDependenciesStatus', 'handleKey', 'handleKeyStatus', 'saveKnownHostsData', 'getKnownHostsData', 'addToKnownHosts', 'addToKnownHostsStatus', 'copyToRemoteHost', 'copyToRemoteHostStatus', 'getSettings'];
 
     protected function checkDep($dependencyName)
     {
-        return ($this->checkDependency($dependencyName) && ($this->uciGet("keymanager.module.installed")));
+        return ($this->systemHelper->checkDependency($dependencyName) && ($this->systemHelper->uciGet("keymanager.module.installed")));
     }
 
     protected function getDevice()
@@ -66,50 +18,50 @@ class KeyManager extends Module
     protected function refreshInfo()
     {
         $moduleInfo = @json_decode(file_get_contents("/pineapple/modules/KeyManager/module.info"));
-        $this->response = array('title' => $moduleInfo->title, 'version' => $moduleInfo->version);
+        $this->responseHandler->setData(array('title' => $moduleInfo->title, 'version' => $moduleInfo->version));
     }
 
-    private function handleKey()
+    public function handleKey()
     {
         if (!file_exists("/root/.ssh/id_rsa")) {
-            $this->execBackground("/pineapple/modules/KeyManager/scripts/generate_key.sh");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/KeyManager/scripts/generate_key.sh");
+            $this->responseHandler->setData(array('success' => true));
         } else {
             exec("rm -rf /root/.ssh/id_rsa*");
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleKeyStatus()
+    public function handleKeyStatus()
     {
         if (!file_exists('/tmp/KeyManager_key.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function handleDependencies()
+    public function handleDependencies()
     {
         if (!$this->checkDep("ssh-keyscan")) {
-            $this->execBackground("/pineapple/modules/KeyManager/scripts/dependencies.sh install " . $this->request->destination);
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/KeyManager/scripts/dependencies.sh install " . $this->request['destination']);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->execBackground("/pineapple/modules/KeyManager/scripts/dependencies.sh remove");
-            $this->response = array('success' => true);
+            $this->systemHelper->execBackground("/pineapple/modules/KeyManager/scripts/dependencies.sh remove");
+            $this->responseHandler->setData(array('success' => true));
         }
     }
 
-    private function handleDependenciesStatus()
+    public function handleDependenciesStatus()
     {
         if (!file_exists('/tmp/KeyManager.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function refreshStatus()
+    public function refreshStatus()
     {
         if (!file_exists('/tmp/KeyManager.progress')) {
             if (!$this->checkDep("ssh-keyscan")) {
@@ -153,87 +105,87 @@ class KeyManager extends Module
             $generating = false;
         }
 
-        $device = $this->getDevice();
-        $sdAvailable = $this->isSDAvailable();
+        $device = $this->systemHelper->getDevice();
+        $sdAvailable = $this->systemHelper->isSDAvailable();
 
-        $this->response = array("device" => $device, "sdAvailable" => $sdAvailable, "installed" => $installed, "key" => $key, "keyLabel" => $keyLabel, "generating" => $generating, "generated" => $generated, "install" => $install, "installLabel" => $installLabel, "processing" => $processing);
+        $this->responseHandler->setData(array("device" => $device, "sdAvailable" => $sdAvailable, "installed" => $installed, "key" => $key, "keyLabel" => $keyLabel, "generating" => $generating, "generated" => $generated, "install" => $install, "installLabel" => $installLabel, "processing" => $processing));
     }
 
-    private function refreshOutput()
+    public function refreshOutput()
     {
         if (file_exists("/tmp/keymanager.log")) {
             $output = file_get_contents("/tmp/keymanager.log");
             if (!empty($output))
-                $this->response = $output;
+                $this->responseHandler->setData($output);
             else
-                $this->response = " ";
+                $this->responseHandler->setData(" ");
         } else {
-            $this->response = " ";
+            $this->responseHandler->setData(" ");
         }
     }
 
-    private function clearOutput()
+    public function clearOutput()
     {
         exec("rm -rf /tmp/keymanager.log");
     }
 
-    private function saveKnownHostsData()
+    public function saveKnownHostsData()
     {
         $filename = '/root/.ssh/known_hosts';
-        file_put_contents($filename, $this->request->knownHostsData);
+        file_put_contents($filename, $this->request['knownHostsData']);
     }
 
-    private function getKnownHostsData()
+    public function getKnownHostsData()
     {
         $knownHostsData = file_get_contents('/root/.ssh/known_hosts');
-        $this->response = array("knownHostsData" => $knownHostsData);
+        $this->responseHandler->setData(array("knownHostsData" => $knownHostsData));
     }
 
-    private function addToKnownHostsStatus()
+    public function addToKnownHostsStatus()
     {
         if (!file_exists('/tmp/KeyManager.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function addToKnownHosts()
+    public function addToKnownHosts()
     {
-        $this->uciSet("keymanager.settings.host", $this->request->host);
-        $this->uciSet("keymanager.settings.port", $this->request->port);
+        $this->systemHelper->uciSet("keymanager.settings.host", $this->request['host']);
+        $this->systemHelper->uciSet("keymanager.settings.port", $this->request['port']);
 
-        $this->execBackground("/pineapple/modules/KeyManager/scripts/add_host.sh");
-        $this->response = array('success' => true);
+        $this->systemHelper->execBackground("/pineapple/modules/KeyManager/scripts/add_host.sh");
+        $this->responseHandler->setData(array('success' => true));
     }
 
-    private function copyToRemoteHostStatus()
+    public function copyToRemoteHostStatus()
     {
         if (!file_exists('/tmp/KeyManager.progress')) {
-            $this->response = array('success' => true);
+            $this->responseHandler->setData(array('success' => true));
         } else {
-            $this->response = array('success' => false);
+            $this->responseHandler->setData(array('success' => false));
         }
     }
 
-    private function copyToRemoteHost()
+    public function copyToRemoteHost()
     {
-        $this->uciSet("keymanager.settings.host", $this->request->host);
-        $this->uciSet("keymanager.settings.port", $this->request->port);
-        $this->uciSet("keymanager.settings.user", $this->request->user);
+        $this->systemHelper->uciSet("keymanager.settings.host", $this->request['host']);
+        $this->systemHelper->uciSet("keymanager.settings.port", $this->request['port']);
+        $this->systemHelper->uciSet("keymanager.settings.user", $this->request['user']);
 
-        $this->execBackground("/pineapple/modules/KeyManager/scripts/copy_key.sh " . $this->request->password);
-        $this->response = array('success' => true);
+        $this->systemHelper->execBackground("/pineapple/modules/KeyManager/scripts/copy_key.sh " . $this->request['password']);
+        $this->responseHandler->setData(array('success' => true));
     }
 
-    private function getSettings()
+    public function getSettings()
     {
         $settings = array(
-            'host' => $this->uciGet("keymanager.settings.host"),
-            'port' => $this->uciGet("keymanager.settings.port"),
-            'user' => $this->uciGet("keymanager.settings.user")
+            'host' => $this->systemHelper->uciGet("keymanager.settings.host"),
+            'port' => $this->systemHelper->uciGet("keymanager.settings.port"),
+            'user' => $this->systemHelper->uciGet("keymanager.settings.user")
         );
-        $this->response = $settings;
+        $this->responseHandler->setData($settings);
     }
 
 }
