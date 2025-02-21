@@ -1,0 +1,30 @@
+name: PHP Cron Update oui file
+
+on:
+  schedule:
+    - cron: '0 0 1,15 * *' # Runs on the 1st and 15th of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run PHP command
+        run: php oui/gen-oui.php
+
+      - name: Commit changes if any
+        run: |
+          # Check for changes and commit if present
+          git diff --quiet || (
+            git config user.name "GitHub Actions" &&
+            git config user.email "actions@github.com" &&
+            git add . &&
+            git commit -m "Automated update from oui/command.php" &&
+            git push
+          )
