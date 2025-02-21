@@ -18,13 +18,16 @@ jobs:
       - name: Run PHP command
         run: php oui/gen-oui.php
 
+      - name: Check changes
+        run: git status
+
       - name: Commit changes if any
         run: |
           # Check for changes and commit if present
-          git diff --quiet || (
+          git diff-index --quiet HEAD || (
             git config user.name "GitHub Actions" &&
             git config user.email "actions@github.com" &&
             git add . &&
-            git commit -m "Automated update from oui/command.php" &&
+            git commit -m "Automated update from oui/gen-oui.php" &&
             git push
           )
