@@ -17,7 +17,7 @@ jobs:
 
       - name: Run PHP command
         working-directory: oui
-        run: php oui/gen-oui.php
+        run: php gen-oui.php
 
       - name: Check changes
         run: git status
