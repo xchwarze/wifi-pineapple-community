@@ -396,10 +396,6 @@ registerController('wps_OptionsController', ['$api', '$scope', '$rootScope', fun
 		option7: {
 			check: false,
 			val: '1:10'
-		},
-		option8: {
-			check: false,
-			val: '1'
 		}
 	};
 
@@ -447,12 +443,7 @@ registerController('wps_OptionsController', ['$api', '$scope', '$rootScope', fun
 		option10: false,
 		option11: false,
 		option12: false,
-		option13: false,
-		option14: false,
-		option15: false,
-		option16: false,
-		option17: false,
-		option18: false
+		option13: false
 	};
 
 	$scope.bullyOptions = {

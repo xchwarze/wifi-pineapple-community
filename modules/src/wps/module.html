@@ -153,24 +153,19 @@
 
                   <div class="form-group">
                       <div class="input-group">
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option1" ng-true-value="'-a'"> Auto detect the best advanced options for the target AP</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option1" ng-true-value="'-F'"> Ignore frame checksum errors</label></div>
                         <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option2" ng-true-value="'-A'"> Do not associate with the AP (association must be done by another application)</label></div>
                         <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option3" ng-true-value="'-N'"> Do not send NACK messages when out of order packets are received</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option4" ng-true-value="'-S'"> Use small DH keys to improve crack speed</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option5" ng-true-value="'-L'"> Ignore locked state reported by the target AP</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option6" ng-true-value="'-E'"> Terminate each WPS session with an EAP FAIL packet</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option7" ng-true-value="'-n'"> Target AP always sends a NACK [Auto]</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option4" ng-true-value="'-J'"> Treat timeout as NACK (DIR-300/320)</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option5" ng-true-value="'-S'"> Use small DH keys to improve crack speed</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option6" ng-true-value="'-L'"> Ignore locked state reported by the target AP</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option7" ng-true-value="'-E'"> Terminate each WPS session with an EAP FAIL packet</label></div>
                         <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option8" ng-true-value="'-w'"> Mimic a Windows 7 registrar [False]</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option9" ng-true-value="'-X'"> Set exhaustive mode from the beginning of the session [False]</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option10" ng-true-value="'-1'"> Set initial array index for the first half of the pin [False]</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option11" ng-true-value="'-2'"> Set initial array index for the second half of the pin [False]</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option12" ng-true-value="'-P'"> Set into PixieLoop mode (doesn't send M4, and loops through to M3) [False]</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option13" ng-true-value="'-H'"> Enables logging of sequence completed PixieHashes</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option14" ng-true-value="'-Z'"> Do NOT run reaver to auto retrieve WPA password if pixiewps attack is successful</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option15" ng-true-value="'-K'"> Run pixiewps</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option16" ng-true-value="'-vv'"> Display non-critical warnings</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option17" ng-true-value="'-vvv'"> Display PixieHashes / enable pixiedust modes</label></div>
-                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option18" ng-true-value="'-q'"> Only display critical messages</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option9" ng-true-value="'-Z'"> Do NOT run reaver to auto retrieve WPA password if pixiewps attack is successful</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option10" ng-true-value="'-K'"> Run pixiewps</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option11" ng-true-value="'-vv'"> Display non-critical warnings</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option12" ng-true-value="'-vvv'"> Display PixieHashes / enable pixiedust modes</label></div>
+                        <div class="checkbox"><label><input type="checkbox" ng-change="update()" ng-model="reaverOptions.option13" ng-true-value="'-q'"> Only display critical messages</label></div>
                       </div>
                   </div>
                 </div>
@@ -221,12 +216,6 @@
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon input-sm"><input type="checkbox" ng-change="update()" ng-model="reaverAdvancedOptions.option7.check" ng-true-value="'-r'"></span><input type="text" ng-change="update()" ng-model="reaverAdvancedOptions.option7.val" class="form-control input-sm"><span class="input-group-addon input-sm">Sleep for y seconds every x pin attempts</span>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon input-sm"><input type="checkbox" ng-change="update()" ng-model="reaverAdvancedOptions.option8.check" ng-true-value="'-W'"></span><input type="text" ng-change="update()" ng-model="reaverAdvancedOptions.option8.val" class="form-control"><span class="input-group-addon input-sm">Default Pin Generator by devttys0 team [1] Belkin [2] D-Link</span>
                       </div>
                     </div>
 
