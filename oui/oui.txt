@@ -325,7 +325,7 @@
 000144Dell Emc
 000145Winsystems Inc
 000146Tesco Controls Inc
-000147Dzs Inc
+000147Zhone Technologies Inc
 000148X-traweb Inc
 000149Tdt Ag
 00014ASony Corporation
@@ -623,7 +623,7 @@
 00026ENegen Access Inc
 00026FSenao International Co Ltd
 000270Crewave Co Ltd
-000271Dzs Inc
+000271Zhone Technologies Inc
 000272Cc&c Technologies Inc
 000273Coriolis Networks
 000274Tommy Technologies Corp
@@ -6126,7 +6126,7 @@
 001809Cresyn
 00180ACisco Meraki
 00180BBrilliant Telecommunications
-00180CDzs Inc
+00180CZhone Technologies Inc
 00180DTerabytes Server Storage Tech Corp
 00180EAvega Systems
 00180FNokia Danmark A/s
@@ -10083,7 +10083,7 @@
 00304FPlanet Technology Corporation
 003050Versa Technology
 003051Orbit Avionic & Communication
-003052Dzs Inc
+003052Zhone Technologies Inc
 003053Basler Ag
 003054Castlenet Technology Inc
 003055Renesas Technology America Inc
@@ -10569,6 +10569,7 @@
 0045E2Cybertan Technology Inc
 00464BHuawei Technologies Coltd
 004A77Zte Corporation
+004B0DHuawei Device Co Ltd
 004B12Espressif Inc
 004BF3Shenzhen Mercury Communication Technologies Coltd
 004CE5Sichuan Tianyi Comheart Telecom Coltd
@@ -10766,7 +10767,7 @@
 0050C7Private
 0050C8Addonics Technologies Inc
 0050C9Maspro Denkoh Corp
-0050CADzs Inc
+0050CAZhone Technologies Inc
 0050CBBucher Automation Ag
 0050CCSeagate Cloud Systems Inc
 0050CDDigianswer A/s
@@ -11125,6 +11126,7 @@
 0068EBHp Inc
 00692DSunnovo International Limited
 006967Ieee Registration Authority
+006A5EIeee Registration Authority
 006B6FHuawei Technologies Coltd
 006B8EShanghai Feixun Communication Coltd
 006B9EVizio Inc
@@ -11433,6 +11435,7 @@
 00841ECisco Meraki
 008497Shenzhen Miaoming Intelligent Technology Coltd
 0084EDLexmark International Inc
+008621Amazon Technologies Inc
 008667Lg Innotek
 00869CPalo Alto Networks
 0086A0Private
@@ -11764,7 +11767,7 @@
 00A018Creative Controllers Inc
 00A019Nebula Consultants Inc
 00A01ABinar Elektronik Ab
-00A01BDzs Inc
+00A01BZhone Technologies Inc
 00A01CNascent Networks Corporation
 00A01DRed Lion Controls Lp
 00A01EEst Corporation
@@ -12921,7 +12924,7 @@
 00E0DCNexware Corp
 00E0DDZenith Electronics Corporation
 00E0DEDatax Nv
-00E0DFDzs Inc
+00E0DFZhone Technologies Inc
 00E0E0Si Electronics Ltd
 00E0E1G2 Networks Inc
 00E0E2Innova Corp
@@ -13892,6 +13895,7 @@
 08D59DSagemcom Broadband Sas
 08D5C0Seers Technology Co Ltd
 08D833Shenzhen Rf Technology Co Ltd
+08D945Huawei Technologies Coltd
 08DA33Ieee Registration Authority
 08DD03Guangdong Oppo Mobile Telecommunications Corpltd
 08DDEBSilicon Laboratories
@@ -13980,6 +13984,7 @@
 0C191FInform Electronik
 0C19F8Apple Inc
 0C1A10Acoustic Stream
+0C1A61Neox Fzco
 0C1BCCIflytek Coltd
 0C1C19Longconn Electronics(shenzhen) Coltd
 0C1C1AEero Inc
@@ -14013,6 +14018,7 @@
 0C3021Apple Inc
 0C31DCHuawei Technologies Coltd
 0C323ASamsung Electronics Coltd
+0C331BTydenbrooks
 0C3526Microsoft Corporation
 0C354FNokia
 0C35FEFiberhome Telecommunication Technologies Coltd
@@ -14297,6 +14303,7 @@
 0CEC8DMotorola Mobility Llc A Lenovo Company
 0CED71Extreme Networks Headquarters
 0CEDC8Xiaomi Communications Co Ltd
+0CEE20Fbc
 0CEE99Amazon Technologies Inc
 0CEEE6Hon Hai Precision Ind Coltd
 0CEF15Tp-link Systems Inc
@@ -14499,6 +14506,7 @@
 1063A3Ieee Registration Authority
 1063C8Liteon Technology Corporation
 1064E2Adfwebcom Srl
+106519Shenzhen Icomm Semiconductor Coltd
 106530Dell Inc
 1065A3Panamax Llc
 1065CFIqsim
@@ -15021,6 +15029,7 @@
 14B968Huawei Technologies Coltd
 14BAAFBks Gmbh
 14BB6ESamsung Electronics Coltd
+14BC68Cisco Systems Inc
 14BD61Apple Inc
 14BEFCNanjing Jiahao Technology Co Ltd
 14C03ECommscope
@@ -15057,6 +15066,7 @@
 14D424Azurewave Technology Inc
 14D4FECommscope
 14D64DD-link International
+14D725Barrot Technology Coltd
 14D76EConch Electronic Coltd
 14D864Tp-link Technologies Coltd
 14D881Beijing Xiaomi Mobile Software Co Ltd
@@ -15471,6 +15481,7 @@
 18E8DDModuletek
 18E8ECStmicrolectronics International Nv
 18E91DHuawei Technologies Coltd
+18EBD4Shenzhen Skyworth Digital  Technology  Co Ltd
 18ECE7Buffaloinc
 18EE69Apple Inc
 18EE86Inseego Wireless Inc
@@ -15900,6 +15911,7 @@
 200F92Stk Technology Co Ltd
 20107AGemtek Technology Co Ltd
 20108AZte Corporation
+2010B1Amazon Technologies Inc
 20114EMetersit Srl
 201257Most Lucky Trading Ltd
 2012D5Scientech Materials Corporation
@@ -16320,7 +16332,9 @@
 2429B0Huawei Technologies Coltd
 2429FEKyocera Corporation
 242A04Cisco Systems Inc
+242BD6Ring Llc
 242CFEZhejiang Tmall Technology Co Ltd
+242D4BF5 Inc
 242D6CEero Inc
 242E02Huawei Technologies Coltd
 242E90Palit Microsystems Ltd
@@ -16426,6 +16440,7 @@
 2475B3Guangdong Oppo Mobile Telecommunications Corpltd
 2475FCZte Corporation
 247625Texas Instruments
+247645Huawei Device Co Ltd
 247656Shanghai Net Miles Fiber Optics Technology Co Ltd
 24767DCisco Spvtg
 247703Intel Corporate
@@ -16711,6 +16726,7 @@
 283410Enigma Diagnostics Limited
 2834A2Cisco Systems Inc
 2834FFApple Inc
+28353AHuawei Technologies Coltd
 283545Shenzhen Chuangwei-rgb Electronics Coltd
 283613Ieee Registration Authority
 283638Ieee Registration Authority
@@ -17536,7 +17552,7 @@
 304E1BHuawei Device Co Ltd
 304EC3Tianjin Techua Technology Co Ltd
 304F00Guangdong Oppo Mobile Telecommunications Corpltd
-304F75Dzs Inc
+304F75Zhone Technologies Inc
 305075Gn Audio A/s
 3050CEXiaomi Communications Co Ltd
 3050F1Ennoconn Corporation
@@ -18441,6 +18457,7 @@
 3891B7Cisco Systems Inc
 3891D5Hangzhou H3c Technologies Co Limited
 3891FBXenox Holding Bv
+389201Tianyi Telecom Terminals Company Limited
 38922EArraycomm
 389231Tecno Mobile Limited
 389461Renesas Electronics (penang) Sdn Bhd
@@ -18502,6 +18519,7 @@
 38B74DFijowave Limited
 38B800Wistron Neweb Corporation
 38B8EBIeee Registration Authority
+38B9AFNxp Semiconductors Taiwan Ltd
 38BAB0Broadcom
 38BAF8Intel Corporate
 38BB23Ozvision America Llc
@@ -18724,6 +18742,7 @@
 3C3B99Itel Mobile Limited
 3C3BADChina Dragon Technology Limited
 3C3F512crsi
+3C401512mm Health Technology (hainan) Co Ltd
 3C404FGuangdong Pisen Electronics Coltd
 3C410ECisco Systems Inc
 3C427EIeee Registration Authority
@@ -19053,6 +19072,7 @@
 401A58Wistron Neweb Corporation
 401B5FWeifang Goertek Electronics Coltd
 401C83Intel Corporate
+401CD4Huawei Device Co Ltd
 401D59Biometric Associates Lp
 402230Shenzhen Superelectron Technology Coltd
 4022D8Espressif Inc
@@ -19377,7 +19397,7 @@
 40F078Cisco Systems Inc
 40F14CIse Europe Sprl
 40F201Sagemcom Broadband Sas
-40F21CDzs Inc
+40F21CZhone Technologies Inc
 40F2E9Ibm
 40F308Murata Manufacturing Co Ltd
 40F385Ieee Registration Authority
@@ -19802,6 +19822,7 @@
 48066ATempered Networks Inc
 480BB2Ieee Registration Authority
 480C49Nakayo Inc
+480E13Ittim
 480EECTp-link Technologies Coltd
 480FCFHewlett Packard
 481063Ntt Innovation Institute Inc
@@ -20032,6 +20053,7 @@
 48A380Gionee Communication Equipment Coltd
 48A3BDTexas Instruments
 48A472Intel Corporate
+48A48CShanghai Zenchant Electornics Coltd
 48A493Taiyo Yuden Coltd
 48A4FDAltobeam Inc
 48A516Huawei Device Co Ltd
@@ -20735,6 +20757,7 @@
 5061BFCisco Systems Inc
 5061D6Indu-sol Gmbh
 5061F6Universal Electronics Inc
+506245Annapurna Labs
 506255Ieee Registration Authority
 506313Hon Hai Precision Ind Coltd
 506391Huawei Technologies Coltd
@@ -20849,6 +20872,7 @@
 50A9DESmartcom - Bulgaria Ad
 50AB3EQibixx Ag
 50ABBFHoseo Telecom
+50ACB9Huawei Technologies Coltd
 50AD71Tessolve Semiconductor Private Limited
 50AD92Nx Technologies
 50ADD5Dynalec Corporation
@@ -21197,6 +21221,7 @@
 549A4CGuangdong Homecare Technology Coltd
 549A8FRealme Chongqing Mobile Telecommunications Corpltd
 549B12Samsung Electronics Coltd
+549B24Mellanox Technologies Inc
 549B49Nec Platforms Ltd
 549B72Ericsson Ab
 549C27Plasma Cloud Limited
@@ -21280,6 +21305,7 @@
 54DBA2Fibrain
 54DC1DYulong Computer Telecommunication Scientific (shenzhen) Coltd
 54DCE9Silicon Laboratories
+54DD21Huawei Device Co Ltd
 54DD4FSamsung Electronics Coltd
 54DED0Sevio Srl
 54DED3Zte Corporation
@@ -21706,6 +21732,7 @@
 5C0947Apple Inc
 5C0979Huawei Technologies Coltd
 5C0A5BSamsung Electro Mechanics Co Ltd
+5C0B3BHuawei Technologies Coltd
 5C0BCATunstall Nordic Ab
 5C0C0EGuizhou Huaxintong Semiconductor Technology Co Ltd
 5C0CBBCelizion Inc
@@ -22153,6 +22180,7 @@
 602B58Em Microelectronic
 602D74Extreme Networks Headquarters
 602E20Huawei Technologies Coltd
+6030B3Huawei Technologies Coltd
 6030D4Apple Inc
 60313BSunnovo International Limited
 603192Ovt India Pvt Ltd
@@ -22224,6 +22252,7 @@
 605BB4Azurewave Technology Inc
 605E4FHuawei Device Co Ltd
 605F8DEero Inc
+605FAAHuawei Device Co Ltd
 60601FSz Dji Technology Coltd
 606134Arcade Communications Ltd
 6061DFZ-meta Research Llc
@@ -22553,6 +22582,7 @@
 642C0FVivo Mobile Communication Co Ltd
 642CACHuawei Technologies Coltd
 642DB7Seungil Electronics
+642E41Huawei Technologies Coltd
 642FC7New H3c Technologies Co Ltd
 643135Apple Inc
 643139Ieee Registration Authority
@@ -23080,6 +23110,7 @@
 689361Integrated Device Technology (malaysia) Sdn Bhd
 689423Hon Hai Precision Ind Coltd
 68944AZte Corporation
+68951BHuawei Device Co Ltd
 689575Zhejiang Bodyguard Electronic Co Ltd
 68962EHuawei Technologies Coltd
 68966AOhsung
@@ -23172,6 +23203,7 @@
 68D925Prosys Development Services
 68D927Huawei Technologies Coltd
 68D93CApple Inc
+68D972Cisco Systems Inc
 68D976Em Microelectronic
 68DA73Ieee Registration Authority
 68DB54Phicomm (shanghai) Co Ltd
@@ -24069,6 +24101,7 @@
 742344Xiaomi Communications Co Ltd
 74238DZte Corporation
 74249FTibro Corp
+7424CAGuangzhou Shiyuan Electronic Technology Company Limited
 742584Ieee Registration Authority
 74258AHangzhou H3c Technologies Co Limited
 7426ACCisco Systems Inc
@@ -24101,6 +24134,7 @@
 7433E9Zte Corporation
 743400Mtg Co Ltd
 74342BHuawei Technologies Coltd
+743491Shenzhen Kings Iot Co Ltd
 7434AEThis Is Engineering Inc
 74366DVodafone Italia Spa
 74372FTongfang Shenzhen Cloudcomputing Technology Coltd
@@ -24260,6 +24294,7 @@
 7493A4Zebra Technologies Corp
 7493DAAskey Computer Corp
 74943DAgjunction
+749533Westala Technologies Inc
 749552Xuzhou Wika Electronics Control Technology Co Ltd
 7495A7Keyence Corporation
 7495ECAlpsalpine Coltd
@@ -24304,6 +24339,7 @@
 74AE76Inovo Broadband Inc
 74B00CNetwork Video Technologies Inc
 74B059Motorola Mobility Llc A Lenovo Company
+74B3EAEk Inc
 74B472Ciesse
 74B57EZte Corporation
 74B587Apple Inc
@@ -24784,6 +24820,7 @@
 78C62BFujian Star-net Communication Coltd
 78C6BBAnalog Devices Inc
 78C881Sony Interactive Entertainment Inc
+78C884Huawei Device Co Ltd
 78C95EMidmark Rtls
 78CA04Nokia Corporation
 78CA39Apple Inc
@@ -25076,6 +25113,7 @@
 7C7B8BControl Concepts Inc
 7C7BBFSamsung Electronics Coltd
 7C7BE4Z'sedai Kenkyusho Corporation
+7C7D21Zte Corporation
 7C7D3DHuawei Technologies Coltd
 7C7D41Jinmuyu Electronics Co Ltd
 7C7EF9Eero Inc
@@ -25176,6 +25214,7 @@
 7CC06FApple Inc
 7CC0AAMicrosoft Corporation
 7CC177Ingram Micro Services
+7CC178Ericsson Ab
 7CC180Apple Inc
 7CC225Samsung Electronics Coltd
 7CC255Super Micro Computer Inc
@@ -25184,6 +25223,7 @@
 7CC385Huawei Technologies Coltd
 7CC3A1Apple Inc
 7CC4EFDevialet
+7CC518Vivo Mobile Communication Co Ltd
 7CC537Apple Inc
 7CC6B6Silicon Laboratories
 7CC6C4Kolff Computer Supplies Bv
@@ -25452,6 +25492,7 @@
 806940Lexar Colimited
 806A00Cisco Systems Inc
 806A10Whisker Labs - Ting
+806A34Bouffalo Lab (nanjing) Co Ltd
 806AB0Shenzhen Tinno Mobile Technology Corp
 806C1BMotorola Mobility Llc A Lenovo Company
 806C8BKaeser Kompressoren Ag
@@ -25789,6 +25830,7 @@
 84509AEasy Soft Tv Co Ltd
 845181Samsung Electronics Coltd
 845234Juniper Networks
+8453CDChina Mobile Group Device Coltd
 8454DFHuawei Device Co Ltd
 8455A5Samsung Electronics Coltd
 84569CCoho Data Inc
@@ -25902,6 +25944,7 @@
 849FB5Huawei Technologies Coltd
 84A06ESagemcom Broadband Sas
 84A134Apple Inc
+84A1B7Honor Device Co Ltd
 84A1D1Sagemcom Broadband Sas
 84A24DBirds Eye Systems Private Limited
 84A329Arcadyan Corporation
@@ -26538,6 +26581,7 @@
 8C4435Shanghai Broadmobi Communication Technology Co Ltd
 8C444FHumax Co Ltd
 8C44A5Cisco Systems Inc
+8C44BBShen Zhen Tenda Technology Coltd
 8C4500Murata Manufacturing Co Ltd
 8C476EIeee Registration Authority
 8C477FNamboosolution
@@ -26622,6 +26666,7 @@
 8C71F8Samsung Electronics Coltd
 8C736EFujitsu Limited
 8C73A0Fiberhome Telecommunication Technologies Coltd
+8C73DASilicon Laboratories
 8C763FCommscope
 8C76C1Goden Tech Limited
 8C7712Samsung Electronics Coltd
@@ -26685,6 +26730,7 @@
 8C902DTp-link Systems Inc
 8C90D3Nokia
 8C9109Toyoshima Electric Technoeogy(suzhou) Coltd
+8C913AMellanox Technologies Inc
 8C9236Auslinx Technology Co Ltd
 8C9246Oerlikon Textile Gmbh&cokg
 8C9351Jigowatts Inc
@@ -27651,6 +27697,7 @@
 94FF34Hanshow Technology Coltd
 94FF3CFortinet Inc
 94FF61China Mobile Group Device Coltd
+94FF7DAltobeam Inc
 98006AZte Corporation
 980074Raisecom Technology Co Ltd
 9800C1Guangzhou Creator Technology Coltd(china)
@@ -27806,6 +27853,7 @@
 985FD3Microsoft Corporation
 986022Emw Co Ltd
 9860CAApple Inc
+986110Huawei Technologies Coltd
 986297Shenzhen Techwinsemi Technology Co Ltd
 986610Zte Corporation
 9866EAIndustrial Control Communications Inc
@@ -27835,6 +27883,7 @@
 987BF3Texas Instruments
 987DDDChina Mobile Group Device Coltd
 987E46Emizon Networks Limited
+987EB5Huawei Device Co Ltd
 987ECAInventus Power Eletronica Do Brasil Ltda
 987EE3Vivo Mobile Communication Co Ltd
 9880BBIeee Registration Authority
@@ -28008,6 +28057,7 @@
 98F537Zte Corporation
 98F5A9Ohsung
 98F621Xiaomi Communications Co Ltd
+98F67AChipsea Technologies (shenzhen) Crop
 98F781Commscope
 98F7D7Commscope
 98F8C1Idt Technology Limited
@@ -28158,6 +28208,7 @@
 9C55B4Ise Srl
 9C5636Huawei Device Co Ltd
 9C5711Feitian Xunda(beijing) Aeronautical Information Technology Co Ltd
+9C5766Huawei Technologies Coltd
 9C57ADCisco Systems Inc
 9C57BCEero Inc
 9C583CApple Inc
@@ -28187,7 +28238,7 @@
 9C648BApple Inc
 9C65B0Samsung Electronics Coltd
 9C65EBIntel Corporate
-9C65EEDzs Inc
+9C65EEZhone Technologies Inc
 9C65F9Acsip Technology Corp
 9C65FAAcsip
 9C6650Glodio Technolies Coltd Tianjin Branch
@@ -29268,6 +29319,7 @@ A81FAFKrypton Polska
 A82066Apple Inc
 A82316Nokia
 A823FELg Electronics
+A82450Beijing Huadianzhongxin Techcoltd
 A824B8Nokia
 A824EBZao Npo Introtest
 A825EBCambridge Industries(group) Coltd
@@ -29454,6 +29506,7 @@ A8995CAizo Ag
 A89969Dell Inc
 A899ADChaoyue Technology Co Ltd
 A899DCI-top Desing Technology Coltd
+A89A8CZte Corporation
 A89A93Sagemcom Broadband Sas
 A89AD7Nokia
 A89B10Inmotion Ltd
@@ -29615,6 +29668,7 @@ AC0BFBEspressif Inc
 AC0D1BLg Electronics (mobile Communications)
 AC0DFEEkon Gmbh - Mygekko
 AC1007Arcadyan Corporation
+AC1065Kt Micro Inc
 AC11D3Suzhou Hotek  Video Technology Co Ltd
 AC1203Intel Corporate
 AC122FFantasia Trading Llc
@@ -29811,6 +29865,7 @@ AC83F0Cobalt Digital Inc
 AC83F3Ampak Technology Inc
 AC84C6Tp-link Technologies Coltd
 AC84C9Sagemcom Broadband Sas
+AC84FAZhejiang Weilai Jingling Artificial Intelligence Technology Co Ltd
 AC853DHuawei Technologies Coltd
 AC8674Open Mesh Inc
 AC867ECreate New Technology (hk) Limited Company
@@ -31067,6 +31122,7 @@ B8D61AEspressif Inc
 B8D6F6Huawei Technologies Coltd
 B8D7AFMurata Manufacturing Co Ltd
 B8D812Ieee Registration Authority
+B8D82DQingdao Intelligent&precise Electronics Coltd
 B8D94DSagemcom Broadband Sas
 B8D9CESamsung Electronics Coltd
 B8DAE8Huawei Device Co Ltd
@@ -31191,6 +31247,7 @@ BC282CE-smart Systems Pvt Ltd
 BC2846Nextbit Computing Pvt Ltd
 BC28D6Rowley Associates Limited
 BC2978Prama Hikvision India Private Limited
+BC2A33Quectel Wireless Solutions Coltd
 BC2B02China Dragon Technology Limited
 BC2B6BBeijing Haier Ic Design Coltd
 BC2BD7Revogi Innovation Co Ltd
@@ -31240,6 +31297,7 @@ BC4377Hang Zhou Huite Technology Coltd
 BC4434Shenzhen Tinno Mobile Technology Corp
 BC4486Samsung Electronics Coltd
 BC44B0Elastifile
+BC4529Zte Corporation
 BC452EKnowledge Development For Pof Sl
 BC4548Beijing Gpthink Technology Coltd
 BC455BSamsung Electronics Coltd
@@ -31526,6 +31584,7 @@ C005C2Commscope
 C0060CHuawei Technologies Coltd
 C006C3Tp-link Systems Inc
 C0074ABrita Gmbh
+C00925Fn-link Technology Ltd
 C00D7EAdditech Inc
 C010B1Hmd Global Oy
 C01173Samsung Electronics Coltd
@@ -31535,6 +31594,7 @@ C0132BSichuan Changhong Electric Ltd
 C0143DHon Hai Precision Ind Coltd
 C014B8Nokia
 C014FECisco Systems Inc
+C0151BSony Interactive Entertainment Inc
 C01692China Mobile Group Device Coltd
 C01693Xiaomi Communications Co Ltd
 C0174DSamsung Electronics Coltd
@@ -31763,6 +31823,7 @@ C0AB2BHuawei Device Co Ltd
 C0AC54Sagemcom Broadband Sas
 C0AD97Tecno Mobile Limited
 C0AEFDShenzhen Hc-wlan Technology Coltd
+C0AFF2Dyson Limited
 C0B101Zte Corporation
 C0B22FApple Inc
 C0B339Comigo Ltd
@@ -32134,6 +32195,7 @@ C49880Apple Inc
 C49886Qorvo International Pte Ltd
 C49894Ieee Registration Authority
 C49A02Lg Electronics (mobile Communications)
+C49A31Zyxel Communications Corporation
 C49A89Suzhou K-hiragawa Electronic Technology Coltd
 C49D08Huawei Device Co Ltd
 C49DEDMicrosoft Corporation
@@ -32231,6 +32293,7 @@ C4D987Intel Corporate
 C4DA26Noblex Sa
 C4DA7DIvium Technologies Bv
 C4DB04Huawei Technologies Coltd
+C4DBADRing Llc
 C4DD57Espressif Inc
 C4DE7BHuawei Device Co Ltd
 C4DEE2Espressif Inc
@@ -32436,6 +32499,7 @@ C863F1Sony Interactive Entertainment Inc
 C863FCCommscope
 C864C7Zte Corporation
 C8662CBeijing Haitai Fangyuan High Technology Coltd
+C8664BAperion Technologies Llc
 C8665DExtreme Networks Headquarters
 C8675EExtreme Networks Headquarters
 C868DEHuawei Device Co Ltd
@@ -32635,6 +32699,7 @@ C8E193Itel Mobile Limited
 C8E1A7Vertu Corporation Limited
 C8E265Intel Corporate
 C8E306Eero Inc
+C8E31DHuawei Technologies Coltd
 C8E42FTechnical Research Design And Development
 C8E5E0Huawei Technologies Coltd
 C8E600Huawei Technologies Coltd
@@ -32852,7 +32917,7 @@ CC6A33Cisco Systems Inc
 CC6B1ECloud Network Technology Singapore Pte Ltd
 CC6B98Minetec Wireless Technologies
 CC6BF1Sound Masking Inc
-CC6C52Dzs Inc
+CC6C52Zhone Technologies Inc
 CC6D55Sichuan Tianyi Comheart Telecom Coltd
 CC6DA0Roku Inc
 CC6DEFTjk Tietolaite Oy
@@ -33299,7 +33364,7 @@ D09466Dell Inc
 D094CFHuawei Technologies Coltd
 D095C7Pantech Co Ltd
 D09686Ieee Registration Authority
-D096FBDzs Inc
+D096FBZhone Technologies Inc
 D097FERealme Chongqing Mobile Telecommunications Corpltd
 D0989CConmet
 D099D5Alcatel-lucent
@@ -33328,6 +33393,7 @@ D0AEECAlpha Networks Inc
 D0AFB6Linktop Technology Co Ltd
 D0B0CDMoen
 D0B128Samsung Electronics Coltd
+D0B1CAShenzhen Skyworth Digital  Technology  Co Ltd
 D0B214Poewit Inc
 D0B270Visteon Portuguesa Ltd
 D0B2C4Vantiva Usa Llc
@@ -33566,6 +33632,7 @@ D45251Ibt Ingenieurbureau Broennimann Thun
 D45297Nstreams Technologies Inc
 D452C7Beijing L&s Lancom Platform Tech Co Ltd
 D452EESky Uk Limited
+D4532ABeijing Xiaomi Mobile Software Co Ltd
 D45347Merytronic 2012 Sl
 D45383Murata Manufacturing Co Ltd
 D453AFVigo System Sa
@@ -33644,6 +33711,7 @@ D479C3Cameronet Gmbh & Co Kg
 D47AE2Samsung Electronics Coltd
 D47AECFunshion Online Technologies Coltd
 D47B35Neo Monitors As
+D47B6BShanghai Cygnus Semiconductor Co Ltd
 D47B75Harting Electronics Gmbh
 D47BB0Askey Computer Corp
 D47C44Ieee Registration Authority
@@ -33855,9 +33923,11 @@ D4F9A1Huawei Technologies Coltd
 D4FB8EApple Inc
 D4FC13Fiberhome Telecommunication Technologies Coltd
 D4FE28Silicon Laboratories
+D4FF26Ohsung
 D8004DApple Inc
 D80093Aurender Inc
 D801D0Huawei Technologies Coltd
+D801EBInfinity Electronics Ltd
 D8028AShenzhen Youhua Technology Co Ltd
 D802C0Extreme Networks Headquarters
 D8031ALaird Connectivity
@@ -33907,6 +33977,7 @@ D81D72Apple Inc
 D81EDDGuangdong Oppo Mobile Telecommunications Corpltd
 D81EDEB&w Group Ltd
 D81F12Tuya Smart Inc
+D81F65Private
 D81FCCBrocade Communications Systems Llc
 D8209FCubro Acronet Gesmbh
 D820A2Huawei Technologies Coltd
@@ -34484,6 +34555,7 @@ DC9FDBUbiquiti Inc
 DCA0D0Amazon Technologies Inc
 DCA120Nokia
 DCA266Hon Hai Precision Ind Coltd
+DCA281Honor Device Co Ltd
 DCA313Shenzhen Changjin Communication Technology Coltd
 DCA333Shenzhen Youhua Technology Co Ltd
 DCA3A2Feng Mi(beijing)technology Co Ltd
@@ -34734,6 +34806,7 @@ E03E7DData-complex Gmbh
 E03ECBQingdao Intelligent&precise Electronics Coltd
 E03F49Asustek Computer Inc
 E04007Huawei Device Co Ltd
+E04027Huawei Device Co Ltd
 E04102Zte Corporation
 E04136Mitrastar Technology Corp
 E0426DGuangdong Oppo Mobile Telecommunications Corpltd
@@ -35127,6 +35200,7 @@ E454E8Dell Inc
 E455A8Cisco Meraki
 E455EADedicated Computing
 E45614Suttle Apparatus
+E456ACSilicon Laboratories
 E45740Commscope
 E45768Vivo Mobile Communication Co Ltd
 E457A8Stuart Manufacturing Inc
@@ -35203,6 +35277,7 @@ E48429New H3c Technologies Co Ltd
 E4842BHangzhou Softel Optic Co Ltd
 E484D3Xiaomi Communications Co Ltd
 E48501Geberit International Ag
+E489CACisco Systems Inc
 E48A93Hisense Visual Technology Coltd
 E48AD5Rf Window Co Ltd
 E48B7FApple Inc
@@ -35272,6 +35347,7 @@ E4B323Espressif Inc
 E4B503Realme Chongqing Mobile Telecommunications Corpltd
 E4B555Huawei Device Co Ltd
 E4B633Wuxi Stars Microsystem Technology Co Ltd
+E4B731Hangzhou Advance Iot Connectivity System Co Ltd
 E4B97ADell Inc
 E4BAD9360 Fly Inc
 E4BC96Versuni
@@ -35545,6 +35621,7 @@ E878A1Beoview Intercom Doo
 E878EENew H3c Technologies Co Ltd
 E879A3Cisco Systems Inc
 E87AF3S5 Tech Srl
+E87E1CHuawei Technologies Coltd
 E87F6BSamsung Electronics Coltd
 E87F95Apple Inc
 E8802EApple Inc
@@ -35836,6 +35913,7 @@ EC2F90Guangdong Oppo Mobile Telecommunications Corpltd
 EC308ELierda Science & Technology Group Co Ltd
 EC3091Cisco Systems Inc
 EC30B3Xiaomi Communications Co Ltd
+EC3111Sichuan Ai-link Technology Co Ltd
 EC314AChengdu Quanjing Intelligent Technology Coltd
 EC316DHansgrohe
 EC34E2Private
@@ -35999,6 +36077,7 @@ EC9B8BHewlett Packard Enterprise
 EC9BF3Samsung Electro-mechanics(thailand)
 EC9C32Sichuan ai-link technology co ltd
 EC9ECDArtesyn Embedded Technologies
+EC9EEAXtra Technology Llc
 EC9F0DIeee Registration Authority
 ECA138Amazon Technologies Inc
 ECA1D1Huawei Technologies Coltd
@@ -36037,6 +36116,7 @@ ECB878Huawei Device Co Ltd
 ECB907Cloudgenix Inc
 ECB970Ruijie Networks Coltd
 ECBAFEGiroptic
+ECBB78Cisco Systems Inc
 ECBBAEDigivoice Tecnologia Em Eletronica Ltda
 ECBD09Fusion Electronics Ltd
 ECBD1DCisco Systems Inc
@@ -36246,6 +36326,7 @@ F05136Tct Mobile Ltd
 F051EAFitbit Inc
 F05494Honeywell Connected Building
 F05501Huawei Device Co Ltd
+F0578DJethome Llc
 F057A6Intel Corporate
 F05849Careview Communications
 F05A09Samsung Electronics Coltd
@@ -37030,6 +37111,7 @@ F854AFEci Telecom Ltd
 F854B8Amazon Technologies Inc
 F854F6Azurewave Technology Inc
 F85548Texas Instruments
+F8554BWirelessmobility Engineering Centre Sdn Bhd
 F855CDVisteon Corporation
 F856C3Zte Corporation
 F8572ECore Brands Llc
@@ -37106,6 +37188,7 @@ F87FA5Greatek
 F88096Elsys Equipamentos Eletrônicos Ltda
 F8811AOverkiz
 F88200Captioncall
+F88306Beijing Xiaomi Mobile Software Co Ltd
 F88479Yaojin Technology(shenzhen)coltd
 F884F2Samsung Electronics Coltd
 F885F9Calix Inc
@@ -37243,6 +37326,7 @@ F8D3A9Axan Networks
 F8D3F0Apple Inc
 F8D462Pumatronix Equipamentos Eletronicos Ltda
 F8D478Flextronics Tech(ind) Pvt Ltd
+F8D554Gd Midea Air-conditioning Equipment Coltd
 F8D756Simm Tronic Limited
 F8D758Veratron Ag
 F8D7BFRev Ritter Gmbh
@@ -37403,6 +37487,7 @@ FC35E6Visteon Corporation
 FC372BSichuan Tianyi Comheart Telecom Coltd
 FC386AShenzhen Skyworth Digital  Technology  Co Ltd
 FC3876Forum Communication Systems Inc
+FC3882Infinix Mobility Limited
 FC38C4China Grand Communications Coltd
 FC395ASonicwall
 FC3964Itel Mobile Limited
@@ -37447,6 +37532,7 @@ FC4E6DHuawei Technologies Coltd
 FC4EA4Apple Inc
 FC500CSitehop Ltd
 FC5090Simex Sp Z Oo
+FC50D6Huawei Device Co Ltd
 FC51A4Commscope
 FC51B5Huawei Technologies Coltd
 FC528DVantiva Usa Llc
@@ -37585,6 +37671,7 @@ FCAA14Giga-byte Technology Coltd
 FCAA81Apple Inc
 FCAAB6Samsung Electronics Coltd
 FCAB90Huawei Technologies Coltd
+FCABD0Vivo Mobile Communication Co Ltd
 FCABF5Zte Corporation
 FCAD0FQts Networks
 FCAE2BTitan Products Ltd
