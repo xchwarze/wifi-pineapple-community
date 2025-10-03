@@ -2,7 +2,7 @@ name: PHP Cron Update oui file
 
 on:
   schedule:
-    - cron: '0 0 1,15 * *' # Runs on the 1st and 15th of each month
+    - cron: '0 0 1 * *' # Runs on the 1st of every month
   workflow_dispatch:
 
 permissions:
