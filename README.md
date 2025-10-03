@@ -40,7 +40,3 @@ If you'd like to contribute:
 ## Related projects
 
 This repository complements the [wifi-pineapple-cloner](https://github.com/xchwarze/wifi-pineapple-cloner) project, which allows you to create your own Wifi Pineapple.
-
----
-
-> ⚡ The goal of this repo is to provide a **single source of versioned and updated content** for the MK6 platform.
