@@ -7,7 +7,7 @@ Its purpose is to keep all resources versioned and updated in a single place.
 
 - [docs](./docs): Documentation and guides.  
 - [firmwares](./firmwares): Firmware files and mirror data.  
-- [json](./json): JSON configuration and sync files.  
+- [json](./json): JSON feeds for firmware news and update metadata.
 - [modules](./modules): Official and community modules.  
 - [oui](./oui): OUI database, updated automatically.  
 - [packages](./packages): Precompiled OpenWrt dependency packages.  
