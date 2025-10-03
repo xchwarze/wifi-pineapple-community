@@ -1,7 +1,7 @@
 # Wifi Pineapple Community
 
 The **Wifi Pineapple Community** repository is a centralized location for all the **updatable content** of the Wifi Pineapple MK6 platform (both official and community).  
-Its purpose is to keep all resources versioned and updated in a single place.
+The goal of this repo is to provide a **single source of versioned and updated content** for the MK6.
 
 ## Repository structure
 
