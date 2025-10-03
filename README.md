@@ -19,20 +19,22 @@ Its purpose is to keep all resources versioned and updated in a single place.
 If you'd like to contribute:
 
 1. Fork the repository.  
+
 2. Create a new branch for your changes:  
-   ```bash
+```bash
    git checkout -b my-feature-branch
-  ```
+```
+
 3. Commit your changes:
-
-   ```bash
+```bash
    git commit -am "Add some feature"
-   ```
-4. Push your branch:
+```
 
-   ```bash
+4. Push your branch:
+```bash
    git push origin my-feature-branch
-   ```
+```
+
 5. Open a Pull Request.
 
 ## Related projects
