@@ -15,9 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run PHP command
+      - name: Update oui mk6
         working-directory: oui
         run: php gen-oui.php
+
+      - name: Update oui mk7
+        working-directory: oui
+        run: php gen-oui-mk7.php
 
       - name: Check changes
         run: git status
