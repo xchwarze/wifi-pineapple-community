@@ -11172,6 +11172,7 @@
 007DFAVolkswagen Group Of America
 007E56China Dragon Technology Limited
 007E95Cisco Systems Inc
+007F1DFantasia Trading Llc
 007F28Actiontec Electronics Inc
 008000Multitech Systems Inc
 008001Periphonics Corporation
@@ -15998,6 +15999,7 @@
 1CE192Qisda Corporation
 1CE209Apple Inc
 1CE2CCTexas Instruments
+1CE4DDTechnicolor (china) Technology Co Ltd
 1CE504Huawei Technologies Coltd
 1CE57FSamsung Electronics Coltd
 1CE61DSamsung Electronics Coltd
@@ -19520,6 +19522,7 @@
 407875Imbel - Industria De Material Belico Do Brasil
 407911Apple Inc
 407912Texas Instruments
+407955Datacolor
 407A80Nokia Corporation
 407AA4Zhejiang Dahua Technologycoltd
 407B1BMettle Networks Inc
@@ -19629,6 +19632,7 @@
 40B89AHon Hai Precision Ind Coltd
 40B8C2Osmozis
 40B93CHewlett Packard Enterprise
+40BA09Dell Inc
 40BA61Arima Communications Corp
 40BB56Teranxt Global India Pvt Ltd
 40BC60Apple Inc
@@ -21736,6 +21740,7 @@
 54E61BApple Inc
 54E63FShenzhen Lingkeweier Technology Co Ltd
 54E6FCTp-link Technologies Coltd
+54E6FDSony Interactive Entertainment Inc
 54E7D5Sun Cupid Technology (hk) Ltd
 54EAA8Apple Inc
 54EAE1Honor Device Co Ltd
@@ -21819,6 +21824,7 @@
 58208AIeee Registration Authority
 5820B1Hewlett Packard
 582136Kmb Systems Sro
+58219DShanghai Timar Integrated Circuit Co Ltd
 5821E9Twpi
 58238CVantiva Usa Llc
 58239BFiberhome Telecommunication Technologies Coltd
@@ -24085,6 +24091,7 @@
 6CB9C5Delta Networks Inc
 6CBAB8Sagemcom Broadband Sas
 6CBEE9Alcatel-lucent Ipd
+6CBF2FEero Inc
 6CBFB5Noon Technology Co Ltd
 6CC147Xiamen Hanin Electronic Technology Co Ltd
 6CC1D2Commscope
@@ -27595,6 +27602,7 @@
 900D66Digimore Electronics Co Ltd
 900DCBCommscope
 900E83Monico Monitoring Inc
+900E84Eero Inc
 900E9EShenzhen Superelectron Technology Coltd
 900EB3Shenzhen Amediatech Technology Co Ltd
 900F0CCloud Network Technology Singapore Pte Ltd
@@ -31251,6 +31259,7 @@ B0ECE1Private
 B0EE45Azurewave Technology Inc
 B0EE7BRoku Inc
 B0F00CDongguan Wecxw Coltd
+B0F079Guangdong Oppo Mobile Telecommunications Corpltd
 B0F1A3Fengfan (beijing) Technology Co Ltd
 B0F1AEEero Inc
 B0F1BCDhemax Ingenieros Ltda
@@ -36569,6 +36578,7 @@ E81E92Huawei Device Co Ltd
 E820E2Humax Co Ltd
 E82281Gd Midea Air-conditioning Equipment Coltd
 E822B8Shenzhen Skyworth Digital  Technology  Co Ltd
+E823FBRedder
 E82404Quectel Wireless Solutions Coltd
 E824A6Juniper Networks
 E82587Shenzhen Chilink Iot Technology Co Ltd
@@ -36668,6 +36678,7 @@ E8655FDell Inc
 E865D4Tenda Technology Coltddongguan Branch
 E866C4Diamanti
 E86819Huawei Technologies Coltd
+E868B1Guangdong Oppo Mobile Telecommunications Corpltd
 E868E7Espressif Inc
 E86A64Lcfc(hefei) Electronics Technology Co Ltd
 E86BEAEspressif Inc
